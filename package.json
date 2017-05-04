@@ -1,0 +1,31 @@
+{
+  "name": "mfin-api-test",
+  "version": "1.0.0",
+  "description": "API test",
+  "main": "app.js",
+  "scripts": {
+    "test": "gulp",
+    "start": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akhila-ariyachandra/mfin-api-test.git"
+  },
+  "keywords": [
+    "API"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akhila-ariyachandra/mfin-api-test/issues"
+  },
+  "homepage": "https://github.com/akhila-ariyachandra/mfin-api-test#readme",
+  "dependencies": {
+		"restify": "*",
+		"mongoose": "*",
+    "gulp": "*",
+    "gulp-livereload": "*",
+    "gulp-nodemon": "*",
+    "gulp-notify": "*"
+	}
+}
