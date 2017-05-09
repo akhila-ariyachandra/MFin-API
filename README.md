@@ -6,9 +6,7 @@
 cd [folder path]
 ```
 3. Download files
-```
-git clone https://github.com/akhila-ariyachandra/mfin-api-test.git
-```
+    Use the URL provided by BitBucket
 4. Open folder that was created by git clone command in Visual Studio Code (mfin-api-test)
 5. Open the terminal in VS Code, ctrl+`
 6. Run the following commands
