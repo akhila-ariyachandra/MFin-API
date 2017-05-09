@@ -6,5 +6,5 @@ module.exports = function(app) {
 	});
  
     app.post('/createCustomer', customer.createCustomer); //Create Customer API
-    app.get('/getCustomer', customer.getCustomer);  // Get All Customer Details API
+    app.get('/getCustomers', customer.getCustomers);  // Get All Customer Details API
 };
