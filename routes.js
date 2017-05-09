@@ -13,4 +13,5 @@ module.exports = function(app) {
 
     app.post('/createLoan', loan.createLoan); //create loan API
     app.get('/getLoans', loan.getLoans); //get loan details
+    app.get('/getLoan/:id', loan.getLoan); // get one loan
 };
