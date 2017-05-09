@@ -5,12 +5,13 @@ function customerController () {
 	
 	// Creating New Customer
 	this.createCustomer = function (req, res, next) {
+		var id = req.params.id;
 		var name = req.params.name;
-		var email = req.params.email;
-		var age = req.params.age;
-		var city = req.params.city;
-		
-		Customer.create({name:name,email:email,age:age,city:city}, function(err, result) {
+		var surname = req.params.surname;
+		var dob = req.params.dob;
+		var phone = req.params.email;
+				
+		Customer.create({id:id,name:name,surname:surname,dob:dob,phone:phone}, function(err, result) {
 			if (err) {
 				console.log(err);
 				return res.send({'error':err});	
@@ -22,7 +23,7 @@ function customerController () {
 	};
  
   // Fetching Details of Customer
-  this.getCustomer = function (req, res, next) {
+  this.getCustomers = function (req, res, next) {
  
     Customer.find({}, function(err, result) {
       if (err) {
