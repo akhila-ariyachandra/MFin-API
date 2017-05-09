@@ -54,7 +54,6 @@ function customerController () {
 
 	// Update Customer details
 	this.updateCustomer = function (req, res){
-		console.log('called');
 		var id = req.params.id;
 
 		// Get existing details of customer
