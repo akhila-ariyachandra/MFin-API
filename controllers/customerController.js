@@ -51,6 +51,38 @@ function customerController () {
       }
     });
   };
+
+	// Update Customer details
+	this.updateCustomer = function (req, res){
+		console.log('called');
+		var id = req.params.id;
+
+		// Get existing details of customer
+		Customer.findById(id, function(err, customer) {
+			if (err) {
+        console.log(err);
+        return res.send({'error':err}); 
+      }
+
+			// Update details
+			customer.name = req.params.name;
+			customer.surname = req.params.surname;
+			customer.dob = req.params.dob;
+			customer.phone = req.params.phone;
+			customer.area = req.params.area;
+
+			// Send data to database
+			customer.save(function(err, result){
+				if (err) {
+        	console.log(err);
+        	return res.send({'error':err}); 
+      	}
+      	else {
+        	return res.send({'Customer Details':result});
+      	}
+			});			
+		});
+	};
  
 return this;
  
