@@ -37,7 +37,23 @@ function loanController () {
     });
   };
  
-return this;
+//feching loan details of 1 customer
+	this.getLoan = function (req, res, next){
+		var id = req.params.id;
+		
+		Loan.findById(id, function(err, result){
+			if(err)
+			{
+				console.log(err);
+				return res.send({'error':err});
+			}
+			else{
+				return res.send({'Loan details':result});
+			};
+		});
+	};
+
+	return this;
  
 };
  
