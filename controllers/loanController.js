@@ -53,6 +53,40 @@ function loanController () {
 		});
 	};
 
+// Update Loan details
+	this.updateLoan = function (req, res){
+		//console.log('called');
+		var id = req.params.id;
+
+		// Get existing details of loan
+		Loan.findById(id, function(err, loan) {
+			if (err) {
+        console.log(err);
+        return res.send({'error':err}); 
+      }
+
+			// Update details
+			loan.loanType = req.params.loanType;
+			loan.date = req.params.date;
+			loan.loanAmount = req.params.loanAmount;
+			loan.duration = req.params.duration;
+			loan.interest = req.params.interest;
+			loan.customer = req.params.customer;
+			
+			// Send data to database
+			loan.save(function(err, result){
+				if (err) {
+        	console.log(err);
+        	return res.send({'error':err}); 
+      	}
+      	else {
+        	return res.send({'Loan Details':result});
+      	}
+			});			
+		});
+	};
+
+
 	return this;
  
 };
