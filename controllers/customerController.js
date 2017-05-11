@@ -15,10 +15,12 @@ function customerController () {
 		Customer.create({id:id,name:name,surname:surname,dob:dob,phone:phone,area:area}, function(err, result) {
 			if (err) {
 				console.log(err);
+				req.log.error('Error creating new customer');
 				return res.send({'error':err});	
 			}
 			else {
-        return res.send({'result':result,'status':'successfully saved'});
+        res.log.info('New customer registered');
+				return res.send({'result':result,'status':'successfully saved'});
       }
 		});
 	};
@@ -30,9 +32,11 @@ function customerController () {
     Customer.findById(id, function(err, result) {
       if (err) {
         console.log(err);
+				req.log.error('Error finding Customer:', id);
         return res.send({'error':err}); 
       }
       else {
+				res.log.info('Customer details retrieved: ', id);
         return res.send({'Customer Details':result});
       }
     });
@@ -40,14 +44,15 @@ function customerController () {
 	
 	// Fetching Details of all Customers
   this.getCustomers = function (req, res, next) {
- 
-    Customer.find({}, function(err, result) {
+		Customer.find({}, function(err, result) {
       if (err) {
         console.log(err);
+				req.log.error('Error retrieving all customer details');
         return res.send({'error':err}); 
       }
       else {
-        return res.send({'Customer Details':result});
+				res.log.info('All customer details retrieved');
+				return res.send({'Customer Details':result});
       }
     });
   };
@@ -60,6 +65,7 @@ function customerController () {
 		Customer.findById(id, function(err, customer) {
 			if (err) {
         console.log(err);
+				req.log.error('Error finding record: ', id);
         return res.send({'error':err}); 
       }
 
@@ -74,9 +80,11 @@ function customerController () {
 			customer.save(function(err, result){
 				if (err) {
         	console.log(err);
+					req.log.error('Error updating record: ', id);
         	return res.send({'error':err}); 
       	}
       	else {
+					req.log.info('Updated customer: ', id);
         	return res.send({'Customer Details':result});
       	}
 			});			
