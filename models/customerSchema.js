@@ -1,9 +1,9 @@
 // Model for the Customer
 module.exports = (function customerSchema () {
  
-	var mongoose = require('../db').mongoose;
+	const mongoose = require('../db').mongoose;
  
-	var schema = {
+	const schema = {
 		id: {type: String, required: true},
 		name: {type: String, required: true},
 		surname: {type: String, required: true},
@@ -11,9 +11,9 @@ module.exports = (function customerSchema () {
 		phone: {type: String, required: true},
 		area: {type: mongoose.Schema.ObjectId}
 	};
-	var collectionName = 'customer';
-	var customerSchema = mongoose.Schema(schema);
-	var Customer = mongoose.model(collectionName, customerSchema);
+	const collectionName = 'customer';
+	const customerSchema = mongoose.Schema(schema);
+	const Customer = mongoose.model(collectionName, customerSchema);
 	
 	return Customer;
 })();

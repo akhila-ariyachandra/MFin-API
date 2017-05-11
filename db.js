@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var config = require('./config');
+const mongoose = require('mongoose');
+const config = require('./config');
  
 mongoose.connect(config.dbPath);
-var db = mongoose.connection;
+const db = mongoose.connection;
  
 db.on('error', function () {
 	console.log('Error occured from the database');

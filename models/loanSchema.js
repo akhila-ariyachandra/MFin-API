@@ -1,9 +1,9 @@
 // Model for the Loan
 module.exports = (function loanSchema () {
  
-	var mongoose = require('../db').mongoose;
+	const mongoose = require('../db').mongoose;
  
-	var schema = {
+	const schema = {
 		loanType: {type: String, required: true},
 		date: {type: Date, required: true},
 		loanAmount: {type: Number, required: true},
@@ -11,9 +11,9 @@ module.exports = (function loanSchema () {
 		interest: {type: Number, required: true},
 		customer: {type: mongoose.Schema.ObjectId}
 	};
-	var collectionName = 'loan';
-	var loanSchema = mongoose.Schema(schema);
-	var Loan = mongoose.model(collectionName, loanSchema);
+	const collectionName = 'loan';
+	const loanSchema = mongoose.Schema(schema);
+	const Loan = mongoose.model(collectionName, loanSchema);
 	
 	return Loan;
 })();

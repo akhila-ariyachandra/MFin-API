@@ -1,6 +1,6 @@
 module.exports = function(app) {
-	var customer = require('./controllers/customerController');
-    var loan= require('./controllers/loanController');
+	const customer = require('./controllers/customerController');
+    const loan= require('./controllers/loanController');
 
     app.get('/', function(req, res, next) {
 		return res.send("WELCOME TO MFIN API");
