@@ -4,8 +4,9 @@
   "description": "API test",
   "main": "app.js",
   "scripts": {
-    "test": "gulp",
-    "start": "gulp"
+    "start": "gulp",
+    "deploy": "gcloud app deploy",
+    "test": "gulp"    
   },
   "repository": {
     "type": "git",

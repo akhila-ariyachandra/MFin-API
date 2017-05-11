@@ -1,3 +1,4 @@
+'use strict';
 var restify = require('restify');
 var config = require('./config');
 var bunyan = require('bunyan');
@@ -20,9 +21,11 @@ var app = restify.createServer({
 app.use(restify.fullResponse());
 app.use(restify.bodyParser());
 app.use(restify.queryParser());
+
+var portNo = process.env.PORT || config.port;
  
-app.listen(config.port, function() {
-	console.log('Server listening on port number', process.env.PORT || config.port);
+app.listen(portNo, function() {
+	console.log('%s listening at %s', app.name, app.url);
 	
 });
 
