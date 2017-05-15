@@ -6,7 +6,7 @@
   "scripts": {
     "start": "gulp",
     "deploy": "gcloud app deploy",
-    "test": "gulp"    
+    "test": "mocha --timeout 10000"    
   },
   "repository": {
     "type": "git",
@@ -29,5 +29,11 @@
     "gulp-notify": "^3.0.0",
     "gulp-livereload": "^3.8.1",
     "bunyan": "^1.8.10"
-	}
+	},
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.4.1",
+    "should": "^11.2.1"
+  }
 }
