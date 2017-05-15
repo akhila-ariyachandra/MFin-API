@@ -23,11 +23,11 @@ gulp.task('server', function() {
 	// configure nodemon
 	nodemon({
 		// the script to run the app
-		script: 'app.js',
+		script: 'src/app.js',
 		ext: 'js'
 	}).on('restart', function(){
 		// when the app has restarted, run livereload.
-		gulp.src('app.js')
+		gulp.src('src/app.js')
 			.pipe(livereload())
 			.pipe(notify('Restarting server, please wait...'));
 	})
