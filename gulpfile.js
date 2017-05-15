@@ -7,12 +7,14 @@ const fs = require('fs');
  
 // Tasks
 gulp.task('logCheck', function(){
-	fs.stat('logs/MFin.log', function(err, stat){
-		if(err!=null){	// File does not exists
-			fs.mkdirSync('logs');
-			fs.writeFileSync('logs/MFin.log', '');
-		}	
-	});
+	// Check if directory exists
+	if(!isDirSync('logs')){
+		fs.mkdirSync('logs');
+	}
+	// Check if file exists
+	if(!isFileSync('logs/MFin.log')){
+		fs.writeFileSync('logs/MFin.log', '');
+	}	
 });
 
 gulp.task('server', function() {
@@ -33,3 +35,28 @@ gulp.task('server', function() {
 
 gulp.task('default',['logCheck','server'],function(){
 });
+
+// Functions
+function isDirSync(aPath){
+	try{
+		return fs.statSync(aPath).isDirectory();
+	}catch(e){
+		if(e.code == 'ENOENT'){
+			return false;
+		}else{
+			throw e;
+		}
+	}
+}
+
+function isFileSync(aPath){
+	try{
+		return fs.statSync(aPath).isFile();
+	}catch(e){
+		if(e.code == 'ENOENT'){
+			return false;
+		}else{
+			throw e;
+		}
+	}
+}
