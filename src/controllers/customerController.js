@@ -14,7 +14,6 @@ function customerController () {
 				
 		Customer.create({id:id,name:name,surname:surname,dob:dob,phone:phone,area:area}, function(err, result) {
 			if (err) {
-				console.log(err);
 				req.log.error('Error creating new customer');
 				return res.send({'error':err});	
 			}
@@ -31,8 +30,7 @@ function customerController () {
  
     Customer.findById(id, function(err, result) {
       if (err) {
-        console.log(err);
-				req.log.error('Error finding Customer:', id);
+        req.log.error('Error finding Customer:', id);
         return res.send({'error':err}); 
       }
       else {
@@ -46,8 +44,7 @@ function customerController () {
   this.getCustomers = function (req, res, next) {
 		Customer.find({}, function(err, result) {
       if (err) {
-        console.log(err);
-				req.log.error('Error retrieving all customer details');
+        req.log.error('Error retrieving all customer details');
         return res.send({'error':err}); 
       }
       else {
@@ -64,8 +61,7 @@ function customerController () {
 		// Get existing details of customer
 		Customer.findById(id, function(err, customer) {
 			if (err) {
-        console.log(err);
-				req.log.error('Error finding record: ', id);
+        req.log.error('Error finding record: ', id);
         return res.send({'error':err}); 
       }
 
@@ -79,8 +75,7 @@ function customerController () {
 			// Send data to database
 			customer.save(function(err, result){
 				if (err) {
-        	console.log(err);
-					req.log.error('Error updating record: ', id);
+        	req.log.error('Error updating record: ', id);
         	return res.send({'error':err}); 
       	}
       	else {

@@ -30,3 +30,5 @@ app.listen(portNo, function() {
 });
 
 const routes = require('./routes')(app);
+
+module.exports = app;
