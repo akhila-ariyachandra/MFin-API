@@ -9,7 +9,9 @@ module.exports = (function customerSchema () {
 		surname: {type: String, required: true},
 		dob: {type: Date, required: true},
 		phone: {type: String, required: true},
-		area: {type: mongoose.Schema.ObjectId}
+		area: {type: mongoose.Schema.ObjectId},
+		longitude: {type: String, required: true},
+		latitude: {type: String, required: true}
 	};
 	const collectionName = 'customer';
 	const customerSchema = mongoose.Schema(schema);

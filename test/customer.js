@@ -37,13 +37,42 @@ describe('Customers', () => {
     
     // Test the /createCustomers route
     describe('POST /createCustomer', () => {
+        it('it should not create a customer without the name field', (done) => {
+            const customer = {
+                id : 1,
+                surname : 'Doe',
+                dob : '01-01-1980',
+                phone : '123456789',
+                area : '59114c08494ebe30537ce7a5',
+                longitude : "6°54'52.8 N",
+                latitude : "79°58'24.1 E" 
+            }
+
+            chai.request(server)
+                .post('/createCustomer')
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('name');
+                    res.body.error.errors.name.should.have.property('properties');
+                    res.body.error.errors.name.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+        
         it('it should not create a customer without the surname field', (done) => {
             const customer = {
-                id : 2,
+                id : 1,
                 name : 'John',
                 dob : '01-01-1980',
                 phone : '123456789',
-                area : '59114c08494ebe30537ce7a5' 
+                area : '59114c08494ebe30537ce7a5',
+                longitude : "6°54'52.8 N",
+                latitude : "79°58'24.1 E" 
             }
 
             chai.request(server)
@@ -64,11 +93,13 @@ describe('Customers', () => {
         
         it('it should not create a customer without the DOB field', (done) => {
             const customer = {
-                id : 2,
+                id : 1,
                 name : 'John',
                 surname : 'Doe',
                 phone : '123456789',
-                area : '59114c08494ebe30537ce7a5' 
+                area : '59114c08494ebe30537ce7a5',
+                longitude : "6°54'52.8 N",
+                latitude : "79°58'24.1 E"  
             }
 
             chai.request(server)
@@ -87,14 +118,97 @@ describe('Customers', () => {
                 });
         });
 
-        it('it should create a customer', (done) => {
+        it('it should not create a customer without the phone field', (done) => {
             const customer = {
-                id : 2,
+                id : 1,
+                name : 'John',
+                surname : 'Doe',
+                dob : '01-01-1980',
+                area : '59114c08494ebe30537ce7a5',
+                longitude : "6°54'52.8 N",
+                latitude : "79°58'24.1 E"  
+            }
+
+            chai.request(server)
+                .post('/createCustomer')
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('phone');
+                    res.body.error.errors.phone.should.have.property('properties');
+                    res.body.error.errors.phone.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not create a customer without the longitude field', (done) => {
+            const customer = {
+                id : 1,
                 name : 'John',
                 surname : 'Doe',
                 dob : '01-01-1980',
                 phone : '123456789',
-                area : '59114c08494ebe30537ce7a5' 
+                area : '59114c08494ebe30537ce7a5',
+                latitude : "79°58'24.1 E"  
+            }
+
+            chai.request(server)
+                .post('/createCustomer')
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('longitude');
+                    res.body.error.errors.longitude.should.have.property('properties');
+                    res.body.error.errors.longitude.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not create a customer without the latitude field', (done) => {
+            const customer = {
+                id : 1,
+                name : 'John',
+                surname : 'Doe',
+                dob : '01-01-1980',
+                phone : '123456789',
+                area : '59114c08494ebe30537ce7a5',
+                longitude : "6°54'52.8 N"  
+            }
+
+            chai.request(server)
+                .post('/createCustomer')
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('latitude');
+                    res.body.error.errors.latitude.should.have.property('properties');
+                    res.body.error.errors.latitude.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should create a customer', (done) => {
+            const customer = {
+                id : 1,
+                name : 'John',
+                surname : 'Doe',
+                dob : '01-01-1980',
+                phone : '123456789',
+                area : '59114c08494ebe30537ce7a5',
+                longitude : "6°54'52.8 N",
+                latitude : "79°58'24.1 E"  
             }
 
             chai.request(server)
@@ -113,6 +227,8 @@ describe('Customers', () => {
                     res.body.result.should.have.property('dob');
                     res.body.result.should.have.property('phone');
                     res.body.result.should.have.property('area');
+                    res.body.result.should.have.property('longitude');
+                    res.body.result.should.have.property('latitude');
                     res.body.result.should.have.property('_id');
                     done();
                 });

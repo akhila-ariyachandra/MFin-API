@@ -1,18 +1,27 @@
 //This Controller deals with all functionalities of Customer
  
 function customerController () {
-	var Customer = require('../models/customerSchema');
+	const Customer = require('../models/customerSchema');
 	
 	// Creating New Customer
 	this.createCustomer = function (req, res, next) {
-		var id = req.params.id;
-		var name = req.params.name;
-		var surname = req.params.surname;
-		var dob = req.params.dob;
-		var phone = req.params.phone;
-		var area = req.params.area;
+		const id = req.params.id;
+		const name = req.params.name;
+		const surname = req.params.surname;
+		const dob = req.params.dob;
+		const phone = req.params.phone;
+		const area = req.params.area;
+		const longitude = req.params.longitude;
+		const latitude = req.params.latitude;
 				
-		Customer.create({id:id,name:name,surname:surname,dob:dob,phone:phone,area:area}, function(err, result) {
+		Customer.create({	id:id,
+											name:name,
+											surname:surname,
+											dob:dob,
+											phone:phone,
+											area:area,
+											longitude:longitude,
+											latitude:latitude }, function(err, result) {
 			if (err) {
 				req.log.error('Error creating new customer');
 				return res.send({'error':err});	
@@ -71,6 +80,8 @@ function customerController () {
 			customer.dob = req.params.dob;
 			customer.phone = req.params.phone;
 			customer.area = req.params.area;
+			customer.longitude = req.params.longitude;
+			customer.latitude = req.params.latitude;
 
 			// Send data to database
 			customer.save(function(err, result){
