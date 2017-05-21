@@ -68,7 +68,7 @@ function customerController () {
 		var id = req.params.id;
 
 		// Get existing details of customer
-		Customer.findById(id, function(err, customer) {
+		Customer.findOne({ 'id' : id }, function(err, customer) {
 			if (err) {
         req.log.error('Error finding record: ', id);
         return res.send({'error':err}); 
@@ -91,7 +91,7 @@ function customerController () {
       	}
       	else {
 					req.log.info('Updated customer: ', id);
-        	return res.send({'Customer Details':result});
+        	return res.send({'result':result});
       	}
 			});			
 		});

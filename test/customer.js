@@ -248,4 +248,41 @@ describe('Customers', () => {
                 });
         });
     });
+
+    // Test the /updateCustomer route
+    describe('PUT /updateCustomer', () => {
+        it('it should update the customer given the id', (done) => {
+            const customer = new Customer({ id : 1,
+                                            name : 'John',
+                                            surname : 'Doe',
+                                            dob : '01-02-1980',
+                                            phone : '123456789',
+                                            area : '59114c08494ebe30537ce7a5',
+                                            longitude : "6°54'52.8 N",
+                                            latitude : "79°58'24.1 E"});
+            
+            customer.save((err, customer) => {
+                chai.request(server)
+                    .put('/updateCustomer')
+                    .send(customer)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property('result');
+                        // Check for all fields
+                        res.body.result.should.have.property('_id');
+                        res.body.result.should.have.property('id');
+                        res.body.result.should.have.property('name');
+                        res.body.result.should.have.property('surname');
+                        res.body.result.should.have.property('dob');
+                        res.body.result.should.have.property('phone');
+                        res.body.result.should.have.property('area');
+                        res.body.result.should.have.property('longitude');
+                        res.body.result.should.have.property('latitude');
+                        res.body.result.should.have.property('__v');  
+                        done();          
+                });
+            });
+        });
+    });
 });
