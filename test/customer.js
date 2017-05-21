@@ -234,4 +234,18 @@ describe('Customers', () => {
                 });
         });
     });
+
+    // Test the /getCustomer/<id> route
+    describe('GET /getCustomer/<id>', () => {
+        it('it should GET the customer', (done) => {
+            chai.request(server)
+                .get('/getCustomer/1')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a('object');
+                    done();
+                });
+        });
+    });
 });

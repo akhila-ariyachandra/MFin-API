@@ -35,9 +35,9 @@ function customerController () {
  
   // Fetching Details of one Customer
   this.getCustomer = function (req, res, next) {
-		var id = req.params.id;
+		const id = req.params.id;
  
-    Customer.findById(id, function(err, result) {
+    Customer.findOne({ 'id' : id }, function(err, result) {
       if (err) {
         req.log.error('Error finding Customer:', id);
         return res.send({'error':err}); 
