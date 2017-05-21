@@ -1,5 +1,8 @@
 'use strict';
 
+// During the test the env variable is set to test
+process.env.NODE_ENV = 'test';
+
 const mongoose = require('mongoose');
 const Customer = require('../src/models/customerSchema');
 
@@ -11,6 +14,13 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 describe('Customers', () => {
+    // Empty the database before each test
+    beforeEach((done) => { 
+        Customer.remove({}, (err) => { 
+           done();         
+        });     
+    });
+    
     // Test the /getCustomers route
     describe('GET /getCustomers', () => {
         it('it should GET all the customers', (done) => {

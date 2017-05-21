@@ -1,6 +1,7 @@
 'use strict';
+
 const restify = require('restify');
-const config = require('./config');
+const config = require('config');
 const bunyan = require('bunyan');
 
 const log = bunyan.createLogger({

@@ -18,6 +18,8 @@ gulp.task('logCheck', function(){
 });
 
 gulp.task('server', function() {
+	// While running the server the env variable is set to dev
+	process.env.NODE_ENV = 'dev';
 	// listen for changes
 	livereload.listen();
 	// configure nodemon
