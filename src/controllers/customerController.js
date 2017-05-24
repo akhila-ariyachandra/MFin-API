@@ -8,6 +8,8 @@ function customerController () {
 		const id = req.params.id;
 		const name = req.params.name;
 		const surname = req.params.surname;
+		const nic = req.params.nic;
+		const address = req.params.address;
 		const dob = req.params.dob;
 		const phone = req.params.phone;
 		const area = req.params.area;
@@ -17,6 +19,8 @@ function customerController () {
 		Customer.create({	id:id,
 											name:name,
 											surname:surname,
+											nic:nic,
+											address:address,
 											dob:dob,
 											phone:phone,
 											area:area,
@@ -77,6 +81,8 @@ function customerController () {
 			// Update details
 			customer.name = req.params.name;
 			customer.surname = req.params.surname;
+			customer.nic = req.params.nic;
+			customer.address = req.params.address;
 			customer.dob = req.params.dob;
 			customer.phone = req.params.phone;
 			customer.area = req.params.area;

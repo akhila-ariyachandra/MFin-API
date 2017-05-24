@@ -7,6 +7,8 @@ module.exports = (function customerSchema () {
 		id: {type: String, required: true},
 		name: {type: String, required: true},
 		surname: {type: String, required: true},
+		nic: {type: String, required: true},
+		address: {type: String, required: true},
 		dob: {type: Date, required: true},
 		phone: {type: String, required: true},
 		area: {type: mongoose.Schema.ObjectId},
