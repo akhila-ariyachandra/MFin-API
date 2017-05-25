@@ -2,9 +2,9 @@
 module.exports = (function customerSchema () {
  
 	const mongoose = require('../db').mongoose;
+	const autoIncrement = require('mongoose-sequence');
  
 	const schema = {
-		id: {type: String, required: true},
 		name: {type: String, required: true},
 		surname: {type: String, required: true},
 		nic: {type: String, required: true},
@@ -15,8 +15,10 @@ module.exports = (function customerSchema () {
 		longitude: {type: String, required: true},
 		latitude: {type: String, required: true}
 	};
+	
 	const collectionName = 'customer';
 	const customerSchema = mongoose.Schema(schema);
+	customerSchema.plugin(autoIncrement, {inc_field: 'customerID'});
 	const Customer = mongoose.model(collectionName, customerSchema);
 	
 	return Customer;

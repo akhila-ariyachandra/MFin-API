@@ -5,7 +5,6 @@ function customerController () {
 	
 	// Creating New Customer
 	this.createCustomer = function (req, res, next) {
-		const id = req.params.id;
 		const name = req.params.name;
 		const surname = req.params.surname;
 		const nic = req.params.nic;
@@ -16,8 +15,7 @@ function customerController () {
 		const longitude = req.params.longitude;
 		const latitude = req.params.latitude;
 				
-		Customer.create({	id:id,
-											name:name,
+		Customer.create({	name:name,
 											surname:surname,
 											nic:nic,
 											address:address,
@@ -39,15 +37,15 @@ function customerController () {
  
   // Fetching Details of one Customer
   this.getCustomer = function (req, res, next) {
-		const id = req.params.id;
+		const customerID = req.params.customerID;
  
-    Customer.findOne({ 'id' : id }, function(err, result) {
+    Customer.findOne({ 'customerID' : customerID }, function(err, result) {
       if (err) {
-        req.log.error('Error finding Customer:', id);
+        req.log.error('Error finding Customer:', customerID);
         return res.send({'error':err}); 
       }
       else {
-				res.log.info('Customer details retrieved: ', id);
+				res.log.info('Customer details retrieved: ', customerID);
         return res.send({'Customer Details':result});
       }
     });
@@ -69,12 +67,12 @@ function customerController () {
 
 	// Update Customer details
 	this.updateCustomer = function (req, res){
-		var id = req.params.id;
+		var customerID = req.params.customerID;
 
 		// Get existing details of customer
-		Customer.findOne({ 'id' : id }, function(err, customer) {
+		Customer.findOne({ 'customerID' : customerID }, function(err, customer) {
 			if (err) {
-        req.log.error('Error finding record: ', id);
+        req.log.error('Error finding record: ', customerID);
         return res.send({'error':err}); 
       }
 
@@ -92,11 +90,11 @@ function customerController () {
 			// Send data to database
 			customer.save(function(err, result){
 				if (err) {
-        	req.log.error('Error updating record: ', id);
+        	req.log.error('Error updating record: ', customerID);
         	return res.send({'error':err}); 
       	}
       	else {
-					req.log.info('Updated customer: ', id);
+					req.log.info('Updated customer: ', customerID);
         	return res.send({'result':result});
       	}
 			});			

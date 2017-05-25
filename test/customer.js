@@ -5,6 +5,7 @@ process.env.NODE_ENV = 'test';
 
 const mongoose = require('mongoose');
 const Customer = require('../src/models/customerSchema');
+const Counter = require('../src/models/counterSchema');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -17,6 +18,11 @@ describe('Customers', () => {
     // Empty the database before each test
     beforeEach((done) => { 
         Customer.remove({}, (err) => { 
+           done();         
+        });     
+    });
+    beforeEach((done) => { 
+        Counter.remove({}, (err) => { 
            done();         
         });     
     });
@@ -39,7 +45,6 @@ describe('Customers', () => {
     describe('POST /createCustomer', () => {
         it('it should not create a customer without the name field', (done) => {
             const customer = {
-                id : 1,
                 surname : 'Doe',
                 nic : '801234567V',
                 address : '123/X Baker St., Narnia',
@@ -68,7 +73,6 @@ describe('Customers', () => {
         
         it('it should not create a customer without the surname field', (done) => {
             const customer = {
-                id : 1,
                 name : 'John',
                 nic : '801234567V',
                 address : '123/X Baker St., Narnia',
@@ -97,7 +101,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the nic field', (done) => {
             const customer = {
-                id : 1,
                 name : 'John',
                 surname : 'Doe',
                 address : '123/X Baker St., Narnia',
@@ -126,7 +129,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the address field', (done) => {
             const customer = {
-                id : 1,
                 name : 'John',
                 surname : 'Doe',
                 nic : '801234567V',
@@ -155,7 +157,6 @@ describe('Customers', () => {
         
         it('it should not create a customer without the DOB field', (done) => {
             const customer = {
-                id : 1,
                 name : 'John',
                 surname : 'Doe',
                 nic : '801234567V',
@@ -184,7 +185,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the phone field', (done) => {
             const customer = {
-                id : 1,
                 name : 'John',
                 surname : 'Doe',
                 nic : '801234567V',
@@ -213,7 +213,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the longitude field', (done) => {
             const customer = {
-                id : 1,
                 name : 'John',
                 surname : 'Doe',
                 nic : '801234567V',
@@ -242,7 +241,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the latitude field', (done) => {
             const customer = {
-                id : 1,
                 name : 'John',
                 surname : 'Doe',
                 nic : '801234567V',
@@ -271,7 +269,6 @@ describe('Customers', () => {
 
         it('it should create a customer', (done) => {
             const customer = {
-                id : 1,
                 name : 'John',
                 surname : 'Doe',
                 nic : '801234567V',
@@ -293,7 +290,7 @@ describe('Customers', () => {
                     res.body.should.have.property('result');
                     // Check for all fields
                     res.body.result.should.have.property('__v');
-                    res.body.result.should.have.property('id');
+                    res.body.result.should.have.property('customerID');
                     res.body.result.should.have.property('name');
                     res.body.result.should.have.property('surname');
                     res.body.result.should.have.property('nic');
@@ -326,7 +323,7 @@ describe('Customers', () => {
     // Test the /updateCustomer route
     describe('PUT /updateCustomer', () => {
         it('it should update the customer given the id', (done) => {
-            const customer = new Customer({ id : 1,
+            const customer = new Customer({ customerID : 1,
                                             name : 'John',
                                             surname : 'Doe',
                                             nic : '801234567V',
@@ -347,7 +344,7 @@ describe('Customers', () => {
                         res.body.should.have.property('result');
                         // Check for all fields
                         res.body.result.should.have.property('_id');
-                        res.body.result.should.have.property('id');
+                        res.body.result.should.have.property('customerID');
                         res.body.result.should.have.property('name');
                         res.body.result.should.have.property('surname');
                         res.body.result.should.have.property('nic');
