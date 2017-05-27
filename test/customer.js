@@ -3,9 +3,7 @@
 // During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
-const mongoose = require('mongoose');
 const Customer = require('../src/models/customerSchema');
-const Counter = require('../src/models/counterSchema');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -16,15 +14,17 @@ chai.use(chaiHttp);
 
 describe('Customers', () => {
     // Empty the database before each test
-    beforeEach((done) => { 
+    before((done) => { 
         Customer.remove({}, (err) => { 
            done();         
-        });     
+        });           
     });
-    beforeEach((done) => { 
-        Counter.remove({}, (err) => { 
-           done();         
-        });     
+
+    // Reset the counter of customerID before running tests
+    before((done) => {
+        Customer.counterReset('customerID', (err) => {
+            done();
+        });   
     });
     
     // Test the /getCustomers route
@@ -35,7 +35,8 @@ describe('Customers', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     should.exist(res.body);
-                    res.body.should.be.a('object');
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
                     done();
                 });
         });
@@ -290,7 +291,45 @@ describe('Customers', () => {
                     res.body.should.have.property('result');
                     // Check for all fields
                     res.body.result.should.have.property('__v');
-                    res.body.result.should.have.property('customerID');
+                    res.body.result.should.have.property('customerID').eql(1);
+                    res.body.result.should.have.property('name');
+                    res.body.result.should.have.property('surname');
+                    res.body.result.should.have.property('nic');
+                    res.body.result.should.have.property('address');
+                    res.body.result.should.have.property('dob');
+                    res.body.result.should.have.property('phone');
+                    res.body.result.should.have.property('area');
+                    res.body.result.should.have.property('longitude');
+                    res.body.result.should.have.property('latitude');
+                    res.body.result.should.have.property('_id');
+                    done();
+                });
+        });
+
+        it('it should create the 2nd customer with customerID 2', (done) => {
+            const customer = {
+                name : 'Jane',
+                surname : 'Doe',
+                nic : '801234567V',
+                address : '123/X Baker St., Narnia',
+                dob : '01-01-1980',
+                phone : '123456789',
+                area : '59114c08494ebe30537ce7a5',
+                longitude : "6°54'52.8 N",
+                latitude : "79°58'24.1 E"  
+            }
+
+            chai.request(server)
+                .post('/createCustomer')
+                .send(customer)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('successfully saved');
+                    res.body.should.have.property('result');
+                    // Check for all fields
+                    res.body.result.should.have.property('__v');
+                    res.body.result.should.have.property('customerID').eql(2);
                     res.body.result.should.have.property('name');
                     res.body.result.should.have.property('surname');
                     res.body.result.should.have.property('nic');
@@ -322,7 +361,7 @@ describe('Customers', () => {
 
     // Test the /updateCustomer route
     describe('PUT /updateCustomer', () => {
-        it('it should update the customer given the id', (done) => {
+        it('it should update the customer given the customerID', (done) => {
             const customer = new Customer({ customerID : 1,
                                             name : 'John',
                                             surname : 'Doe',
@@ -344,7 +383,7 @@ describe('Customers', () => {
                         res.body.should.have.property('result');
                         // Check for all fields
                         res.body.result.should.have.property('_id');
-                        res.body.result.should.have.property('customerID');
+                        res.body.result.should.have.property('customerID').eql(1);
                         res.body.result.should.have.property('name');
                         res.body.result.should.have.property('surname');
                         res.body.result.should.have.property('nic');

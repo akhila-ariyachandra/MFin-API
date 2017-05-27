@@ -30,7 +30,7 @@ function customerController () {
 			}
 			else {
         res.log.info('New customer registered');
-				return res.send({'result':result,'status':'successfully saved'});
+				return res.json({'result':result,'status':'successfully saved'});
       }
 		});
 	};
@@ -46,7 +46,7 @@ function customerController () {
       }
       else {
 				res.log.info('Customer details retrieved: ', customerID);
-        return res.send({'Customer Details':result});
+        return res.json(result);
       }
     });
   };
@@ -60,14 +60,14 @@ function customerController () {
       }
       else {
 				res.log.info('All customer details retrieved');
-				return res.send({'Customer Details':result});
+				return res.json(result);
       }
     });
   };
 
 	// Update Customer details
 	this.updateCustomer = function (req, res){
-		var customerID = req.params.customerID;
+		const customerID = req.params.customerID;
 
 		// Get existing details of customer
 		Customer.findOne({ 'customerID' : customerID }, function(err, customer) {
