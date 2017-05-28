@@ -72,9 +72,13 @@ function customerController () {
 		// Get existing details of customer
 		Customer.findOne({ 'customerID' : customerID }, function(err, customer) {
 			if (err) {
-        req.log.error('Error finding record: ', customerID);
-        return res.send({'error':err}); 
-      }
+        req.log.error('Error finding customer to update: ', customerID);
+        return res.json({'error':err}); 
+      } else if (!customer) {
+				// If customer doesn't exist i.e. the wrong customerID was 
+				req.log.error('Customer does not exist to update: ', customerID);
+				return res.json({'error':'Record does not exist'});
+			}
 
 			// Update details
 			customer.name = req.params.name;
@@ -90,12 +94,12 @@ function customerController () {
 			// Send data to database
 			customer.save(function(err, result){
 				if (err) {
-        	req.log.error('Error updating record: ', customerID);
-        	return res.send({'error':err}); 
+        	req.log.error('Error updating customer: ', customerID);
+        	return res.json({'error':err}); 
       	}
       	else {
 					req.log.info('Updated customer: ', customerID);
-        	return res.send({'result':result});
+        	return res.json({'result':result});
       	}
 			});			
 		});
