@@ -1,24 +1,39 @@
-# Micro Finance API
-## Set up
-1. Download and install Git for Windows, https://git-scm.com/downloads
-2. Open folder you want to copy files to in command prompt
+# Micro Finance API #
+## Set up ##
+* Download and install Git for Windows
+* Open folder you want to copy files to in command prompt
+
 ```
+#!Command Prompt
+
 cd [folder path]
 ```
-3. Download files
-    Use the URL provided by BitBucket
-4. Open folder that was created by git clone command in Visual Studio Code (mfin-api-test)
-5. Open the terminal in VS Code, ctrl+`
-6. Run the following commands
+* Download files, use the URL provided by BitBucket
+* Open folder that was created by git clone command in Visual Studio Code (2017_ccpd_2017)
+* Open the terminal in VS Code, ctrl+`
+* Run the following commands
+
 ```
+#!Command Prompt
+
 npm install
 gulp
 ```
-7. To stop server <br>
-ctrl+c
 
-## Optional
-### Install Gulp globally
+* To stop server
+
 ```
+#!Command Prompt
+
+ctrl+c
+```
+
+
+## Optional ##
+### Install Gulp globally ###
+
+```
+#!Command Prompt
+
 npm install --global gulp-cli
 ```
