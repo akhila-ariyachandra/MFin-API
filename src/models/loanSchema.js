@@ -7,7 +7,7 @@ module.exports = (function loanSchema () {
 		loanType: {type: String, required: true},
 		date: {type: Date, required: true},
 		loanAmount: {type: Number, required: true},
-		duration: {type: Number, require:true},
+		duration: {type: Number, required:true},
 		interest: {type: Number, required: true},
 		customer: {type: mongoose.Schema.ObjectId}
 	};

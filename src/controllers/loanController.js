@@ -12,7 +12,12 @@ function loanController () {
 		var interest = req.params.interest;
 		var customer = req.params.customer;
 		
-		Loan.create({loanType:loanType,date:date,loanAmount:loanAmount,duration:duration,interest:interest,customer:customer}, function(err, result) {
+		Loan.create({	loanType:loanType,
+									date:date,
+									loanAmount:loanAmount,
+									duration:duration,
+									interest:interest,
+									customer:customer}, function(err, result) {
 		//changing log or error
 			if (err) {
 				req.log.error('Error creating new loan');
