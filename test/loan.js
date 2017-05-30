@@ -25,11 +25,15 @@ describe('Loan',() =>{
     describe('POST /createLoan', () => {
         it('it should not create a loan without the loanType field', (done) => {
             const loan = {
+                id : 1,
                 date : '04-03-1998',
                 loanAmount : '250000',
                 duration : '12',
                 interest : '5',
-                customer : 1 
+                customer : 1 ,
+                manager : 'Dineth Lahiru',
+                status : 'Aprove',
+              
             }
 
             chai.request(server)
@@ -47,6 +51,90 @@ describe('Loan',() =>{
                     done();
                 });
         });
+
+         it('it should not create a loan without the date field', (done) => {
+            const loan = {
+                id : 1,
+                loanType : 'Monthly',
+                loanAmount : '250000',
+                duration : '12',
+                interest : '5',
+                customer : 1 ,
+                manager : 'Dineth Lahiru',
+                status : 'Aprove',
+              
+            }
+
+            chai.request(server)
+                .post('/createLoan')
+                .send(loan)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('date');
+                    res.body.error.errors.date.should.have.property('properties');
+                    res.body.error.errors.date.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+
+            
+
+
+    });
+
+
+    //Test the /getLoan /<id> route
+        describe('GET /getLoan/<id>', () => {
+
+            it('it should GET the loan', (done) => {
+
+                    chai.request(server)
+                        .get('/getLoan/5927f1d52d0c201f6cf58be4')
+                        .end((err, res) => {
+
+                            res.should.have.status(200);
+                            should.exist(res.body);
+                            res.body.should.be.a('object');
+                            done();
+
+                        });
+
+            });
+
+        });
+
+
+//test loan approval route
+
+    describe('PUT /loan_aproval', () => {
+
+        it('it should give approval to loans', (done) => {
+            const loan = new Loan({id : 1,
+                                    manager : 'Dineth Lahiru',
+                                status : 'Approve'});
+
+                loan.save((err, loan) => {
+                    chai.request(server)
+                        .put('/loan_aproval')
+                        .send(loan)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('result');
+
+                            res.body.result.should.have.property('id').eql(1);
+                            res.body.result.should.have.property('manager');
+                            res.body.result.should.have.property('status');
+                            done();
+                        });
+                });
+        });
+
     });
 
 

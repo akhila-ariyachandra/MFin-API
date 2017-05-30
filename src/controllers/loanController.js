@@ -11,6 +11,8 @@ function loanController () {
 		var duration = req.params.duration;
 		var interest = req.params.interest;
 		var customer = req.params.customer;
+		var manager = req.params.manager;
+		var status = req.params.status;
 		
 		Loan.create({loanType:loanType,date:date,loanAmount:loanAmount,duration:duration,interest:interest,customer:customer}, function(err, result) {
 			if (err) {
@@ -85,6 +87,43 @@ function loanController () {
 			});			
 		});
 	};
+
+
+//loan aproval
+
+this.loan_aproval = function(req,res)
+{
+	var id = req.params.id;
+	//geting existing details form loan
+	Loan.findById(id, function(err, loan)
+	{
+		if(err)
+		{
+			console.log(err);
+			return res.send({'erroe':err});
+		}
+			//update deteails
+			loan.manager = req.params.manager;
+			loan.status = req.params.status;
+
+			//send data to database
+			loan.save(function(err, result){
+
+					if(err)
+					{
+						console.log(err);
+						return res.send({'error':err});
+					}
+					else
+					{
+						return res.send({'Aproval details':result});
+					}
+
+			});
+
+	});
+};
+
 
 
 	return this;
