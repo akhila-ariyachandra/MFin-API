@@ -15,13 +15,28 @@ chai.use(chaiHttp);
 
 describe('Loan',() =>{
     // Empty the database before each test
-    beforeEach((done) => { 
+    before((done) => { 
         Loan.remove({}, (err) => { 
            done();         
         });     
     });
+/*
+    // Test the /getLoans route
+    describe('GET /getLoans', () => {
+        it('it should GET all the loans', (done) => {
+            chai.request(server)
+                .get('/getLoans')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a('object');
+                    done();
+                });
+        });
+    });
+    */
 
-      // Test the /createLoan route
+    // Test the /createLoan route
     describe('POST /createLoan', () => {
         it('it should not create a loan without the loanType field', (done) => {
             const loan = {
@@ -51,6 +66,7 @@ describe('Loan',() =>{
                     done();
                 });
         });
+<<<<<<< HEAD
 
          it('it should not create a loan without the date field', (done) => {
             const loan = {
@@ -136,6 +152,131 @@ describe('Loan',() =>{
         });
 
     });
+=======
+>>>>>>> ee44d41fd923e8e039f4acc9d7dd8bcc35f01a49
 
+        it('it should not create a loan without the date field', (done) => {
+            const loan = {
+                loanType: 'Fix Deposit',
+                loanAmount : '250000',
+                duration : '12',
+                interest : '5',
+                customer : 1 
+            }
 
+            chai.request(server)
+                .post('/createLoan')
+                .send(loan)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('date');
+                    res.body.error.errors.date.should.have.property('properties');
+                    res.body.error.errors.date.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not create a loan without the loanAmount field', (done) => {
+            const loan = {
+                loanType: 'Fix Deposit',
+                date: '04-03-1998', 
+                duration : '12',
+                interest : '5',
+                customer : 1 
+            }
+
+            chai.request(server)
+                .post('/createLoan')
+                .send(loan)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('loanAmount');
+                    res.body.error.errors.loanAmount.should.have.property('properties');
+                    res.body.error.errors.loanAmount.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not create a loan without the duration field', (done) => {
+            const loan = {
+                loanType: 'Fix Deposit',
+                date: '04-03-1998', 
+                loanAmount : '250000',
+                interest : '5',
+                customer : 1 
+            }
+
+            chai.request(server)
+                .post('/createLoan')
+                .send(loan)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('duration');
+                    res.body.error.errors.duration.should.have.property('properties');
+                    res.body.error.errors.duration.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not create a loan without the interest field', (done) => {
+            const loan = {
+                loanType: 'Fix Deposit',
+                date: '04-03-1998', 
+                loanAmount : '250000',
+                duration : '12',
+                customer : 1 
+            }
+
+            chai.request(server)
+                .post('/createLoan')
+                .send(loan)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('interest');
+                    res.body.error.errors.interest.should.have.property('properties');
+                    res.body.error.errors.interest.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+        it('it should not create a loan without the customer field', (done) => {
+            const loan = {
+                loanType: 'Fix Deposit',
+                date: '04-03-1998', 
+                loanAmount : '250000',
+                duration : '12',
+                interest : '5'
+            }
+
+            chai.request(server)
+                .post('/createLoan')
+                .send(loan)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('customer');
+                    res.body.error.errors.customer.should.have.property('properties');
+                    res.body.error.errors.customer.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+    });
 });

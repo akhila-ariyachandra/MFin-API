@@ -14,12 +14,19 @@ function loanController () {
 		var manager = req.params.manager;
 		var status = req.params.status;
 		
-		Loan.create({loanType:loanType,date:date,loanAmount:loanAmount,duration:duration,interest:interest,customer:customer}, function(err, result) {
+		Loan.create({	loanType:loanType,
+									date:date,
+									loanAmount:loanAmount,
+									duration:duration,
+									interest:interest,
+									customer:customer}, function(err, result) {
+		//changing log or error
 			if (err) {
-				console.log(err);
+				req.log.error('Error creating new loan');
 				return res.send({'error':err});	
 			}
 			else {
+				req.log.info('New loan registered');
         return res.send({'result':result,'status':'successfully saved'});
       }
 		});
@@ -30,10 +37,11 @@ function loanController () {
  
     Loan.find({}, function(err, result) {
       if (err) {
-        console.log(err);
+        req.log.error('Error getting loans: ', id);
         return res.send({'error':err}); 
       }
       else {
+				req.log.info('Retrived loan: ', id);
         return res.send({'Loan Details':result});
       }
     });
@@ -46,10 +54,11 @@ function loanController () {
 		Loan.findById(id, function(err, result){
 			if(err)
 			{
-				console.log(err);
+				req.log.error('Error getting loan: ', id);
 				return res.send({'error':err});
 			}
 			else{
+				req.log.info('Retrived loan');
 				return res.send({'Loan details':result});
 			};
 		});
@@ -63,7 +72,7 @@ function loanController () {
 		// Get existing details of loan
 		Loan.findById(id, function(err, loan) {
 			if (err) {
-        console.log(err);
+        req.log.error('Error find loan details:', id);
         return res.send({'error':err}); 
       }
 
@@ -78,11 +87,12 @@ function loanController () {
 			// Send data to database
 			loan.save(function(err, result){
 				if (err) {
-        	console.log(err);
+        	req.log.error('Error updating loan: ', id);
         	return res.send({'error':err}); 
       	}
       	else {
-        	return res.send({'Loan Details':result});
+						req.log.info('Updated loan details: ', id);
+        		return res.send({'Loan Details':result});
       	}
 			});			
 		});

@@ -31,7 +31,8 @@
     "bunyan": "^1.8.10",
     "async": "^2.4.0",
     "bluebird": "^3.5.0",
-    "config": "^1.26.1"
+    "config": "^1.26.1",
+    "mongoose-sequence": "^3.2.0"
 	},
   "devDependencies": {
     "chai": "^3.5.0",

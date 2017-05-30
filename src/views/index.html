@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html>
+    
+    <head>
+        <style>
+            h1, h2 {text-align:center;}
+            div {float: left; padding-right: 30px;}
+        </style>
+        <title>
+            MFin API
+        </title>
+    </head>
+    
+    <body>
+        <h1>MFin API Documentation</h1>
+        <h2>Routes currently implemented</h2>
+        
+        <div>
+            <h3>Customer</h3>
+            <ul>
+                <li>
+                    <b>/createCustomer</b>
+                    <br>
+                    <b>POST</b>
+                    <br>
+                    Parameters
+                    <br>
+                    <ul>
+                        <li>name (String)</li>
+                        <li>surname (String)</li>
+                        <li>nic (String)</li>
+                        <li>address (String)</li>
+                        <li>dob (Date) [MM-dd-YYYY]</li>
+                        <li>phone (String)</li>
+                        <li>area (String)</li>
+                        <li>longitude (String)</li>
+                        <li>latitude (String)</li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>/getCustomer/:customerID</b>
+                    <br>
+                    <b>GET</b>
+                    <br>
+                    Parameters
+                    <br>
+                    <ul>
+                        <li>customerID (Number)</li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>/getCustomers</b>
+                    <br>
+                    <b>GET</b>
+                </li>
+                <br>
+                <li>
+                    <b>/updateCustomer</b>
+                    <br>
+                    <b>POST</b>
+                    <br>
+                    Parameters
+                    <br>
+                    <ul>
+                        <li>customerID (Number)</li>
+                        <li>name (String)</li>
+                        <li>surname (String)</li>
+                        <li>nic (String)</li>
+                        <li>address (String)</li>
+                        <li>dob (Date) [MM-dd-YYYY]</li>
+                        <li>phone (String)</li>
+                        <li>area (String)</li>
+                        <li>longitude (String)</li>
+                        <li>latitude (String)</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3>Loan</h3>
+            <ul>
+                <li>
+                    <b>/createLoan</b>
+                    <br>
+                    <b>POST</b>
+                    <br>
+                    Parameters
+                    <br>
+                    <ul>
+                        <li>loanType (String)</li>
+                        <li>date (Date) [MM-dd-YYYY]</li>
+                        <li>loanAmount (Number)</li>
+                        <li>duration (Number)</li>
+                        <li>interest (Number)</li>
+                        <li>customer (ObjectID)</li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>/getLoans</b>
+                    <br>
+                    <b>GET</b>
+                </li>
+                <br>
+                <li>
+                    <b>/getLoan/:id</b>
+                    <br>
+                    <b>GET</b>
+                    <br>
+                    Parameters
+                    <br>
+                    <ul>
+                        <li>id (Number)</li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>/updateLoan</b>
+                    <br>
+                    <b>PUT</b>
+                    <br>
+                    Parameters
+                    <br>
+                    <ul>
+                        <li>id (ObjectID)</li>
+                        <li>loanType (String)</li>
+                        <li>date (Date) [MM-dd-YYYY]</li>
+                        <li>loanAmount (Number)</li>
+                        <li>duration (Number)</li>
+                        <li>interest (Number)</li>
+                        <li>customer (ObjectID)</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3>Log</h3>
+            <ul>
+                <li>
+                    <b>/viewLogs</b>
+                    <br>
+                    <b>GET</b>
+                </li>
+            </ul>
+        </div>
+
+    </body>
+
+</html>
