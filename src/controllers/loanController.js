@@ -15,39 +15,38 @@ function loanController () {
 		var status = req.params.status;
 		
 		Loan.create({	loanType:loanType,
-									date:date,
-									loanAmount:loanAmount,
-									duration:duration,
-									interest:interest,
-									customer:customer}, function(err, result) {
-		//changing log or error
+						date:date,
+						loanAmount:loanAmount,
+						duration:duration,
+						interest:interest,
+						customer:customer}, function(err, result) {
+			//changing log or error
 			if (err) {
 				req.log.error('Error creating new loan');
 				return res.send({'error':err});	
 			}
 			else {
 				req.log.info('New loan registered');
-        return res.send({'result':result,'status':'successfully saved'});
-      }
+        		return res.send({'result':result,'status':'successfully saved'});
+      		}
 		});
 	};
  
-  // Fetching Details of Loan
-  this.getLoans = function (req, res, next) {
- 
-    Loan.find({}, function(err, result) {
-      if (err) {
-        req.log.error('Error getting loans: ', id);
-        return res.send({'error':err}); 
-      }
-      else {
+  	// Fetching Details of Loan
+  	this.getLoans = function (req, res, next) {
+ 		Loan.find({}, function(err, result) {
+      		if (err) {
+        		req.log.error('Error getting loans: ', id);
+        		return res.send({'error':err}); 
+      		}
+      		else {
 				req.log.info('Retrived loan: ', id);
-        return res.send({'Loan Details':result});
-      }
-    });
-  };
+        		return res.send({'Loan Details':result});
+      		}
+    	});
+  	};
  
-//feching loan details of 1 customer
+	//feching loan details of 1 customer
 	this.getLoan = function (req, res, next){
 		var id = req.params.id;
 		
@@ -64,7 +63,7 @@ function loanController () {
 		});
 	};
 
-// Update Loan details
+	// Update Loan details
 	this.updateLoan = function (req, res){
 		//console.log('called');
 		var id = req.params.id;
@@ -72,9 +71,9 @@ function loanController () {
 		// Get existing details of loan
 		Loan.findById(id, function(err, loan) {
 			if (err) {
-        req.log.error('Error find loan details:', id);
-        return res.send({'error':err}); 
-      }
+        		req.log.error('Error find loan details:', id);
+        		return res.send({'error':err}); 
+      		}
 
 			// Update details
 			loan.loanType = req.params.loanType;
@@ -87,57 +86,45 @@ function loanController () {
 			// Send data to database
 			loan.save(function(err, result){
 				if (err) {
-        	req.log.error('Error updating loan: ', id);
-        	return res.send({'error':err}); 
-      	}
-      	else {
+        			req.log.error('Error updating loan: ', id);
+        			return res.send({'error':err}); 
+      			}
+      			else {
 						req.log.info('Updated loan details: ', id);
-        		return res.send({'Loan Details':result});
-      	}
+        				return res.send({'Loan Details':result});
+      			}
 			});			
 		});
 	};
 
+	//loan aproval
+	this.loanApproval = function(req,res) {
+		var id = req.params.id;
+		//geting existing details form loan
+		Loan.findById(id, function(err, loan) {
+			if(err) {
+				console.log(err);
+				return res.send({'erroe':err});
+			}
 
-//loan aproval
-
-this.loan_aproval = function(req,res)
-{
-	var id = req.params.id;
-	//geting existing details form loan
-	Loan.findById(id, function(err, loan)
-	{
-		if(err)
-		{
-			console.log(err);
-			return res.send({'erroe':err});
-		}
 			//update deteails
 			loan.manager = req.params.manager;
 			loan.status = req.params.status;
 
 			//send data to database
-			loan.save(function(err, result){
-
-					if(err)
-					{
-						console.log(err);
-						return res.send({'error':err});
-					}
-					else
-					{
-						return res.send({'Aproval details':result});
-					}
-
+			loan.save(function(err, result) {
+				if(err) {
+					console.log(err);
+					return res.send({'error':err});
+				}
+				else {
+					return res.send({'Aproval details':result});
+				}
 			});
-
-	});
-};
-
-
+		});
+	};
 
 	return this;
- 
 };
  
 module.exports = new loanController();

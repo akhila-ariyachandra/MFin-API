@@ -20,7 +20,7 @@ module.exports = function(app) {
     app.get('/getLoans', loan.getLoans); //get loan details
     app.get('/getLoan/:id', loan.getLoan); // get one loan
     app.put('/updateLoan', loan.updateLoan); //Update Loan Details
-    app.put('/loan_aproval', loan.loan_aproval);//loan aproval
+    app.put('/loanApproval', loan.loanApproval); //loan aproval
 
     app.get('/viewLogs', logs.viewLogs); // View Logs
 };
