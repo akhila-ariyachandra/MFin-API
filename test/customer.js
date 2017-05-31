@@ -345,8 +345,8 @@ describe('Customers', () => {
         });
     });
 
-    // Test the /getCustomer/<id> route
-    describe('GET /getCustomer/<id>', () => {
+    // Test the /getCustomer/:customerID route
+    describe('GET /getCustomer/:customerID', () => {
         it('it should GET the customer', (done) => {
             chai.request(server)
                 .get('/getCustomer/1')

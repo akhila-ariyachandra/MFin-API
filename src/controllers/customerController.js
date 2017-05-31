@@ -75,7 +75,7 @@ function customerController () {
         req.log.error('Error finding customer to update: ', customerID);
         return res.json({'error':err}); 
       } else if (!customer) {
-				// If customer doesn't exist i.e. the wrong customerID was 
+				// If customer doesn't exist i.e. the wrong customerID was given
 				req.log.error('Customer does not exist to update: ', customerID);
 				return res.json({'error':'Record does not exist'});
 			}

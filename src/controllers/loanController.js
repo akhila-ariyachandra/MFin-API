@@ -1,25 +1,23 @@
 //This Controller deals with all functionalities of Customer
  
 function loanController () {
-	var Loan = require('../models/loanSchema');
+	const Loan = require('../models/loanSchema');
 	
 	// Creating New Loan
 	this.createLoan = function (req, res, next) {
-		var loanType = req.params.loanType;
-		var date = req.params.date;
-		var loanAmount = req.params.loanAmount;
-		var duration = req.params.duration;
-		var interest = req.params.interest;
-		var customer = req.params.customer;
-		var manager = req.params.manager;
-		var status = req.params.status;
-		
+		const loanType = req.params.loanType;
+		const date = req.params.date;
+		const loanAmount = req.params.loanAmount;
+		const duration = req.params.duration;
+		const interest = req.params.interest;
+		const customerID = req.params.customerID;
+
 		Loan.create({	loanType:loanType,
 						date:date,
 						loanAmount:loanAmount,
 						duration:duration,
 						interest:interest,
-						customer:customer}, function(err, result) {
+						customerID:customerID}, function(err, result) {
 			//changing log or error
 			if (err) {
 				req.log.error('Error creating new loan');
@@ -27,53 +25,56 @@ function loanController () {
 			}
 			else {
 				req.log.info('New loan registered');
-        		return res.send({'result':result,'status':'successfully saved'});
+        		return res.json({'result':result,'status':'successfully saved'});
       		}
 		});
 	};
  
-  	// Fetching Details of Loan
+  	// Fetching Details of all loans
   	this.getLoans = function (req, res, next) {
  		Loan.find({}, function(err, result) {
       		if (err) {
-        		req.log.error('Error getting loans: ', id);
+        		req.log.error('Error getting all loans');
         		return res.send({'error':err}); 
       		}
       		else {
-				req.log.info('Retrived loan: ', id);
-        		return res.send({'Loan Details':result});
+				req.log.info('Retrived all loans');
+        		return res.json(result);
       		}
     	});
   	};
  
-	//feching loan details of 1 customer
+	// Fetching Details of one loan
 	this.getLoan = function (req, res, next){
-		var id = req.params.id;
+		const loanID = req.params.loanID;
 		
-		Loan.findById(id, function(err, result){
-			if(err)
-			{
-				req.log.error('Error getting loan: ', id);
+		Loan.findOne({ 'loanID' : loanID }, function(err, result) {
+			if(err) {
+				req.log.error('Error getting loan: ',loanID);
 				return res.send({'error':err});
 			}
-			else{
+			else {
 				req.log.info('Retrived loan');
-				return res.send({'Loan details':result});
+				return res.json(result);
 			};
 		});
 	};
 
 	// Update Loan details
 	this.updateLoan = function (req, res){
-		//console.log('called');
-		var id = req.params.id;
+		const loanID = req.params.loanID;
 
 		// Get existing details of loan
-		Loan.findById(id, function(err, loan) {
+		Loan.findOne({ 'loanID' : loanID }, function(err, loan) {
 			if (err) {
         		req.log.error('Error find loan details:', id);
         		return res.send({'error':err}); 
       		}
+			else if (!loan) {
+				// If loan doesn't exist i.e. the wrong loanID was given
+				req.log.error('Loan does not exist to update: ', loanID);
+				return res.json({'error':'Record does not exist'});
+			}
 
 			// Update details
 			loan.loanType = req.params.loanType;
@@ -86,12 +87,12 @@ function loanController () {
 			// Send data to database
 			loan.save(function(err, result){
 				if (err) {
-        			req.log.error('Error updating loan: ', id);
+        			req.log.error('Error updating loan: ', loanID);
         			return res.send({'error':err}); 
       			}
       			else {
-						req.log.info('Updated loan details: ', id);
-        				return res.send({'Loan Details':result});
+					req.log.info('Updated loan details: ', id);
+        			return res.json({'Loan Details':result});
       			}
 			});			
 		});
@@ -99,12 +100,17 @@ function loanController () {
 
 	//loan aproval
 	this.loanApproval = function(req,res) {
-		var id = req.params.id;
-		//geting existing details form loan
-		Loan.findById(id, function(err, loan) {
+		const loanID = req.params.loanID;
+		//geting existing details from loan
+		Loan.findOne({ 'loanID' : loanID }, function(err, loan) {
 			if(err) {
 				console.log(err);
-				return res.send({'erroe':err});
+				return res.send({'error':err});
+			}
+			else if (!loan) {
+				// If loan doesn't exist i.e. the wrong loanID was given
+				req.log.error('Loan does not exist to update: ', loanID);
+				return res.json({'error':'Record does not exist'});
 			}
 
 			//update deteails
@@ -118,7 +124,7 @@ function loanController () {
 					return res.send({'error':err});
 				}
 				else {
-					return res.send({'Aproval details':result});
+					return res.json({'Aproval details':result});
 				}
 			});
 		});
