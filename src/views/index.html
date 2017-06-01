@@ -96,7 +96,7 @@
                         <li>loanAmount (Number)</li>
                         <li>duration (Number)</li>
                         <li>interest (Number)</li>
-                        <li>customer (ObjectID)</li>
+                        <li>customerID (Number)</li>
                     </ul>
                 </li>
                 <br>
@@ -107,14 +107,14 @@
                 </li>
                 <br>
                 <li>
-                    <b>/getLoan/:id</b>
+                    <b>/getLoan/:loanID</b>
                     <br>
                     <b>GET</b>
                     <br>
                     Parameters
                     <br>
                     <ul>
-                        <li>id (Number)</li>
+                        <li>loanID (Number)</li>
                     </ul>
                 </li>
                 <br>
@@ -126,13 +126,27 @@
                     Parameters
                     <br>
                     <ul>
-                        <li>id (ObjectID)</li>
+                        <li>loanID (Number)</li>
                         <li>loanType (String)</li>
                         <li>date (Date) [MM-dd-YYYY]</li>
                         <li>loanAmount (Number)</li>
                         <li>duration (Number)</li>
                         <li>interest (Number)</li>
-                        <li>customer (ObjectID)</li>
+                        <li>customerID (Number)</li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>/loanApproval</b>
+                    <br>
+                    <b>PUT</b>
+                    <br>
+                    Parameters
+                    <br>
+                    <ul>
+                        <li>loanID</li>
+                        <li>manager</li>
+                        <li>status</li>         
                     </ul>
                 </li>
             </ul>
