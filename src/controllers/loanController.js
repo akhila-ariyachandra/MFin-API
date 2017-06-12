@@ -82,7 +82,7 @@ function loanController () {
 			loan.loanAmount = req.params.loanAmount;
 			loan.duration = req.params.duration;
 			loan.interest = req.params.interest;
-			loan.customer = req.params.customer;
+			loan.customerID = req.params.customerID;
 			
 			// Send data to database
 			loan.save(function(err, result){
