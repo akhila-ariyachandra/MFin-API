@@ -91,7 +91,7 @@ function loanController () {
         			return res.send({'error':err}); 
       			}
       			else {
-					req.log.info('Updated loan details: ', id);
+					req.log.info('Updated loan details: ', customerID);
         			return res.json({'Loan Details':result});
       			}
 			});			
