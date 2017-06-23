@@ -6,7 +6,7 @@
   "scripts": {
     "start": "gulp",
     "deploy": "gcloud app deploy",
-    "test": "mocha --timeout 10000"    
+    "test": "mocha --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/akhila-ariyachandra/mfin-api-test#readme",
   "dependencies": {
-		"restify": "^4.3.0",
-		"mongoose": "^4.9.7",
+    "restify": "^4.3.0",
+    "mongoose": "^4.9.7",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
     "gulp-notify": "^3.0.0",
@@ -33,7 +33,7 @@
     "bluebird": "^3.5.0",
     "config": "^1.26.1",
     "mongoose-sequence": "^3.2.0"
-	},
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
