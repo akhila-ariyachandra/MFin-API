@@ -12,19 +12,19 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('Loan',() =>{
+describe('Loan', () => {
     // Empty the database before each test
-    before((done) => { 
-        Loan.remove({}, (err) => { 
-           done();         
-        });     
+    before((done) => {
+        Loan.remove({}, (err) => {
+            done();
+        });
     });
 
     // Reset the counter of loanID before running tests
     before((done) => {
         Loan.counterReset('loanID', (err) => {
             done();
-        });   
+        });
     });
 
     // Test the /getLoans route
@@ -38,20 +38,20 @@ describe('Loan',() =>{
                     res.body.should.be.a('array');
                     res.body.length.should.be.eql(0);
                     done();
-            });
+                });
         });
     });
 
     // Test the /createLoan route
     describe('POST /createLoan', () => {
-  
+
         it('it should not create a loan without the loanType field', (done) => {
             const loan = {
                 date: '04-03-1998',
-                loanAmount : '250000',
-                duration : '12',
-                interest : '5',
-                customerID : 1 
+                loanAmount: '250000',
+                duration: '12',
+                interest: '5',
+                customerID: 1
             }
 
             chai.request(server)
@@ -73,10 +73,10 @@ describe('Loan',() =>{
         it('it should not create a loan without the date field', (done) => {
             const loan = {
                 loanType: 'Fix Deposit',
-                loanAmount : '250000',
-                duration : '12',
-                interest : '5',
-                customerID : 1 
+                loanAmount: '250000',
+                duration: '12',
+                interest: '5',
+                customerID: 1
             }
 
             chai.request(server)
@@ -98,10 +98,10 @@ describe('Loan',() =>{
         it('it should not create a loan without the loanAmount field', (done) => {
             const loan = {
                 loanType: 'Fix Deposit',
-                date: '04-03-1998', 
-                duration : '12',
-                interest : '5',
-                customerID : 1 
+                date: '04-03-1998',
+                duration: '12',
+                interest: '5',
+                customerID: 1
             }
 
             chai.request(server)
@@ -123,10 +123,10 @@ describe('Loan',() =>{
         it('it should not create a loan without the duration field', (done) => {
             const loan = {
                 loanType: 'Fix Deposit',
-                date: '04-03-1998', 
-                loanAmount : '250000',
-                interest : '5',
-                customerID : 1 
+                date: '04-03-1998',
+                loanAmount: '250000',
+                interest: '5',
+                customerID: 1
             }
 
             chai.request(server)
@@ -148,10 +148,10 @@ describe('Loan',() =>{
         it('it should not create a loan without the interest field', (done) => {
             const loan = {
                 loanType: 'Fix Deposit',
-                date: '04-03-1998', 
-                loanAmount : '250000',
-                duration : '12',
-                customerID : 1 
+                date: '04-03-1998',
+                loanAmount: '250000',
+                duration: '12',
+                customerID: 1
             }
 
             chai.request(server)
@@ -173,10 +173,10 @@ describe('Loan',() =>{
         it('it should not create a loan without the customerID field', (done) => {
             const loan = {
                 loanType: 'Fix Deposit',
-                date: '04-03-1998', 
-                loanAmount : '250000',
-                duration : '12',
-                interest : '5'
+                date: '04-03-1998',
+                loanAmount: '250000',
+                duration: '12',
+                interest: '5'
             }
 
             chai.request(server)
@@ -226,7 +226,7 @@ describe('Loan',() =>{
                     res.body.result.should.have.property('status').eql('Pending');
                     res.body.result.should.have.property('_id');
                     done();
-            })
+                })
         });
     });
 
@@ -240,16 +240,18 @@ describe('Loan',() =>{
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     done();
-            });
+                });
         });
     });
 
     //test loan approval route
     describe('PUT /loanApproval', () => {
         it('it should give approval to loans', (done) => {
-            const loan = new Loan({ loanID : 1,
-                                    manager : 'John Doe',
-                                    status : 'Approve'});
+            const loan = new Loan({
+                loanID: 1,
+                manager: 'John Doe',
+                status: 'Approve'
+            });
 
             loan.save((err, loan) => {
                 chai.request(server)

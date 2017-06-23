@@ -14,19 +14,19 @@ chai.use(chaiHttp);
 
 describe('Customers', () => {
     // Empty the database before each test
-    before((done) => { 
-        Customer.remove({}, (err) => { 
-           done();         
-        });           
+    before((done) => {
+        Customer.remove({}, (err) => {
+            done();
+        });
     });
 
     // Reset the counter of customerID before running tests
     before((done) => {
         Customer.counterReset('customerID', (err) => {
             done();
-        });   
+        });
     });
-    
+
     // Test the /getCustomers route
     describe('GET /getCustomers', () => {
         it('it should GET all the customers', (done) => {
@@ -41,19 +41,19 @@ describe('Customers', () => {
                 });
         });
     });
-    
+
     // Test the /createCustomers route
     describe('POST /createCustomer', () => {
         it('it should not create a customer without the name field', (done) => {
             const customer = {
-                surname : 'Doe',
-                nic : '801234567V',
-                address : '123/X Baker St., Narnia',
-                dob : '01-01-1980',
-                phone : '123456789',
-                area : '59114c08494ebe30537ce7a5',
-                longitude : "6°54'52.8 N",
-                latitude : "79°58'24.1 E" 
+                surname: 'Doe',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                dob: '01-01-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
             }
 
             chai.request(server)
@@ -71,17 +71,17 @@ describe('Customers', () => {
                     done();
                 });
         });
-        
+
         it('it should not create a customer without the surname field', (done) => {
             const customer = {
-                name : 'John',
-                nic : '801234567V',
-                address : '123/X Baker St., Narnia',
-                dob : '01-01-1980',
-                phone : '123456789',
-                area : '59114c08494ebe30537ce7a5',
-                longitude : "6°54'52.8 N",
-                latitude : "79°58'24.1 E" 
+                name: 'John',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                dob: '01-01-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
             }
 
             chai.request(server)
@@ -102,14 +102,14 @@ describe('Customers', () => {
 
         it('it should not create a customer without the nic field', (done) => {
             const customer = {
-                name : 'John',
-                surname : 'Doe',
-                address : '123/X Baker St., Narnia',
-                dob : '01-01-1980',
-                phone : '123456789',
-                area : '59114c08494ebe30537ce7a5',
-                longitude : "6°54'52.8 N",
-                latitude : "79°58'24.1 E" 
+                name: 'John',
+                surname: 'Doe',
+                address: '123/X Baker St., Narnia',
+                dob: '01-01-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
             }
 
             chai.request(server)
@@ -130,14 +130,14 @@ describe('Customers', () => {
 
         it('it should not create a customer without the address field', (done) => {
             const customer = {
-                name : 'John',
-                surname : 'Doe',
-                nic : '801234567V',
-                dob : '01-01-1980',
-                phone : '123456789',
-                area : '59114c08494ebe30537ce7a5',
-                longitude : "6°54'52.8 N",
-                latitude : "79°58'24.1 E" 
+                name: 'John',
+                surname: 'Doe',
+                nic: '801234567V',
+                dob: '01-01-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
             }
 
             chai.request(server)
@@ -155,17 +155,17 @@ describe('Customers', () => {
                     done();
                 });
         });
-        
+
         it('it should not create a customer without the DOB field', (done) => {
             const customer = {
-                name : 'John',
-                surname : 'Doe',
-                nic : '801234567V',
-                address : '123/X Baker St., Narnia',
-                phone : '123456789',
-                area : '59114c08494ebe30537ce7a5',
-                longitude : "6°54'52.8 N",
-                latitude : "79°58'24.1 E"  
+                name: 'John',
+                surname: 'Doe',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
             }
 
             chai.request(server)
@@ -186,14 +186,14 @@ describe('Customers', () => {
 
         it('it should not create a customer without the phone field', (done) => {
             const customer = {
-                name : 'John',
-                surname : 'Doe',
-                nic : '801234567V',
-                address : '123/X Baker St., Narnia',
-                dob : '01-01-1980',
-                area : '59114c08494ebe30537ce7a5',
-                longitude : "6°54'52.8 N",
-                latitude : "79°58'24.1 E"  
+                name: 'John',
+                surname: 'Doe',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                dob: '01-01-1980',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
             }
 
             chai.request(server)
@@ -214,14 +214,14 @@ describe('Customers', () => {
 
         it('it should not create a customer without the longitude field', (done) => {
             const customer = {
-                name : 'John',
-                surname : 'Doe',
-                nic : '801234567V',
-                address : '123/X Baker St., Narnia',
-                dob : '01-01-1980',
-                phone : '123456789',
-                area : '59114c08494ebe30537ce7a5',
-                latitude : "79°58'24.1 E"  
+                name: 'John',
+                surname: 'Doe',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                dob: '01-01-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                latitude: "79°58'24.1 E"
             }
 
             chai.request(server)
@@ -242,14 +242,14 @@ describe('Customers', () => {
 
         it('it should not create a customer without the latitude field', (done) => {
             const customer = {
-                name : 'John',
-                surname : 'Doe',
-                nic : '801234567V',
-                address : '123/X Baker St., Narnia',
-                dob : '01-01-1980',
-                phone : '123456789',
-                area : '59114c08494ebe30537ce7a5',
-                longitude : "6°54'52.8 N"  
+                name: 'John',
+                surname: 'Doe',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                dob: '01-01-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N"
             }
 
             chai.request(server)
@@ -270,15 +270,15 @@ describe('Customers', () => {
 
         it('it should create a customer', (done) => {
             const customer = {
-                name : 'John',
-                surname : 'Doe',
-                nic : '801234567V',
-                address : '123/X Baker St., Narnia',
-                dob : '01-01-1980',
-                phone : '123456789',
-                area : '59114c08494ebe30537ce7a5',
-                longitude : "6°54'52.8 N",
-                latitude : "79°58'24.1 E"  
+                name: 'John',
+                surname: 'Doe',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                dob: '01-01-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
             }
 
             chai.request(server)
@@ -308,15 +308,15 @@ describe('Customers', () => {
 
         it('it should create the 2nd customer with customerID 2', (done) => {
             const customer = {
-                name : 'Jane',
-                surname : 'Doe',
-                nic : '801234567V',
-                address : '123/X Baker St., Narnia',
-                dob : '01-01-1980',
-                phone : '123456789',
-                area : '59114c08494ebe30537ce7a5',
-                longitude : "6°54'52.8 N",
-                latitude : "79°58'24.1 E"  
+                name: 'Jane',
+                surname: 'Doe',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                dob: '01-01-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
             }
 
             chai.request(server)
@@ -362,17 +362,19 @@ describe('Customers', () => {
     // Test the /updateCustomer route
     describe('PUT /updateCustomer', () => {
         it('it should not update the customer if the wrong customerID is given', (done) => {
-            const customer = new Customer({ customerID : 3,
-                                            name : 'John',
-                                            surname : 'Doe',
-                                            nic : '801234567V',
-                                            address : '123/X Baker St., Narnia',
-                                            dob : '01-02-1980',
-                                            phone : '123456789',
-                                            area : '59114c08494ebe30537ce7a5',
-                                            longitude : "6°54'52.8 N",
-                                            latitude : "79°58'24.1 E"});
-            
+            const customer = new Customer({
+                customerID: 3,
+                name: 'John',
+                surname: 'Doe',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                dob: '01-02-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
+            });
+
             customer.save((err, customer) => {
                 chai.request(server)
                     .put('/updateCustomer')
@@ -380,24 +382,26 @@ describe('Customers', () => {
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('object');
-                        res.body.should.have.property('error').eql('Record does not exist'); 
-                        done();          
-                });
+                        res.body.should.have.property('error').eql('Record does not exist');
+                        done();
+                    });
             });
         });
 
         it('it should update the customer given the customerID', (done) => {
-            const customer = new Customer({ customerID : 1,
-                                            name : 'John',
-                                            surname : 'Doe',
-                                            nic : '801234567V',
-                                            address : '123/X Baker St., Narnia',
-                                            dob : '01-02-1980',
-                                            phone : '123456789',
-                                            area : '59114c08494ebe30537ce7a5',
-                                            longitude : "6°54'52.8 N",
-                                            latitude : "79°58'24.1 E"});
-            
+            const customer = new Customer({
+                customerID: 1,
+                name: 'John',
+                surname: 'Doe',
+                nic: '801234567V',
+                address: '123/X Baker St., Narnia',
+                dob: '01-02-1980',
+                phone: '123456789',
+                area: '59114c08494ebe30537ce7a5',
+                longitude: "6°54'52.8 N",
+                latitude: "79°58'24.1 E"
+            });
+
             customer.save((err, customer) => {
                 chai.request(server)
                     .put('/updateCustomer')
@@ -418,9 +422,9 @@ describe('Customers', () => {
                         res.body.result.should.have.property('area');
                         res.body.result.should.have.property('longitude');
                         res.body.result.should.have.property('latitude');
-                        res.body.result.should.have.property('__v');  
-                        done();          
-                });
+                        res.body.result.should.have.property('__v');
+                        done();
+                    });
             });
         });
     });

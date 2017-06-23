@@ -1,8 +1,8 @@
-module.exports = function(app) {
-	const customer = require('./controllers/customerController');
+module.exports = function (app) {
+    const customer = require('./controllers/customerController');
     const loan = require('./controllers/loanController');
     const logs = require('./controllers/loggingController');
-    
+
     const restify = require('restify');
     const path = require('path');
 
@@ -10,7 +10,7 @@ module.exports = function(app) {
         directory: path.join(__dirname, 'views'),
         file: 'index.html'
     }));
- 
+
     app.post('/createCustomer', customer.createCustomer); //Create Customer API
     app.get('/getCustomer/:customerID', customer.getCustomer);  // Get one Customer Details API
     app.get('/getCustomers', customer.getCustomers);  // Get All Customer Details API

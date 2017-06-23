@@ -15,8 +15,8 @@ const log = bunyan.createLogger({
 });
 
 const app = restify.createServer({
-	name: 'mfin-api',
-	log: log
+    name: 'mfin-api',
+    log: log
 });
 
 app.use(restify.fullResponse());
@@ -24,10 +24,10 @@ app.use(restify.bodyParser());
 app.use(restify.queryParser());
 
 const portNo = process.env.PORT || config.port;
- 
-app.listen(portNo, function() {
-	console.log('%s listening at %s', app.name, app.url);
-	
+
+app.listen(portNo, function () {
+    console.log('%s listening at %s', app.name, app.url);
+
 });
 
 const routes = require('./routes')(app);
