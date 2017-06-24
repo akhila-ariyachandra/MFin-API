@@ -1,10 +1,11 @@
+/*--------------------Server--------------------*/
 'use strict';
 
-const restify = require('restify');
-const config = require('config');
-const bunyan = require('bunyan');
+var restify = require('restify');
+var config = require('config');
+var bunyan = require('bunyan');
 
-const log = bunyan.createLogger({
+var log = bunyan.createLogger({
     name: 'MFin',
     streams: [{
         type: 'rotating-file',
@@ -14,7 +15,7 @@ const log = bunyan.createLogger({
     }]
 });
 
-const app = restify.createServer({
+var app = restify.createServer({
     name: 'mfin-api',
     log: log
 });
@@ -23,13 +24,8 @@ app.use(restify.fullResponse());
 app.use(restify.bodyParser());
 app.use(restify.queryParser());
 
-const portNo = process.env.PORT || config.port;
+var portNo = process.env.PORT || config.port;
 
 app.listen(portNo, function () {
     console.log('%s listening at %s', app.name, app.url);
-
 });
-
-const routes = require('./routes')(app);
-
-module.exports = app;

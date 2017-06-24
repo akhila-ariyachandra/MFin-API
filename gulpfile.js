@@ -4,8 +4,33 @@ const nodemon = require('gulp-nodemon');
 const notify = require('gulp-notify');
 const livereload = require('gulp-livereload');
 const fs = require('fs');
+const concat = require('gulp-concat');
+const rename = require('gulp-rename');
+const uglify = require('gulp-uglify');
+
+// Paths
+const appFiles = [
+	'src/app.js', // Server file
+	'src/db.js', // Database file
+	'src/headers/modelHeader.js', 'src/models/*.js', // Model files
+	'src/headers/controllerHeader.js', 'src/controllers/*.js', // Controller files
+	'src/routes.js', // Routes
+	'src/footer.js'// Footer
+];
+const dest = 'build';
 
 // Tasks
+gulp.task('build', function () {
+    gulp.src(appFiles)
+		.pipe(concat('app.js'))
+		.pipe(gulp.dest(dest))
+		.pipe(rename('app.min.js'))
+		.pipe(uglify())
+		.pipe(gulp.dest(dest));
+
+	return;
+});
+
 gulp.task('logCheck', function () {
 	// Check if directory exists
 	if (!isDirSync('logs')) {
@@ -25,17 +50,17 @@ gulp.task('server', function () {
 	// configure nodemon
 	nodemon({
 		// the script to run the app
-		script: 'src/app.js',
+		script: 'build/app.min.js',
 		ext: 'js'
 	}).on('restart', function () {
 		// when the app has restarted, run livereload.
-		gulp.src('src/app.js')
+        gulp.src('build/app.min.js')
 			.pipe(livereload())
 			.pipe(notify('Restarting server, please wait...'));
 	})
 });
 
-gulp.task('default', ['logCheck', 'server'], function () {
+gulp.task('default', ['build', 'logCheck', 'server'], function () {
 });
 
 // Functions

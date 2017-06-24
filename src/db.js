@@ -1,11 +1,11 @@
-'use strict';
+/*--------------------Database--------------------*/
 
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-const config = require('config');
+var config = require('config');
 
 mongoose.connect(config.dbPath);
-const db = mongoose.connection;
+var db = mongoose.connection;
 
 db.on('error', function () {
 	console.log('Error occured from the database');
@@ -14,5 +14,3 @@ db.on('error', function () {
 db.once('open', function dbOpen() {
 	console.log('Successfully opened the database');
 });
-
-exports.mongoose = mongoose;
