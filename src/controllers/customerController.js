@@ -2,15 +2,15 @@
 
 // Creating New Customer
 var createCustomer = function (req, res, next) {
-	var name = req.params.name;
-	var surname = req.params.surname;
-	var nic = req.params.nic;
-	var address = req.params.address;
-	var dob = req.params.dob;
-	var phone = req.params.phone;
-	var area = req.params.area;
-	var longitude = req.params.longitude;
-	var latitude = req.params.latitude;
+	var name = req.body.name;
+	var surname = req.body.surname;
+	var nic = req.body.nic;
+	var address = req.body.address;
+	var dob = req.body.dob;
+	var phone = req.body.phone;
+	var area = req.body.area;
+	var longitude = req.body.longitude;
+	var latitude = req.body.latitude;
 
 	Customer.create({
 		name: name,
@@ -66,7 +66,7 @@ var getCustomers = function (req, res, next) {
 
 // Update Customer details
 var updateCustomer = function (req, res) {
-	var customerID = req.params.customerID;
+	var customerID = req.body.customerID;
 
 	// Get existing details of customer
 	Customer.findOne({ 'customerID': customerID }, function (err, customer) {
@@ -80,15 +80,15 @@ var updateCustomer = function (req, res) {
 		}
 
 		// Update details
-		customer.name = req.params.name;
-		customer.surname = req.params.surname;
-		customer.nic = req.params.nic;
-		customer.address = req.params.address;
-		customer.dob = req.params.dob;
-		customer.phone = req.params.phone;
-		customer.area = req.params.area;
-		customer.longitude = req.params.longitude;
-		customer.latitude = req.params.latitude;
+		customer.name = req.body.name;
+		customer.surname = req.body.surname;
+		customer.nic = req.body.nic;
+		customer.address = req.body.address;
+		customer.dob = req.body.dob;
+		customer.phone = req.body.phone;
+		customer.area = req.body.area;
+		customer.longitude = req.body.longitude;
+		customer.latitude = req.body.latitude;
 
 		// Send data to database
 		customer.save(function (err, result) {
