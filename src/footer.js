@@ -2,7 +2,7 @@
 
 // Exports
 module.exports = {
-    app : app, // Main server
+    Server : app, // Main server
     
     // Export models for use in test cases
     Customer : Customer, // Customer schema

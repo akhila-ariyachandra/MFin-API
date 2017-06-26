@@ -7,7 +7,7 @@ const app = require('../build/app.min');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = app.app;
+const server = app.Server;
 const Loan = app.Loan;
 const should = chai.should();
 
