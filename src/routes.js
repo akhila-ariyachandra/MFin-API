@@ -7,15 +7,15 @@ app.get('/', restify.serveStatic({
     file: 'index.html'
 }));
 
-app.post('/createCustomer', createCustomer); //Create Customer API
-app.get('/getCustomer/:customerID', getCustomer);  // Get one Customer Details API
-app.get('/getCustomers', getCustomers);  // Get All Customer Details API
-app.put('/updateCustomer', updateCustomer); // Update Customer details
+app.post('/customer', createCustomer); //Create Customer API
+app.get('/customer/:customerID', getCustomer);  // Get one Customer Details API
+app.get('/customer', getCustomers);  // Get All Customer Details API
+app.put('/customer', updateCustomer); // Update Customer details
 
-app.post('/createLoan', createLoan); // create loan API
-app.get('/getLoans', getLoans); // get loan details
-app.get('/getLoan/:loanID', getLoan); // get one loan
-app.put('/updateLoan', updateLoan); //Update Loan Details
-app.put('/loanApproval', loanApproval); //loan aproval
+app.post('/loan', createLoan); // create loan API
+app.get('/loan', getLoans); // get loan details
+app.get('/loan/:loanID', getLoan); // get one loan
+app.put('/loan', updateLoan); //Update Loan Details
+app.put('/loan', loanApproval); //loan aproval
 
-app.get('/viewLogs', viewLogs); // View Logs
+app.get('/logs', viewLogs); // View Logs
