@@ -1,4 +1,4 @@
-// Dependencies
+/*--------------------Dependencies--------------------*/
 const gulp = require('gulp');
 const nodemon = require('gulp-nodemon');
 const notify = require('gulp-notify');
@@ -8,7 +8,7 @@ const concat = require('gulp-concat');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 
-// Paths
+/*--------------------Paths--------------------*/
 const appFiles = [
 	'src/app.js', // Server file
 	'src/db.js', // Database file
@@ -19,7 +19,7 @@ const appFiles = [
 ];
 const dest = 'build';
 
-// Tasks
+/*--------------------Tasks--------------------*/
 gulp.task('build', function () {
 	// Copy View files
 	gulp.src('src/views/*.html')
@@ -47,6 +47,7 @@ gulp.task('logCheck', function () {
 	}
 });
 
+// Run server using minified file
 gulp.task('server', function () {
 	// While running the server the env variable is set to dev
 	process.env.NODE_ENV = 'dev';
@@ -65,10 +66,34 @@ gulp.task('server', function () {
 	})
 });
 
+// Run server using file that hasn't been minified
+// Makes it easier to debug
+gulp.task('serverDebug', function () {
+	// While running the server the env variable is set to dev
+	process.env.NODE_ENV = 'dev';
+	// listen for changes
+	livereload.listen();
+	// configure nodemon
+	nodemon({
+		// the script to run the app
+		script: 'build/app',
+		ext: 'js'
+	}).on('restart', function () {
+		// when the app has restarted, run livereload.
+		gulp.src('build/app.js')
+			.pipe(livereload())
+			.pipe(notify('Restarting server, please wait...'));
+	})
+});
+
 gulp.task('default', ['build', 'logCheck', 'server'], function () {
 });
 
-// Functions
+// Used for debugging
+gulp.task('debug', ['build', 'logCheck', 'serverDebug'], function () {
+});
+
+/*--------------------Functions--------------------*/
 function isDirSync(aPath) {
 	try {
 		return fs.statSync(aPath).isDirectory();
