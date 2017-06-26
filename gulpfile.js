@@ -21,7 +21,12 @@ const dest = 'build';
 
 // Tasks
 gulp.task('build', function () {
-    gulp.src(appFiles)
+	// Copy View files
+	gulp.src('src/views/*.html')
+		.pipe(gulp.dest('build/views'));
+
+	// Concat and minify Javascript files
+	gulp.src(appFiles)
 		.pipe(concat('app.js'))
 		.pipe(gulp.dest(dest))
 		.pipe(rename('app.min.js'))
@@ -50,11 +55,11 @@ gulp.task('server', function () {
 	// configure nodemon
 	nodemon({
 		// the script to run the app
-		script: 'build/app.min.js',
+		script: 'build/app.min',
 		ext: 'js'
 	}).on('restart', function () {
 		// when the app has restarted, run livereload.
-        gulp.src('build/app.min.js')
+		gulp.src('build/app.min.js')
 			.pipe(livereload())
 			.pipe(notify('Restarting server, please wait...'));
 	})
