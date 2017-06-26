@@ -3,11 +3,12 @@
 // During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
-const Customer = require('../src/models/customerSchema');
+const app = require('../build/app.min');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../src/app');
+const server = app.Server;
+const Customer = app.Customer;
 const should = chai.should();
 
 chai.use(chaiHttp);

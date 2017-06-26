@@ -1,12 +1,12 @@
 //This Controller deals with all functionalities of Customer
 
 var createLoan = function (req, res, next) {
-	var loanType = req.params.loanType;
-	var date = req.params.date;
-	var loanAmount = req.params.loanAmount;
-	var duration = req.params.duration;
-	var interest = req.params.interest;
-	var customerID = req.params.customerID;
+	var loanType = req.body.loanType;
+	var date = req.body.date;
+	var loanAmount = req.body.loanAmount;
+	var duration = req.body.duration;
+	var interest = req.body.interest;
+	var customerID = req.body.customerID;
 
 	Loan.create({
 		loanType: loanType,
@@ -75,12 +75,12 @@ var updateLoan = function (req, res) {
 		}
 
 		// Update details
-		loan.loanType = req.params.loanType;
-		loan.date = req.params.date;
-		loan.loanAmount = req.params.loanAmount;
-		loan.duration = req.params.duration;
-		loan.interest = req.params.interest;
-		loan.customerID = req.params.customerID;
+		loan.loanType = req.body.loanType;
+		loan.date = req.body.date;
+		loan.loanAmount = req.body.loanAmount;
+		loan.duration = req.body.duration;
+		loan.interest = req.body.interest;
+		loan.customerID = req.body.customerID;
 
 		// Send data to database
 		loan.save(function (err, result) {
@@ -98,7 +98,7 @@ var updateLoan = function (req, res) {
 
 //loan aproval
 var loanApproval = function (req, res) {
-	var loanID = req.params.loanID;
+	var loanID = req.body.loanID;
 	//geting existing details from loan
 	Loan.findOne({ 'loanID': loanID }, function (err, loan) {
 		if (err) {
