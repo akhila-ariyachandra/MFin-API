@@ -18,4 +18,6 @@ app.get('/loan/:loanID', getLoan); // get one loan
 app.put('/loan', updateLoan); //Update Loan Details
 app.put('/loan', loanApproval); //loan aproval
 
+app.get('/transaction/:customerID', getNextTransaction);
+
 app.get('/logs', viewLogs); // View Logs
