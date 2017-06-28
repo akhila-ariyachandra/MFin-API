@@ -23,6 +23,7 @@ var app = restify.createServer({
 app.use(restify.fullResponse());
 app.use(restify.bodyParser());
 app.use(restify.queryParser());
+app.use(restify.gzipResponse()); // key: Accept-Encoding, value: application/gzip
 
 var portNo = process.env.PORT || config.port;
 
