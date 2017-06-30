@@ -17,13 +17,19 @@ const appFiles = [
 	'src/routes.js', // Routes
 	'src/footer.js'// Footer
 ];
+const viewFiles = [
+	'src/views/header.html',
+	'src/views/entities/*.html',
+	'src/views/footer.html'
+];
 const dest = 'build';
 
 /*--------------------Tasks--------------------*/
 gulp.task('build', function () {
-	// Copy View files
-	gulp.src('src/views/*.html')
-		.pipe(gulp.dest('build/views'));
+	// Concat View files
+	gulp.src(viewFiles)
+		.pipe(concat('index.html'))
+		.pipe(gulp.dest(dest));
 
 	// Concat and minify Javascript files
 	gulp.src(appFiles)

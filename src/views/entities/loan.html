@@ -1,0 +1,61 @@
+<!--Create new loan-->
+<tr>
+    <td>Loan</td>
+    <td>/loan</td>
+    <td>POST</td>
+    <td>Create a new loan</td>
+    <td>
+        <ul>
+            <li>loanType (String)</li>
+            <li>date (Date) [MM-dd-YYYY]</li>
+            <li>loanAmount (Number)</li>
+            <li>duration (Number)</li>
+            <li>interest (Number)</li>
+            <li>customerID (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get details of one loan-->
+<tr>
+    <td>Loan</td>
+    <td>/loan/:loanID</td>
+    <td>GET</td>
+    <td>Get the details of one loan</td>
+    <td>
+        <ul>
+            <li>loanID (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get details of all loans-->
+<tr>
+    <td>Loan</td>
+    <td>/loan</td>
+    <td>GET</td>
+    <td>Get the details of all loans</td>
+    <td>
+    </td>
+</tr>
+
+<!--Update the details of loan-->
+<tr>
+    <td>Loan</td>
+    <td>/loan</td>
+    <td>PUT</td>
+    <td>Update the details of a loan</td>
+    <td>
+        <ul>
+            <li>loanID (Number)</li>
+            <li>loanType (String)</li>
+            <li>date (Date) [MM-dd-YYYY]</li>
+            <li>loanAmount (Number)</li>
+            <li>duration (Number)</li>
+            <li>interest (Number)</li>
+            <li>customerID (Number)</li>
+            <li>manager (String)</li>
+            <li>status (String)</li>
+        </ul>
+    </td>
+</tr>
