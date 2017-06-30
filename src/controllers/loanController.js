@@ -81,6 +81,8 @@ var updateLoan = function (req, res) {
 		loan.duration = req.body.duration;
 		loan.interest = req.body.interest;
 		loan.customerID = req.body.customerID;
+		loan.manager = req.params.manager;
+		loan.status = req.params.status;
 
 		// Send data to database
 		loan.save(function (err, result) {
@@ -91,38 +93,6 @@ var updateLoan = function (req, res) {
 			else {
 				req.log.info('Updated loan details: ', loanID);
 				return res.json({ 'Loan Details': result });
-			}
-		});
-	});
-};
-
-//loan aproval
-var loanApproval = function (req, res) {
-	var loanID = req.body.loanID;
-	//geting existing details from loan
-	Loan.findOne({ 'loanID': loanID }, function (err, loan) {
-		if (err) {
-			console.log(err);
-			return res.send({ 'error': err });
-		}
-		else if (!loan) {
-			// If loan doesn't exist i.e. the wrong loanID was given
-			req.log.error('Loan does not exist to update: ', loanID);
-			return res.json({ 'error': 'Record does not exist' });
-		}
-
-		//update deteails
-		loan.manager = req.params.manager;
-		loan.status = req.params.status;
-
-		//send data to database
-		loan.save(function (err, result) {
-			if (err) {
-				console.log(err);
-				return res.send({ 'error': err });
-			}
-			else {
-				return res.json({ 'Aproval details': result });
 			}
 		});
 	});
