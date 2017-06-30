@@ -6,7 +6,7 @@ schema = {
 	address: { type: String, required: true },
 	dob: { type: Date, required: true },
 	phone: { type: String, required: true },
-	area: { type: mongoose.Schema.ObjectId },
+	areaID: { type: Number, required: true },
 	longitude: { type: String, required: true },
 	latitude: { type: String, required: true }
 };

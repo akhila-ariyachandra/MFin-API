@@ -8,7 +8,7 @@ var createCustomer = function (req, res, next) {
 	var address = req.body.address;
 	var dob = req.body.dob;
 	var phone = req.body.phone;
-	var area = req.body.area;
+	var areaID = req.body.areaID;
 	var longitude = req.body.longitude;
 	var latitude = req.body.latitude;
 
@@ -19,7 +19,7 @@ var createCustomer = function (req, res, next) {
 		address: address,
 		dob: dob,
 		phone: phone,
-		area: area,
+		areaID: areaID,
 		longitude: longitude,
 		latitude: latitude
 	}, function (err, result) {
@@ -86,7 +86,7 @@ var updateCustomer = function (req, res) {
 		customer.address = req.body.address;
 		customer.dob = req.body.dob;
 		customer.phone = req.body.phone;
-		customer.area = req.body.area;
+		customer.areaID = req.body.areaID;
 		customer.longitude = req.body.longitude;
 		customer.latitude = req.body.latitude;
 

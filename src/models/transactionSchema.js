@@ -3,6 +3,7 @@ schema = {
     loanID: { type: Number, required: true },
     date: { type: Date, default: new Date() },
     amount: { type: Number, required: true },
+    cashCollectorID: { type: Number, default: -1 },
     status: { type: String, default: 'Unpaid' }
 }
 

@@ -8,5 +8,7 @@ module.exports = {
     Customer : Customer, // Customer schema
     Loan : Loan, // Loan schema
     Counter : Counter, // Counter schema
-    Transaction : Transaction // Transaction schema
+    Transaction : Transaction, // Transaction schema
+    CashCollector: CashCollector, // Cash Collector schema 
+    Area: Area // Area Schema
 };
