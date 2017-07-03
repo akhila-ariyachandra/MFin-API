@@ -11,6 +11,7 @@ const uglify = require('gulp-uglify');
 /*--------------------Paths--------------------*/
 const appFiles = [
 	'src/app.js', // Server file
+	'src/middleware.js', // Middleware file
 	'src/db.js', // Database file
 	'src/headers/modelHeader.js', 'src/models/*.js', // Model files
 	'src/headers/controllerHeader.js', 'src/controllers/*.js', // Controller files

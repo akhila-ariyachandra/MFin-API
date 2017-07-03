@@ -1,5 +1,9 @@
 /*--------------------Routes--------------------*/
+// router is used for all the protected routes
 var router = express.Router(); // Create instance of express router
+
+// Protect routes with authentication middleware
+router.use(authenticate);
 
 /*app.get('/', restify.serveStatic({
     directory: __dirname,
@@ -54,6 +58,20 @@ router.route('/area/:areaID')
 
 //router.get('/logs', viewLogs); // View Logs
 
+router.route('/user')
+    // Get all Users
+    .get(getUsers);
+
+router.route('/user/:username')
+    // Get the User with this username
+    .get(getUser)
+    // Update the User with this username
+    .put(updateUser);
+
+// Unprotected routes
+app.post('/user', createUser); // Create a User
+app.post('/authenticate', authenticateUser); // Authenticate User
+
 // Register routes
-// Prefix all routes with /api
-app.use('', router);
+// Prefix all protected routes with /api
+app.use('/api', router);

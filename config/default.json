@@ -1,4 +1,5 @@
 {
 	"dbPath": "mongodb://api-dev:mfinapi-sliit@ds113841.mlab.com:13841/mfin",
-	"port": 8080
+	"port": 8080,
+	"secret": "mfinapi"
 }
