@@ -24,8 +24,9 @@
   "dependencies": {
     "async": "^2.4.0",
     "bluebird": "^3.5.0",
-    "bunyan": "^1.8.10",
+    "body-parser": "^1.17.2",
     "config": "^1.26.1",
+    "express": "^4.15.3",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-livereload": "^3.8.1",
@@ -35,7 +36,7 @@
     "gulp-uglify": "^3.0.0",
     "mongoose": "^4.9.7",
     "mongoose-sequence": "^3.2.0",
-    "restify": "^4.3.0"
+    "morgan": "^1.8.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",

@@ -1,29 +1,59 @@
 /*--------------------Routes--------------------*/
+var router = express.Router(); // Create instance of express router
 
-app.get('/', restify.serveStatic({
+/*app.get('/', restify.serveStatic({
     directory: __dirname,
     file: 'index.html'
-}));
+}));*/
 
-app.post('/customer', createCustomer); //Create Customer API
-app.get('/customer/:customerID', getCustomer);  // Get one Customer Details API
-app.get('/customer', getCustomers);  // Get All Customer Details API
-app.put('/customer', updateCustomer); // Update Customer details
+router.route('/customer')
+    // Create a Customer
+    .post(createCustomer)
+    // Get all Customers
+    .get(getCustomers);
 
-app.post('/loan', createLoan); // create loan API
-app.get('/loan', getLoans); // get loan details
-app.get('/loan/:loanID', getLoan); // get one loan
-app.put('/loan', updateLoan); //Update Loan Details
+router.route('/customer/:customerID')
+    // Get the Customer with this ID
+    .get(getCustomer)
+    // Update the Customer with this ID
+    .put(updateCustomer);
 
-app.get('/transaction/:customerID', getNextTransaction);
+router.route('/loan')
+    // Create a Loan
+    .post(createLoan)
+    // Get all Loans
+    .get(getLoans);
 
-app.post('/cashCollector', createCashCollector); // Create Cash Collector
-app.get('/cashCollector/:cashCollectorID', getCashCollector);  // Get one Cash Collector Details 
-app.get('/cashCollector', getCashCollectors);  // Get All Cash Collector Details
+router.route('/loan/:loanID')
+    // Get the Loan with this ID
+    .get(getLoan)
+    // Update the Loan with this ID
+    .put(updateLoan);
 
-app.post('/area', createArea); // Create Area 
-app.get('/area/:areaID', getArea);  // Get one Area Details
-app.get('/area', getAreas);  // Get All Area Details
-app.put('/area', updateArea); // Update Area details
+router.route('/cashCollector')
+    // Create a Cash Collector
+    .post(createCashCollector)
+    // Get all Cash Collectors
+    .get(getCashCollectors);
 
-app.get('/logs', viewLogs); // View Logs
+router.route('/cashCollector/:cashCollector')
+    // Get the Cash Collector with this ID
+    .get(getCashCollector);
+
+router.route('/area')
+    // Create an Area
+    .post(createArea)
+    // Get all Areas
+    .get(getAreas);
+
+router.route('/area/:areaID')
+    // Get the Area with this ID
+    .get(getArea)
+    // Update the Area with this ID
+    .put(updateArea);
+
+//router.get('/logs', viewLogs); // View Logs
+
+// Register routes
+// Prefix all routes with /api
+app.use('', router);

@@ -12,3 +12,7 @@ module.exports = {
     CashCollector: CashCollector, // Cash Collector schema 
     Area: Area // Area Schema
 };
+
+// Start server
+app.listen(portNo);
+console.log('MFin API running on port ' + portNo);
