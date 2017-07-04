@@ -9,11 +9,15 @@ var morgan = require('morgan');
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
 var path = require('path');
+var compression = require('compression')
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.text());                                    
 app.use(bodyParser.json({ type: 'application/json'})); 
+
+// Use compression middleware
+app.use(compression());
 
 // create a write stream (in append mode) 
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
