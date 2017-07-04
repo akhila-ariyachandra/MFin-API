@@ -1,6 +1,7 @@
 /*--------------------Routes--------------------*/
 // router is used for all the protected routes
 var router = express.Router(); // Create instance of express router
+var path = require('path');
 
 // Protect routes with authentication middleware
 router.use(authenticate);
@@ -71,6 +72,9 @@ router.route('/user/:username')
 // Unprotected routes
 app.post('/user', createUser); // Create a User
 app.post('/authenticate', authenticateUser); // Authenticate User
+app.get('/log', function(req, res) {
+    res.sendFile(path.join(__dirname + '/access.log'));
+}); // View log
 
 // Register routes
 // Prefix all protected routes with /api
