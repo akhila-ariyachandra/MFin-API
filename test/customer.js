@@ -79,7 +79,20 @@ describe('Customers', () => {
 
     // Test the  GET /api/customer route
     describe('GET /api/customer', () => {
-        it('it should GET all the customers', (done) => {
+        it('it should not get all the customers without an authorization token', (done) => {
+            chai.request(server)
+                .get('/api/customer')
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    should.exist(res.body);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+                    res.body.should.have.property('message').eql('No token provided.');
+                    done();
+                });
+        });
+        
+        it('it should get all the customers', (done) => {
             chai.request(server)
                 .get('/api/customer')
                 .set('x-access-token', token)
@@ -95,6 +108,32 @@ describe('Customers', () => {
 
     // Test the POST /api/customer route
     describe('POST /api/customer', () => {
+        it('it should not create a customer without an authorization token', (done) => {
+            const customer = {
+                "name": "Jane",
+                "surname": "Doe",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+            
+            chai.request(server)
+                .post('/api/customer')
+                .send(customer)
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    should.exist(res.body);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+                    res.body.should.have.property('message').eql('No token provided.');
+                    done();
+                });
+        });
+        
         it('it should not create a customer without the name field', (done) => {
             const customer = {
                 "token": token,
@@ -437,7 +476,20 @@ describe('Customers', () => {
 
     // Test the GET /api/customer/:customerID route
     describe('GET /api/customer/:customerID', () => {
-        it('it should GET the customer', (done) => {
+        it('it should not get the customer without an authorization token', (done) => {
+            chai.request(server)
+                .get('/api/customer/1')
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    should.exist(res.body);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+                    res.body.should.have.property('message').eql('No token provided.');
+                    done();
+                });
+        });
+        
+        it('it should get the customer', (done) => {
             chai.request(server)
                 .get('/api/customer/1')
                 .set('x-access-token', token)

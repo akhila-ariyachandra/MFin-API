@@ -16,7 +16,7 @@ chai.use(chaiHttp);
 
 describe('Loan', () => {
     var token = null; // Store authentication token
-    
+
     // Empty the database before each test
     before((done) => {
         Loan.remove({}, (err) => {
@@ -79,7 +79,20 @@ describe('Loan', () => {
 
     // Test the GET /api/loan route
     describe('GET /api/loan', () => {
-        it('it should GET all the loans', (done) => {
+        it('it should not get all the loans without an authorization token', (done) => {
+            chai.request(server)
+                .get('/api/loan')
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    should.exist(res.body);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+                    res.body.should.have.property('message').eql('No token provided.');
+                    done();
+                });
+        });
+
+        it('it should get all the loans', (done) => {
             chai.request(server)
                 .get('/api/loan')
                 .set('x-access-token', token)
@@ -95,6 +108,29 @@ describe('Loan', () => {
 
     // Test the POST /api/loan route
     describe('POST /api/loan', () => {
+        it('it should not create a loan without an authorization token', (done) => {
+            const loan = {
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1
+            };
+            
+            chai.request(server)
+                .post('/api/loan')
+                .send(loan)
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    should.exist(res.body);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+                    res.body.should.have.property('message').eql('No token provided.');
+                    done();
+                });
+        });
+
 
         it('it should not create a loan without the loanType field', (done) => {
             const loan = {
@@ -290,7 +326,20 @@ describe('Loan', () => {
 
     //Test the GET /api/loan/:loanID route
     describe('GET /api/loan/:loanID', () => {
-        it('it should GET the loan', (done) => {
+        it('it should not get the loan without an authorization token', (done) => {
+            chai.request(server)
+                .get('/api/loan/1')
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    should.exist(res.body);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+                    res.body.should.have.property('message').eql('No token provided.');
+                    done();
+                });
+        });
+        
+        it('it should get the loan', (done) => {
             chai.request(server)
                 .get('/api/loan/1')
                 .set('x-access-token', token)
