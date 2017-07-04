@@ -1,0 +1,54 @@
+<!--Create new a user-->
+<tr>
+    <td>User</td>
+    <td>/user</td>
+    <td>POST</td>
+    <td>Create a new user</td>
+    <td>
+        <ul>
+            <li>username (string)</li>
+            <li>password (String)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get details of one user-->
+<tr>
+    <td>User</td>
+    <td>/api/user/:username</td>
+    <td>GET</td>
+    <td>Get the details of one user</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+            <li>username (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get details of all users-->
+<tr>
+    <td>User</td>
+    <td>/api/user</td>
+    <td>GET</td>
+    <td>Get the details of all users</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Update the details of a user-->
+<tr>
+    <td>User</td>
+    <td>/api/user/:username</td>
+    <td>PUT</td>
+    <td>Update the details of a user</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>password (String)</li>
+        </ul>
+    </td>
+</tr>

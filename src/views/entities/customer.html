@@ -1,11 +1,12 @@
 <!--Create new Customer-->
 <tr>
     <td>Customer</td>
-    <td>/customer</td>
+    <td>/api/customer</td>
     <td>POST</td>
     <td>Create a new customer</td>
     <td>
         <ul>
+            <li>token (String)</li>
             <li>name (String)</li>
             <li>surname (String)</li>
             <li>nic (String)</li>
@@ -22,11 +23,12 @@
 <!--Get one Customer's details-->
 <tr>
     <td>Customer</td>
-    <td>/customer/:customerID</td>
+    <td>/api/customer/:customerID</td>
     <td>GET</td>
     <td>Get the details of one customer</td>
     <td>
         <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
             <li>customerID (Number)</li>
         </ul>
     </td>
@@ -35,20 +37,25 @@
 <!--Get all Customer details-->
 <tr>
     <td>Customer</td>
-    <td>/customer</td>
+    <td>/api/customer</td>
     <td>GET</td>
     <td>Get the details of all customers</td>
-    <td></td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+        </ul>
+    </td>
 </tr>
 
 <!--Update customer details-->
 <tr>
     <td>Customer</td>
-    <td>/customer</td>
+    <td>/api/customer/:customerID</td>
     <td>PUT</td>
     <td>Update the details of the customer</td>
     <td>
         <ul>
+            <li>token (String)</li>
             <li>customerID (Number)</li>
             <li>name (String)</li>
             <li>surname (String)</li>

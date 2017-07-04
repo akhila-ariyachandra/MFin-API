@@ -45,6 +45,21 @@
 
 <body>
     <h1>MFin API Documentation</h1>
+
+    <br>
+
+    <h2>Authorization</h2>
+    <p>
+        The API uses JSON web tokens for authorization. Any route with the
+        prefix <b>/api</b> is protected and will require a token to be 
+        accessed. New users can use the route <b>POST /user</b> to register 
+        and <b>POST /authenticate</b> to get the token. The tokens are 
+        set to expire after 30 mins. The token can be passed in the header 
+        as <b>x-access-token</b> or as <b>token</b> in the query or body.
+    </p>
+
+    <br>
+
     <h2>Routes currently implemented</h2>
 
     <table>

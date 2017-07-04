@@ -1,11 +1,12 @@
 <!--Create new cash collector-->
 <tr>
     <td>Cash Collector</td>
-    <td>/cashCollector</td>
+    <td>/api/cashCollector</td>
     <td>POST</td>
     <td>Create a new cash collector</td>
     <td>
         <ul>
+            <li>token (String)</li>
             <li>name (String)</li>
             <li>areaID (String)</li>
         </ul>
@@ -15,11 +16,12 @@
 <!--Get one cash collector details-->
 <tr>
     <td>Cash Collector</td>
-    <td>/cashCollector/:cashCollectorID</td>
+    <td>/api/cashCollector/:cashCollectorID</td>
     <td>GET</td>
     <td>Get the details of one cash collector</td>
     <td>
         <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
             <li>cashCollectorID</li>
         </ul>
     </td>
@@ -28,9 +30,12 @@
 <!--Get all cash collector details-->
 <tr>
     <td>Cash Collector</td>
-    <td>/cashCollector</td>
+    <td>/api/cashCollector</td>
     <td>GET</td>
     <td>Get the details of all cash collectors</td>
     <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+        </ul>
     </td>
 </tr>
