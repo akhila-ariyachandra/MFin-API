@@ -1,32 +1,31 @@
 /*--------------------Server--------------------*/
 'use strict';
 
-var restify = require('restify');
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
 var config = require('config');
-var bunyan = require('bunyan');
+var morgan = require('morgan');
+var jwt = require('jsonwebtoken');
+var fs = require('fs');
+var path = require('path');
 
-var log = bunyan.createLogger({
-    name: 'MFin',
-    streams: [{
-        type: 'rotating-file',
-        path: 'logs/MFin.log',
-        period: '1d',   // daily rotation
-        count: 3        // keep 3 back copies
-    }]
-});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.text());                                    
+app.use(bodyParser.json({ type: 'application/json'})); 
 
-var app = restify.createServer({
-    name: 'mfin-api',
-    log: log
-});
+// create a write stream (in append mode) 
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 
-app.use(restify.fullResponse());
-app.use(restify.bodyParser());
-app.use(restify.queryParser());
-app.use(restify.gzipResponse()); // key: Accept-Encoding, value: application/gzip
+//don't show the log when it is test
+if (config.util.getEnv('NODE_ENV') !== 'test') {
+    // use morgan to log requests to the log file
+    app.use(morgan('combined', { stream: accessLogStream }));
+    // use morgan to log requests to the console
+    app.use(morgan('dev'));
+}
+
+app.set('superSecret', config.secret); // secret variable
 
 var portNo = process.env.PORT || config.port;
-
-app.listen(portNo, function () {
-    console.log('%s listening at %s', app.name, app.url);
-});

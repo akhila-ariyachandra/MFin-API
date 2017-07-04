@@ -3,7 +3,6 @@ const gulp = require('gulp');
 const nodemon = require('gulp-nodemon');
 const notify = require('gulp-notify');
 const livereload = require('gulp-livereload');
-const fs = require('fs');
 const concat = require('gulp-concat');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
@@ -11,6 +10,7 @@ const uglify = require('gulp-uglify');
 /*--------------------Paths--------------------*/
 const appFiles = [
 	'src/app.js', // Server file
+	'src/middleware.js', // Middleware file
 	'src/db.js', // Database file
 	'src/headers/modelHeader.js', 'src/models/*.js', // Model files
 	'src/headers/controllerHeader.js', 'src/controllers/*.js', // Controller files
@@ -40,17 +40,6 @@ gulp.task('build', function () {
 		.pipe(gulp.dest(dest));
 
 	return;
-});
-
-gulp.task('logCheck', function () {
-	// Check if directory exists
-	if (!isDirSync('logs')) {
-		fs.mkdirSync('logs');
-	}
-	// Check if file exists
-	if (!isFileSync('logs/MFin.log')) {
-		fs.writeFileSync('logs/MFin.log', '');
-	}
 });
 
 // Run server using minified file
@@ -92,34 +81,9 @@ gulp.task('serverDebug', function () {
 	})
 });
 
-gulp.task('default', ['build', 'logCheck', 'server'], function () {
+gulp.task('default', ['build', 'server'], function () {
 });
 
 // Used for debugging
-gulp.task('debug', ['build', 'logCheck', 'serverDebug'], function () {
+gulp.task('debug', ['build', 'serverDebug'], function () {
 });
-
-/*--------------------Functions--------------------*/
-function isDirSync(aPath) {
-	try {
-		return fs.statSync(aPath).isDirectory();
-	} catch (e) {
-		if (e.code == 'ENOENT') {
-			return false;
-		} else {
-			throw e;
-		}
-	}
-}
-
-function isFileSync(aPath) {
-	try {
-		return fs.statSync(aPath).isFile();
-	} catch (e) {
-		if (e.code == 'ENOENT') {
-			return false;
-		} else {
-			throw e;
-		}
-	}
-}

@@ -10,11 +10,11 @@ var createArea = function (req,res,next){
         details: details
     }, function (err, result) {
         if (err) {
-			req.log.error('Error creating new area');
+			//req.log.error('Error creating new area');
 			return res.send({ 'error': err });
 		}
 		else {
-			res.log.info('New area registered');
+			//res.log.info('New area registered');
 			return res.json({ 'result': result, 'status': 'successfully saved' });
 		}
     });
@@ -26,11 +26,11 @@ var getArea = function(req,res,next) {
 
     Area.findOne({ 'areaID': areaID }, function (err, result) {
         if (err) {
-			req.log.error('Error finding Area:', areaID);
+			//req.log.error('Error finding Area:', areaID);
 			return res.send({ 'error': err });
 		}
 		else {
-			res.log.info('Area details retrieved: ', areaID);
+			//res.log.info('Area details retrieved: ', areaID);
 			return res.json(result);
 		}
     });
@@ -40,11 +40,11 @@ var getArea = function(req,res,next) {
 var getAreas = function (req, res, next) {
 	Area.find({}, function (err, result) {
 		if (err) {
-			req.log.error('Error retrieving all area details');
+			//req.log.error('Error retrieving all area details');
 			return res.send({ 'error': err });
 		}
 		else {
-			res.log.info('All area details retrieved');
+			//res.log.info('All area details retrieved');
 			return res.json(result);
 		}
 	});
@@ -57,11 +57,11 @@ var updateArea = function (req, res) {
 	// Get existing details of area
 	Area.findOne({ 'areaID': areaID }, function (err, area) {
 		if (err) {
-			req.log.error('Error finding area to update: ', areaID);
+			//req.log.error('Error finding area to update: ', areaID);
 			return res.json({ 'error': err });
 		} else if (!area) {
 			// If area doesn't exist i.e. the wrong areaID was given
-			req.log.error('Area does not exist to update: ', areaID);
+			//req.log.error('Area does not exist to update: ', areaID);
 			return res.json({ 'error': 'Record does not exist' });
 		}
 
@@ -72,11 +72,11 @@ var updateArea = function (req, res) {
 		// Send data to database
 		area.save(function (err, result) {
 			if (err) {
-				req.log.error('Error updating area: ', areaID);
+				//req.log.error('Error updating area: ', areaID);
 				return res.json({ 'error': err });
 			}
 			else {
-				req.log.info('Updated area: ', areaID);
+				//req.log.info('Updated area: ', areaID);
 				return res.json({ 'result': result });
 			}
 		});
