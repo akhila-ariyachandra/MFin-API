@@ -6,11 +6,6 @@ var path = require('path');
 // Protect routes with authentication middleware
 router.use(authenticate);
 
-/*app.get('/', restify.serveStatic({
-    directory: __dirname,
-    file: 'index.html'
-}));*/
-
 router.route('/customer')
     // Create a Customer
     .post(createCustomer)
@@ -70,11 +65,21 @@ router.route('/user/:username')
     .put(updateUser);
 
 // Unprotected routes
-app.post('/user', createUser); // Create a User
-app.post('/authenticate', authenticateUser); // Authenticate User
+// View documentation
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '/index.html'));
+});
+
+// Create a User 
+app.post('/user', createUser); 
+
+// Authenticate User
+app.post('/authenticate', authenticateUser);
+
+// View log
 app.get('/log', function(req, res) {
     res.sendFile(path.join(__dirname + '/access.log'));
-}); // View log
+}); 
 
 // Register routes
 // Prefix all protected routes with /api
