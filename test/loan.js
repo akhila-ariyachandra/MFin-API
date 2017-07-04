@@ -9,11 +9,14 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = app.Server;
 const Loan = app.Loan;
+const User = app.User;
 const should = chai.should();
 
 chai.use(chaiHttp);
 
 describe('Loan', () => {
+    var token = null; // Store authentication token
+    
     // Empty the database before each test
     before((done) => {
         Loan.remove({}, (err) => {
@@ -28,11 +31,58 @@ describe('Loan', () => {
         });
     });
 
-    // Test the /getLoans route
-    describe('GET /getLoans', () => {
+    // Remove all users before running tests
+    before((done) => {
+        User.remove({}, (err) => {
+            done();
+        });
+    });
+
+    // Create a new user before running tests
+    before((done) => {
+        const user = {
+            "username": "mfindev",
+            "password": "sliitcpp"
+        };
+
+        chai.request(server)
+            .post('/user')
+            .send(user)
+            .end((err, result) => {
+                // Go through the properties one by one
+                result.should.have.status(200);
+                result.body.should.be.a('object');
+                result.body.should.have.property('status').eql('successfully saved');
+                done();
+            });
+    });
+
+    // Get a new authentication token
+    before((done) => {
+        const user = {
+            "username": "mfindev",
+            "password": "sliitcpp"
+        };
+
+        chai.request(server)
+            .post('/authenticate')
+            .send(user)
+            .end((err, result) => {
+                // Go through the properties one by one
+                result.should.have.status(200);
+                result.body.should.be.a('object');
+                result.body.should.have.property('success').eql(true);
+                token = result.body.token;
+                done();
+            });
+    });
+
+    // Test the GET /api/loan route
+    describe('GET /api/loan', () => {
         it('it should GET all the loans', (done) => {
             chai.request(server)
-                .get('/getLoans')
+                .get('/api/loan')
+                .set('x-access-token', token)
                 .end((err, res) => {
                     res.should.have.status(200);
                     should.exist(res.body);
@@ -43,20 +93,21 @@ describe('Loan', () => {
         });
     });
 
-    // Test the /createLoan route
-    describe('POST /createLoan', () => {
+    // Test the POST /api/loan route
+    describe('POST /api/loan', () => {
 
         it('it should not create a loan without the loanType field', (done) => {
             const loan = {
-                date: '04-03-1998',
-                loanAmount: '250000',
-                duration: '12',
-                interest: '5',
-                customerID: 1
+                "token": token,
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1
             }
 
             chai.request(server)
-                .post('/createLoan')
+                .post('/api/loan')
                 .send(loan)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -73,15 +124,16 @@ describe('Loan', () => {
 
         it('it should not create a loan without the date field', (done) => {
             const loan = {
-                loanType: 'Fix Deposit',
-                loanAmount: '250000',
-                duration: '12',
-                interest: '5',
-                customerID: 1
+                "token": token,
+                "loanType": "Fix Deposit",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1
             }
 
             chai.request(server)
-                .post('/createLoan')
+                .post('/api/loan')
                 .send(loan)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -98,15 +150,16 @@ describe('Loan', () => {
 
         it('it should not create a loan without the loanAmount field', (done) => {
             const loan = {
-                loanType: 'Fix Deposit',
-                date: '04-03-1998',
-                duration: '12',
-                interest: '5',
-                customerID: 1
+                "token": token,
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1
             }
 
             chai.request(server)
-                .post('/createLoan')
+                .post('/api/loan')
                 .send(loan)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -123,15 +176,16 @@ describe('Loan', () => {
 
         it('it should not create a loan without the duration field', (done) => {
             const loan = {
-                loanType: 'Fix Deposit',
-                date: '04-03-1998',
-                loanAmount: '250000',
-                interest: '5',
-                customerID: 1
+                "token": token,
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "interest": 5,
+                "customerID": 1
             }
 
             chai.request(server)
-                .post('/createLoan')
+                .post('/api/loan')
                 .send(loan)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -148,15 +202,16 @@ describe('Loan', () => {
 
         it('it should not create a loan without the interest field', (done) => {
             const loan = {
-                loanType: 'Fix Deposit',
-                date: '04-03-1998',
-                loanAmount: '250000',
-                duration: '12',
-                customerID: 1
+                "token": token,
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "customerID": 1
             }
 
             chai.request(server)
-                .post('/createLoan')
+                .post('/api/loan')
                 .send(loan)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -173,15 +228,16 @@ describe('Loan', () => {
 
         it('it should not create a loan without the customerID field', (done) => {
             const loan = {
-                loanType: 'Fix Deposit',
-                date: '04-03-1998',
-                loanAmount: '250000',
-                duration: '12',
-                interest: '5'
+                "token": token,
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5
             }
 
             chai.request(server)
-                .post('/createLoan')
+                .post('/api/loan')
                 .send(loan)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -198,16 +254,17 @@ describe('Loan', () => {
 
         it('it should create a loan', (done) => {
             const loan = {
-                loanType: 'Fix Deposit',
-                date: '04-03-1998',
-                loanAmount: 250000,
-                duration: 12,
-                interest: 5,
-                customerID: 1
+                "token": token,
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1
             };
 
             chai.request(server)
-                .post('/createLoan')
+                .post('/api/loan')
                 .send(loan)
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -231,11 +288,12 @@ describe('Loan', () => {
         });
     });
 
-    //Test the /getLoan/:loanID route
-    describe('GET /getLoan/:loanID', () => {
+    //Test the GET /api/loan/:loanID route
+    describe('GET /api/loan/:loanID', () => {
         it('it should GET the loan', (done) => {
             chai.request(server)
-                .get('/getLoan/1')
+                .get('/api/loan/1')
+                .set('x-access-token', token)
                 .end((err, res) => {
                     res.should.have.status(200);
                     should.exist(res.body);
@@ -245,7 +303,7 @@ describe('Loan', () => {
         });
     });
 
-    //test loan approval route
+    /*//test loan approval route
     describe('PUT /loanApproval', () => {
         it('it should give approval to loans', (done) => {
             const loan = new Loan({
@@ -269,6 +327,6 @@ describe('Loan', () => {
                     });
             });
         });
-    });
+    });*/
 
 });
