@@ -23,6 +23,7 @@
   "homepage": "https://github.com/akhila-ariyachandra/mfin-api-test#readme",
   "dependencies": {
     "async": "^2.4.0",
+    "bcrypt": "^1.0.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "compression": "^1.6.2",

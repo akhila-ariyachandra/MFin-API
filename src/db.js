@@ -1,7 +1,7 @@
 /*--------------------Database--------------------*/
 
 var mongoose = require('mongoose');
-mongoose.Promise = require('bluebird');
+mongoose.Promise = global.Promise;
 var config = require('config');
 
 mongoose.connect(config.dbPath);

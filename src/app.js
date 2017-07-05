@@ -9,7 +9,8 @@ var morgan = require('morgan');
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
 var path = require('path');
-var compression = require('compression')
+var compression = require('compression');
+global.Promise = require('bluebird');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

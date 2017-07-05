@@ -2,19 +2,21 @@
 
 // Creating New User
 var createUser = function (req, res) {
-	var username = req.body.username;
-	var password = req.body.password;
-
-	User.create({
-		username: username,
-		password: password
-	}, function (err, result) {
-		if (err) {
-			return res.json({ 'error': err });
-		}
-		else {
-			return res.json({ 'result': result, 'status': 'successfully saved' });
-		}
+	// Run hashing asynchronously to avoid blocking the server
+	bcrypt.hash(req.body.password, saltRounds).then(function (hash) {
+		var username = req.body.username;
+		var password = hash;
+		User.create({
+			username: username,
+			password: password
+		}, function (err, result) {
+			if (err) {
+				return res.json({ 'error': err });
+			}
+			else {
+				return res.json({ 'result': result, 'status': 'successfully saved' });
+			}
+		});
 	});
 };
 
@@ -86,23 +88,25 @@ var authenticateUser = function (req, res) {
 		if (!user) {
 			res.json({ success: false, message: 'Authentication failed. User not found.' });
 		} else if (user) {
-			// check if password matches
-			if (user.password != req.body.password) {
-				res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-			} else {
-				// if user is found and password is right
-				// create a token
-				var token = jwt.sign(user, app.get('superSecret'), {
-					expiresIn: 1800
-				});
-				// return the information including token as JSON
-				res.json({
-					success: true,
-					message: 'Authentication success.',
-					token: token
-				});
-			}
-
+			// Run password checking asynchronously to avoid blocking the server
+			bcrypt.compare(req.body.password, user.password).then(function (result) {
+				// check if password matches
+				if (!result) {
+					res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+				} else {
+					// if user is found and password is right
+					// create a token
+					var token = jwt.sign(user, app.get('superSecret'), {
+						expiresIn: 1800
+					});
+					// return the information including token as JSON
+					res.json({
+						success: true,
+						message: 'Authentication success.',
+						token: token
+					});
+				}
+			});
 		}
 	});
 };
