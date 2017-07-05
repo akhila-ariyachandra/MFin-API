@@ -9,7 +9,7 @@ var app = express();
 var fs = require('fs');
 var jwt = require('jsonwebtoken');
 var morgan = require('morgan');
-var path = require('path');
+var rfs = require('rotating-file-stream')
 
 global.Promise = require('bluebird');
 
@@ -21,8 +21,16 @@ app.use(bodyParser.json({ type: 'application/json'}));
 // Use compression middleware
 app.use(compression());
 
-// create a write stream (in append mode) 
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+var logDirectory = __dirname;
+
+// ensure log directory exists 
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+
+// create a rotating write stream 
+var accessLogStream = rfs('access.log', {
+  interval: '1d', // rotate daily 
+  path: logDirectory
+})
 
 //don't show the log when it is test
 if (config.util.getEnv('NODE_ENV') !== 'test') {
