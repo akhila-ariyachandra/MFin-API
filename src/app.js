@@ -1,15 +1,16 @@
 /*--------------------Server--------------------*/
 'use strict';
 
+var bodyParser = require('body-parser');
+var compression = require('compression');
+var config = require('config');
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser');
-var config = require('config');
-var morgan = require('morgan');
-var jwt = require('jsonwebtoken');
 var fs = require('fs');
+var jwt = require('jsonwebtoken');
+var morgan = require('morgan');
 var path = require('path');
-var compression = require('compression');
+
 global.Promise = require('bluebird');
 
 app.use(bodyParser.urlencoded({ extended: true }));
