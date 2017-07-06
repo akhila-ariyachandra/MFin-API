@@ -1,6 +1,7 @@
 /*--------------------Server--------------------*/
 'use strict';
 
+var bluebird = require('bluebird');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var config = require('config');
@@ -9,9 +10,9 @@ var app = express();
 var fs = require('fs');
 var jwt = require('jsonwebtoken');
 var morgan = require('morgan');
-var rfs = require('rotating-file-stream')
+var rfs = require('rotating-file-stream');
 
-global.Promise = require('bluebird');
+global.Promise = bluebird;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -35,7 +36,8 @@ var accessLogStream = rfs('access.log', {
 //don't show the log when it is test
 if (config.util.getEnv('NODE_ENV') !== 'test') {
     // use morgan to log requests to the log file
-    app.use(morgan('combined', { stream: accessLogStream }));
+    // (Displayed temporarily)
+    //app.use(morgan('combined', { stream: accessLogStream })); 
     // use morgan to log requests to the console
     app.use(morgan('dev'));
 }
