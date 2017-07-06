@@ -5,12 +5,9 @@ var getNextTransaction = function (req, res, next) {
     var customerID = req.params.customerID;
 
     // Get the loan details
-    Loan.findOne({ 'customerID': customerID }, function (err, result) {
-        if (err) {
-            //req.log.error('Error calculating transaction');
-            return res.send({ 'error': err });
-        }
-        else {
+    Loan.findOne({ 'customerID': customerID })
+        .then(function (result) {
+
             var loanID = result.loanID;
             var loanAmount = result.loanAmount;
             var interest = result.interest;
@@ -19,16 +16,15 @@ var getNextTransaction = function (req, res, next) {
             Transaction.create({
                 loanID: loanID,
                 amount: paymentAmount
-            }, function (err, result) {
-                if (err) {
-                    //req.log.error('Error calculating transaction');
-                    return res.send({ 'error': err });
-                }
-                else {
-                    //res.log.info('New transaction calculated for customer: ', customerID);
+            })
+                .then(function (result) {
                     return res.json(result);
-                }
-            });
-        }
-    });
+                })
+                .catch(function (err) {
+                    return res.send({ 'error': err });
+                });
+        })
+        .catch(function (err) {
+            return res.send({ 'error': err });
+        });
 };
