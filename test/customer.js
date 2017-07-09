@@ -91,7 +91,7 @@ describe('Customers', () => {
                     done();
                 });
         });
-        
+
         it('it should get all the customers', (done) => {
             chai.request(server)
                 .get('/api/customer')
@@ -120,7 +120,7 @@ describe('Customers', () => {
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             };
-            
+
             chai.request(server)
                 .post('/api/customer')
                 .send(customer)
@@ -133,10 +133,9 @@ describe('Customers', () => {
                     done();
                 });
         });
-        
+
         it('it should not create a customer without the name field', (done) => {
             const customer = {
-                "token": token,
                 "surname": "Doe",
                 "nic": "801234567V",
                 "address": "123/X Baker St., Narnia",
@@ -149,6 +148,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -165,7 +165,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the surname field', (done) => {
             const customer = {
-                "token": token,
                 "name": "John",
                 "nic": "801234567V",
                 "address": "123/X Baker St., Narnia",
@@ -178,6 +177,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -194,7 +194,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the nic field', (done) => {
             const customer = {
-                "token": token,
                 "name": "John",
                 "surname": "Doe",
                 "address": "123/X Baker St., Narnia",
@@ -207,6 +206,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -223,7 +223,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the address field', (done) => {
             const customer = {
-                "token": token,
                 "name": "John",
                 "surname": "Doe",
                 "nic": "801234567V",
@@ -236,6 +235,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -252,7 +252,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the DOB field', (done) => {
             const customer = {
-                "token": token,
                 "name": "John",
                 "surname": "Doe",
                 "nic": "801234567V",
@@ -265,6 +264,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -281,7 +281,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the phone field', (done) => {
             const customer = {
-                "token": token,
                 "name": "John",
                 "surname": "Doe",
                 "nic": "801234567V",
@@ -294,6 +293,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -310,7 +310,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the areaID field', (done) => {
             const customer = {
-                "token": token,
                 "name": "John",
                 "surname": "Doe",
                 "nic": "801234567V",
@@ -323,6 +322,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -339,7 +339,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the longitude field', (done) => {
             const customer = {
-                "token": token,
                 "name": "John",
                 "surname": "Doe",
                 "nic": "801234567V",
@@ -352,6 +351,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -368,7 +368,6 @@ describe('Customers', () => {
 
         it('it should not create a customer without the latitude field', (done) => {
             const customer = {
-                "token": token,
                 "name": "John",
                 "surname": "Doe",
                 "nic": "801234567V",
@@ -381,6 +380,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     // Go through the properties one by one
@@ -397,7 +397,6 @@ describe('Customers', () => {
 
         it('it should create a customer', (done) => {
             const customer = {
-                "token": token,
                 "name": "John",
                 "surname": "Doe",
                 "nic": "801234567V",
@@ -411,6 +410,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -436,7 +436,6 @@ describe('Customers', () => {
 
         it('it should create the 2nd customer with customerID 2', (done) => {
             const customer = {
-                "token": token,
                 "name": "Jane",
                 "surname": "Doe",
                 "nic": "801234567V",
@@ -450,6 +449,7 @@ describe('Customers', () => {
 
             chai.request(server)
                 .post('/api/customer')
+                .set('x-access-token', token)
                 .send(customer)
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -488,7 +488,7 @@ describe('Customers', () => {
                     done();
                 });
         });
-        
+
         it('it should get the customer', (done) => {
             chai.request(server)
                 .get('/api/customer/1')
@@ -502,8 +502,21 @@ describe('Customers', () => {
         });
     });
 
-    /*// Test the PUT /api/customer/:customerID route
+    // Test the PUT /api/customer/:customerID route
     describe('PUT /api/customer/:customerID', () => {
+        it('it should not update the customer without an authorization token', (done) => {
+            chai.request(server)
+                .put('/api/customer/1')
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    should.exist(res.body);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+                    res.body.should.have.property('message').eql('No token provided.');
+                    done();
+                });
+        });
+
         it('it should not update the customer if the wrong customerID is given', (done) => {
             const customer = new Customer({
                 "name": "John",
@@ -517,28 +530,16 @@ describe('Customers', () => {
                 "latitude": "79°58'24.1 E"
             });
 
-            customer.save((err, customer) => {
-                chai.request(server)
-                    .put('/api/customer/3')
-                    .set('x-access-token', token)
-                    .send({
-                        "name": "John",
-                        "surname": "Doe",
-                        "nic": "801234567V",
-                        "address": "123/X Baker St., Narnia",
-                        "dob": "01-02-1980",
-                        "phone": "123456789",
-                        "areaID": "1",
-                        "longitude": "6°54'52.8 N",
-                        "latitude": "79°58'24.1 E"
-                    })
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('error').eql('Record does not exist');
-                        done();
-                    });
-            });
+            chai.request(server)
+                .put('/api/customer/3')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error').eql('Record does not exist');
+                    done();
+                });
         });
 
         it('it should update the customer given the customerID', (done) => {
@@ -550,14 +551,15 @@ describe('Customers', () => {
                 address: '123/X Baker St., Narnia',
                 dob: '01-02-1980',
                 phone: '123456789',
-                area: '59114c08494ebe30537ce7a5',
+                areaID: 1,
                 longitude: "6°54'52.8 N",
                 latitude: "79°58'24.1 E"
             });
 
             customer.save((err, customer) => {
                 chai.request(server)
-                    .put('/updateCustomer')
+                    .put('/api/customer/1')
+                    .set('x-access-token', token)
                     .send(customer)
                     .end((err, res) => {
                         res.should.have.status(200);
@@ -572,7 +574,7 @@ describe('Customers', () => {
                         res.body.result.should.have.property('address');
                         res.body.result.should.have.property('dob');
                         res.body.result.should.have.property('phone');
-                        res.body.result.should.have.property('area');
+                        res.body.result.should.have.property('areaID');
                         res.body.result.should.have.property('longitude');
                         res.body.result.should.have.property('latitude');
                         res.body.result.should.have.property('__v');
@@ -580,5 +582,5 @@ describe('Customers', () => {
                     });
             });
         });
-    });*/
+    });
 });
