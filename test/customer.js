@@ -542,6 +542,267 @@ describe('Customers', () => {
                 });
         });
 
+        it('it should not update the customer without the name field', (done) => {
+            const customer = {
+                "surname": "Doe",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('name');
+                    res.body.error.errors.name.should.have.property('properties');
+                    res.body.error.errors.name.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not update the customer without the surname field', (done) => {
+            const customer = {
+                "name": "John",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('surname');
+                    res.body.error.errors.surname.should.have.property('properties');
+                    res.body.error.errors.surname.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not update the customer without the nic field', (done) => {
+            const customer = {
+                "name": "John",
+                "surname": "Doe",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('nic');
+                    res.body.error.errors.nic.should.have.property('properties');
+                    res.body.error.errors.nic.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not update the customer without the address field', (done) => {
+            const customer = {
+                "name": "John",
+                "surname": "Doe",
+                "nic": "801234567V",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('address');
+                    res.body.error.errors.address.should.have.property('properties');
+                    res.body.error.errors.address.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not update the customer without the DOB field', (done) => {
+            const customer = {
+                "name": "John",
+                "surname": "Doe",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "phone": "123456789",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('dob');
+                    res.body.error.errors.dob.should.have.property('properties');
+                    res.body.error.errors.dob.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not update the customer without the phone field', (done) => {
+            const customer = {
+                "name": "John",
+                "surname": "Doe",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('phone');
+                    res.body.error.errors.phone.should.have.property('properties');
+                    res.body.error.errors.phone.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not update the customer without the areaID field', (done) => {
+            const customer = {
+                "name": "John",
+                "surname": "Doe",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('areaID');
+                    res.body.error.errors.areaID.should.have.property('properties');
+                    res.body.error.errors.areaID.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not update the customer without the longitude field', (done) => {
+            const customer = {
+                "name": "John",
+                "surname": "Doe",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "areaID": "1",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('longitude');
+                    res.body.error.errors.longitude.should.have.property('properties');
+                    res.body.error.errors.longitude.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
+        it('it should not update the customer without the latitude field', (done) => {
+            const customer = {
+                "name": "John",
+                "surname": "Doe",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N"
+            };
+
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error');
+                    res.body.error.should.have.property('errors');
+                    res.body.error.errors.should.have.property('latitude');
+                    res.body.error.errors.latitude.should.have.property('properties');
+                    res.body.error.errors.latitude.properties.should.have.property('type').eql('required');
+                    done();
+                });
+        });
+
         it('it should update the customer given the customerID', (done) => {
             const customer = new Customer({
                 customerID: 1,
