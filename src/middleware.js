@@ -30,3 +30,7 @@ var authenticate = function (req, res, next) {
 
     }
 };
+
+// CORS (for browser issues)
+var cors = require('cors');
+app.use(cors());

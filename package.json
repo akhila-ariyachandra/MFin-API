@@ -28,6 +28,7 @@
     "body-parser": "^1.17.2",
     "compression": "^1.6.2",
     "config": "^1.26.1",
+    "cors": "^2.8.3",
     "express": "^4.15.3",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
