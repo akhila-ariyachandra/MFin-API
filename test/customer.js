@@ -817,31 +817,29 @@ describe('Customers', () => {
                 latitude: "79°58'24.1 E"
             });
 
-            customer.save((err, customer) => {
-                chai.request(server)
-                    .put('/api/customer/1')
-                    .set('x-access-token', token)
-                    .send(customer)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('result');
-                        // Check for all fields
-                        res.body.result.should.have.property('_id');
-                        res.body.result.should.have.property('customerID').eql(1);
-                        res.body.result.should.have.property('name');
-                        res.body.result.should.have.property('surname');
-                        res.body.result.should.have.property('nic');
-                        res.body.result.should.have.property('address');
-                        res.body.result.should.have.property('dob');
-                        res.body.result.should.have.property('phone');
-                        res.body.result.should.have.property('areaID');
-                        res.body.result.should.have.property('longitude');
-                        res.body.result.should.have.property('latitude');
-                        res.body.result.should.have.property('__v');
-                        done();
-                    });
-            });
+            chai.request(server)
+                .put('/api/customer/1')
+                .set('x-access-token', token)
+                .send(customer)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('result');
+                    // Check for all fields
+                    res.body.result.should.have.property('_id');
+                    res.body.result.should.have.property('customerID').eql(1);
+                    res.body.result.should.have.property('name');
+                    res.body.result.should.have.property('surname');
+                    res.body.result.should.have.property('nic');
+                    res.body.result.should.have.property('address');
+                    res.body.result.should.have.property('dob');
+                    res.body.result.should.have.property('phone');
+                    res.body.result.should.have.property('areaID');
+                    res.body.result.should.have.property('longitude');
+                    res.body.result.should.have.property('latitude');
+                    res.body.result.should.have.property('__v');
+                    done();
+                });
         });
     });
 });
