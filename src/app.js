@@ -14,14 +14,6 @@ var rfs = require('rotating-file-stream');
 
 global.Promise = bluebird;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(bodyParser.text());                                    
-app.use(bodyParser.json({ type: 'application/json'})); 
-
-// Use compression middleware
-app.use(compression());
-
 var logDirectory = __dirname;
 
 // ensure log directory exists 

@@ -31,6 +31,15 @@ var authenticate = function (req, res, next) {
     }
 };
 
+// Body parsers
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.text());                                    
+app.use(bodyParser.json({ type: 'application/json'})); 
+
+// Use compression middleware
+app.use(compression());
+
 // CORS (for browser issues)
 var cors = require('cors');
 app.use(cors());
