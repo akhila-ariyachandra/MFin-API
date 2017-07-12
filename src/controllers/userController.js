@@ -17,7 +17,10 @@ var createUser = function (req, res) {
 			.catch(function (err) {
 				return res.json({ 'error': err });
 			});
-	});
+	})
+		.catch(function (err) {
+			return res.json({ 'error': 'password is required' });
+		});
 };
 
 // Fetching Details of one User
@@ -47,6 +50,10 @@ var getUsers = function (req, res) {
 // Update User details
 var updateUser = function (req, res) {
 	var username = req.params.username;
+
+	if(!req.body.password){
+		return res.json({ 'error': 'No password given' });
+	}
 
 	// Get existing details of user
 	User.findOne({ 'username': username })
@@ -105,6 +112,9 @@ var authenticateUser = function (req, res) {
 							token: token
 						});
 					}
+				})
+				.catch(function(err){
+					res.json({ success: false, message: 'Authentication failed. No password given.' });
 				});
 			}
 		})
