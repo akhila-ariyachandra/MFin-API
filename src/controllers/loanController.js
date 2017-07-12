@@ -40,7 +40,7 @@ var getLoan = function (req, res) {
 	var loanID = req.params.loanID;
 
 	Loan.findOne({ 'loanID': loanID })
-		.then(function (err, result) {
+		.then(function (result) {
 			return res.json(result);
 		})
 		.catch(function (err) {
