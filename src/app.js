@@ -28,8 +28,7 @@ var accessLogStream = rfs('access.log', {
 //don't show the log when it is test
 if (config.util.getEnv('NODE_ENV') !== 'test') {
   // use morgan to log requests to the log file
-  // (Displayed temporarily)
-  //app.use(morgan('combined', { stream: accessLogStream })); 
+  app.use(morgan('combined', { stream: accessLogStream }));
   // use morgan to log requests to the console
   app.use(morgan('dev'));
 }
