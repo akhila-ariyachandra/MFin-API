@@ -28,6 +28,23 @@ gulp
 ctrl+c
 ```
 
+## Running the automated testing ##
+
+```
+npm test
+```
+### Running for the first time ###
+Running the testing for the first time will result in the entire
+online database(~250MB) being downloaded to the computer. To avoid
+Mocha timing out during the download, increase the timeout for 
+Mocha in scripts.test in package.json to at least 15 mins.
+Change the line
+```
+"test": "mocha --timeout 10000"
+```
+Once the database has been downloaded and the test cases have been
+run, revert the changes made to the package.json file.
+
 
 ## Optional ##
 ### Install Gulp globally ###
