@@ -15,5 +15,5 @@ module.exports = {
 };
 
 // Start server
-app.listen(portNo);
+app.listen(portNo, ip);
 console.log('MFin API running on port ' + portNo);
