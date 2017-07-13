@@ -6,8 +6,8 @@ schema = {
 	duration: { type: Number, required: true },
 	interest: { type: Number, required: true },
 	customerID: { type: Number, required: true },
-	manager: { type: String, default: 'Not set' },
-	status: { type: String, default: 'Pending' }
+	manager: { type: String, default: 'Not set', required: true },
+	status: { type: String, default: 'Pending', required: true }
 };
 
 collectionName = 'loan';
