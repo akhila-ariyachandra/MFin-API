@@ -2,7 +2,6 @@
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-var config = require('config');
 
 // Use mockgoose for automated testing
 // Mockgoose is for a temporary DB stored in RAM
