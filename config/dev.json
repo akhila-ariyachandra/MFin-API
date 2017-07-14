@@ -1,5 +1,6 @@
 {
 	"dbPath": "mongodb://api-dev:mfinapi-sliit@ds113841.mlab.com:13841/mfin",
 	"port": 8080,
-	"secret": "mfinapi"
+	"secret": "mfinapi",
+	"tokenExpireTime": 1800
 }
