@@ -83,11 +83,11 @@ describe('Loan', () => {
             chai.request(server)
                 .get('/api/loan')
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });
@@ -122,11 +122,11 @@ describe('Loan', () => {
                 .post('/api/loan')
                 .send(loan)
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });
@@ -140,7 +140,7 @@ describe('Loan', () => {
                 "duration": 12,
                 "interest": 5,
                 "customerID": 1
-            }
+            };
 
             chai.request(server)
                 .post('/api/loan')
@@ -166,7 +166,7 @@ describe('Loan', () => {
                 "duration": 12,
                 "interest": 5,
                 "customerID": 1
-            }
+            };
 
             chai.request(server)
                 .post('/api/loan')
@@ -192,7 +192,7 @@ describe('Loan', () => {
                 "duration": 12,
                 "interest": 5,
                 "customerID": 1
-            }
+            };
 
             chai.request(server)
                 .post('/api/loan')
@@ -218,7 +218,7 @@ describe('Loan', () => {
                 "loanAmount": 250000,
                 "interest": 5,
                 "customerID": 1
-            }
+            };
 
             chai.request(server)
                 .post('/api/loan')
@@ -244,7 +244,7 @@ describe('Loan', () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "customerID": 1
-            }
+            };
 
             chai.request(server)
                 .post('/api/loan')
@@ -270,7 +270,7 @@ describe('Loan', () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5
-            }
+            };
 
             chai.request(server)
                 .post('/api/loan')
@@ -320,7 +320,7 @@ describe('Loan', () => {
                     res.body.result.should.have.property('status').eql('Pending');
                     res.body.result.should.have.property('_id');
                     done();
-                })
+                });
         });
     });
 
@@ -330,11 +330,11 @@ describe('Loan', () => {
             chai.request(server)
                 .get('/api/loan/1')
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });
@@ -370,11 +370,11 @@ describe('Loan', () => {
                 .put('/api/loan/1')
                 .send(loan)
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });

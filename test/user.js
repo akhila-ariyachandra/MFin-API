@@ -105,7 +105,7 @@ describe('Users', () => {
                     res.body.should.have.property('success').eql(false);
                     res.body.should.have.property('message').eql('Authentication failed. User not found.');
                     done();
-                })
+                });
         });
 
         it('it should not authenticate without the password field entered', (done) => {
@@ -122,7 +122,7 @@ describe('Users', () => {
                     res.body.should.have.property('success').eql(false);
                     res.body.should.have.property('message').eql('Authentication failed. No password given.');
                     done();
-                })
+                });
         });
 
         it('it should not authenticate without the correct username', (done) => {
@@ -140,7 +140,7 @@ describe('Users', () => {
                     res.body.should.have.property('success').eql(false);
                     res.body.should.have.property('message').eql('Authentication failed. User not found.');
                     done();
-                })
+                });
         });
 
         it('it should not authenticate without the correct password', (done) => {
@@ -158,7 +158,7 @@ describe('Users', () => {
                     res.body.should.have.property('success').eql(false);
                     res.body.should.have.property('message').eql('Authentication failed. Wrong password.');
                     done();
-                })
+                });
         });
 
         it('it should authenticate successfully with the correct username and password', (done) => {
@@ -178,7 +178,7 @@ describe('Users', () => {
                     res.body.should.have.property('token');
                     token = res.body.token;
                     done();
-                })
+                });
         });
     });
 
@@ -188,11 +188,11 @@ describe('Users', () => {
             chai.request(server)
                 .get('/api/user')
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });
@@ -217,11 +217,11 @@ describe('Users', () => {
             chai.request(server)
                 .get('/api/user/mfindev')
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });
@@ -261,11 +261,11 @@ describe('Users', () => {
             chai.request(server)
                 .put('/api/user/mfindev')
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });

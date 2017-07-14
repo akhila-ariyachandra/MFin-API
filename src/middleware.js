@@ -11,7 +11,11 @@ var authenticate = function (req, res, next) {
         // verifies secret and checks exp
         jwt.verify(token, app.get('superSecret'), function (err, decoded) {
             if (err) {
-                return res.json({ success: false, message: 'Failed to authenticate token.' });
+                return res.status(401).send({
+                    success: false,
+                    message: 'Unauthorised'
+                });
+        
             } else {
                 // if everything is good, save to request for use in other routes
                 req.decoded = decoded;
@@ -23,9 +27,9 @@ var authenticate = function (req, res, next) {
 
         // if there is no token
         // return an error
-        return res.status(403).send({
+        return res.status(401).send({
             success: false,
-            message: 'No token provided.'
+            message: 'Unauthorised'
         });
 
     }
@@ -34,8 +38,8 @@ var authenticate = function (req, res, next) {
 // Body parsers
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.text());                                    
-app.use(bodyParser.json({ type: 'application/json'})); 
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: 'application/json' }));
 
 // Use compression middleware
 app.use(compression());

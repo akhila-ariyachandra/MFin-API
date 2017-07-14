@@ -83,11 +83,11 @@ describe('Customers', () => {
             chai.request(server)
                 .get('/api/customer')
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });
@@ -125,11 +125,11 @@ describe('Customers', () => {
                 .post('/api/customer')
                 .send(customer)
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });
@@ -480,11 +480,11 @@ describe('Customers', () => {
             chai.request(server)
                 .get('/api/customer/1')
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });
@@ -508,11 +508,11 @@ describe('Customers', () => {
             chai.request(server)
                 .put('/api/customer/1')
                 .end((err, res) => {
-                    res.should.have.status(403);
+                    res.should.have.status(401);
                     should.exist(res.body);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
-                    res.body.should.have.property('message').eql('No token provided.');
+                    res.body.should.have.property('message').eql('Unauthorised');
                     done();
                 });
         });
