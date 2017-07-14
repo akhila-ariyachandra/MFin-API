@@ -52,8 +52,6 @@ router.route('/area/:areaID')
     // Update the Area with this ID
     .put(updateArea);
 
-//router.get('/logs', viewLogs); // View Logs
-
 router.route('/user')
     // Get all Users
     .get(getUsers);
