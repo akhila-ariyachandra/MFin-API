@@ -4,9 +4,11 @@
   "description": "API test",
   "main": "app.js",
   "scripts": {
-    "start": "gulp",
-    "deploy": "gcloud app deploy",
-    "test": "mocha --timeout 10000"
+    "prestart": "gulp build",
+    "start": "set NODE_ENV=dev&&node build/app.min.js",
+
+    "pretest": "gulp build",
+    "test": "set NODE_ENV=test&&mocha --timeout 10000"
   },
   "repository": {
     "type": "git",
