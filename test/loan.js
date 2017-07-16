@@ -1,8 +1,5 @@
 'use strict';
 
-// During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
-
 const app = require('../build/app.min');
 
 const chai = require('chai');
