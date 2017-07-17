@@ -5,7 +5,7 @@ var getNextTransaction = function (req, res, next) {
     var customerID = req.params.customerID;
 
     // Get the loan details
-    Loan.findOne({ 'customerID': customerID })
+    Loan.findOne({ "customerID": customerID })
         .then(function (result) {
 
             var loanID = result.loanID;
@@ -21,10 +21,10 @@ var getNextTransaction = function (req, res, next) {
                     return res.json(result);
                 })
                 .catch(function (err) {
-                    return res.send({ 'error': err });
+                    return res.send({ "error": err });
                 });
         })
         .catch(function (err) {
-            return res.send({ 'error': err });
+            return res.send({ "error": err });
         });
 };

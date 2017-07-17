@@ -3,17 +3,17 @@
 var authenticate = function (req, res, next) {
 
     // check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    var token = req.body.token || req.query.token || req.headers["x-access-token"];
 
     // decode token
     if (token) {
 
         // verifies secret and checks exp
-        jwt.verify(token, app.get('superSecret'), function (err, decoded) {
+        jwt.verify(token, app.get("superSecret"), function (err, decoded) {
             if (err) {
                 return res.status(401).send({
                     success: false,
-                    message: 'Unauthorised'
+                    message: "Unauthorised"
                 });
         
             } else {
@@ -29,7 +29,7 @@ var authenticate = function (req, res, next) {
         // return an error
         return res.status(401).send({
             success: false,
-            message: 'Unauthorised'
+            message: "Unauthorised"
         });
 
     }
@@ -39,11 +39,11 @@ var authenticate = function (req, res, next) {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.text());
-app.use(bodyParser.json({ type: 'application/json' }));
+app.use(bodyParser.json({ type: "application/json" }));
 
 // Use compression middleware
 app.use(compression());
 
 // CORS (for browser issues)
-var cors = require('cors');
+var cors = require("cors");
 app.use(cors());
