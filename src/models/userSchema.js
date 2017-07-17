@@ -2,7 +2,7 @@
 schema = {
     username: { type: String, required: true },
     password: { type: String, required: true },
-    admin: {type: Boolean, default: false}
+    admin: { type: Boolean, default: false }
 };
 
 collectionName = "user";

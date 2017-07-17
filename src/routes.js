@@ -64,20 +64,20 @@ router.route("/user/:username")
 
 // Unprotected routes
 // View documentation
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname + "/index.html"));
 });
 
 // Create a User 
-app.post("/user", createUser); 
+app.post("/user", createUser);
 
 // Authenticate User
 app.post("/authenticate", authenticateUser);
 
 // View log
-app.get("/log", function(req, res) {
+app.get("/log", function (req, res) {
     res.sendFile(path.join(__dirname + "/access.log"));
-}); 
+});
 
 // Register routes
 // Prefix all protected routes with /api

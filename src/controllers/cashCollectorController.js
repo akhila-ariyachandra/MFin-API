@@ -9,12 +9,12 @@ var createCashCollector = function (req, res) {
         name: name,
         areaID: areaID
     })
-		.then(function (result) {
-    return res.json({ "result": result, "status": "successfully saved" });
-})
-		.catch(function (err) {
-    return res.send({ "error": err });
-});
+        .then(function (result) {
+            return res.json({ "result": result, "status": "successfully saved" });
+        })
+        .catch(function (err) {
+            return res.send({ "error": err });
+        });
 };
 
 // Fetching Details of one cash collector
@@ -22,21 +22,21 @@ var getCashCollector = function (req, res) {
     var cashCollectorID = req.params.cashCollectorID;
 
     CashCollector.findOne({ "cashCollectorID": cashCollectorID })
-		.then(function (result) {
-    return res.json(result);
-})
-		.catch(function (err) {
-    return res.send({ "error": err });
-});
+        .then(function (result) {
+            return res.json(result);
+        })
+        .catch(function (err) {
+            return res.send({ "error": err });
+        });
 };
 
 // Fetching Details of cash collectors
 var getCashCollectors = function (req, res) {
     CashCollector.find({})
-		.then(function (result) {
-    return res.json(result);
-})
-		.catch(function (err) {
-    return res.send({ "error": err });
-});
+        .then(function (result) {
+            return res.json(result);
+        })
+        .catch(function (err) {
+            return res.send({ "error": err });
+        });
 };
