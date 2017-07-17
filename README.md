@@ -14,17 +14,13 @@ cd [folder path]
 * Run the following commands
 
 ```
-#!Command Prompt
-
 npm install
-gulp
+npm start
 ```
 
 * To stop server
 
 ```
-#!Command Prompt
-
 ctrl+c
 ```
 
@@ -50,7 +46,5 @@ run, revert the changes made to the package.json file.
 ### Install Gulp globally ###
 
 ```
-#!Command Prompt
-
 npm install --global gulp-cli
 ```
