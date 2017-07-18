@@ -11,7 +11,7 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-describe("Loan", () => {
+describe("Loans", () => {
     var token = null; // Store authentication token
 
     // Empty the database before each test

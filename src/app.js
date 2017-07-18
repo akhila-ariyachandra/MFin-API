@@ -16,24 +16,24 @@ global.Promise = bluebird;
 
 var logDirectory = __dirname;
 
-// ensure log directory exists 
+// Ensure log directory exists 
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
-// create a rotating write stream 
+// Create a rotating write stream 
 var accessLogStream = rfs("access.log", {
-  interval: "1d", // rotate daily 
+  interval: "1d", // Rotate daily 
   path: logDirectory
 });
 
-//don't show the log when it is test
+// Don't show the log when it is test
 if (config.util.getEnv("NODE_ENV") !== "test") {
-  // use morgan to log requests to the log file
+  // Use morgan to log requests to the log file
   app.use(morgan("combined", { stream: accessLogStream }));
-  // use morgan to log requests to the console
+  // Use morgan to log requests to the console
   app.use(morgan("dev"));
 }
 
-app.set("superSecret", config.secret); // secret variable
+app.set("superSecret", config.secret); // Secret variable
 
 var portNo = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || config.port;
 var ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0";

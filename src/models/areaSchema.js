@@ -3,7 +3,6 @@ schema = {
     name: { type: String, required: true },
     postalCode: { type: Number, required: true},
     district: {type: String, required: true},
-    
 };
 
 collectionName = "area";

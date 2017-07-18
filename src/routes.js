@@ -1,5 +1,5 @@
 /*--------------------Routes--------------------*/
-// router is used for all the protected routes
+// Router is used for all the protected routes
 var router = express.Router(); // Create instance of express router
 var path = require("path");
 
@@ -41,6 +41,7 @@ router.route("/cashCollector/:cashCollectorID")
     .get(getCashCollector)
     // Update the Cash Collector with this ID
     .put(updateCashCollector);
+
 router.route("/area")
     // Create an Area
     .post(createArea)

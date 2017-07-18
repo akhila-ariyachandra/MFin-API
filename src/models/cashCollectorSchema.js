@@ -5,7 +5,7 @@ schema = {
     nic: { type: String, required: true},
     address: { type: String, required:true},
     phone: { type: String, required:true},
-    areaID: { type: String, required: true }
+    areaID: { type: Number, required: true }
 };
 
 collectionName = "cashCollector";

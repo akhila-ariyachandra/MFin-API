@@ -20,19 +20,15 @@ var createArea = function (req, res) {
 };
 
 // Getting details of one area
-var getArea = function (req, res, next) {
+var getArea = function (req, res) {
     var areaID = req.params.areaID;
-    console.log(areaID);
-
-    Area.findOne({ "areaID": areaID }, function (err, result) {
-        if (err) {
-            //req.log.error('Error finding Area:', areaID);
-            return res.send({ "error": err });
-        }
-        else {
-            //res.log.info('Area details retrieved: ', areaID);
-            return res.json(result);
-        }
+    
+    Area.findOne({ "areaID": areaID })
+    .then(function (result) {
+        return res.json(result);
+    })
+    .catch(function(err){
+        return res.send({ "error": err });
     });
 };
 
