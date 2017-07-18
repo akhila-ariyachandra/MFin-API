@@ -1,7 +1,11 @@
 // Model for the Cash Collector
 schema = {
     name: { type: String, required: true },
-    areaID: { type: Number, required: true }
+    surname: { type: String, required: true},
+    nic: { type: String, required: true},
+    address: { type: String, required:true},
+    phone: { type: String, required:true},
+    areaID: { type: String, required: true }
 };
 
 collectionName = "cashCollector";

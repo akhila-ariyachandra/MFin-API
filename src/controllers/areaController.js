@@ -3,11 +3,13 @@
 // Creating a new Area
 var createArea = function (req, res) {
     var name = req.body.name;
-    var details = req.body.details;
+    var postalCode = req.body.postalCode;
+    var district = req.body.district;
 
     Area.create({
         name: name,
-        details: details
+        postalCode:postalCode,
+        district:district
     })
         .then(function (result) {
             return res.json({ "result": result, "status": "successfully saved" });
@@ -19,7 +21,8 @@ var createArea = function (req, res) {
 
 // Getting details of one area
 var getArea = function (req, res, next) {
-    var areaID = req.body.areaID;
+    var areaID = req.params.areaID;
+    console.log(areaID);
 
     Area.findOne({ "areaID": areaID }, function (err, result) {
         if (err) {
@@ -46,7 +49,7 @@ var getAreas = function (req, res) {
 
 // Update Area details
 var updateArea = function (req, res) {
-    var areaID = req.body.areaID;
+    var areaID = req.params.areaID;
 
     // Get existing details of area
     Area.findOne({ "areaID": areaID })
@@ -58,7 +61,8 @@ var updateArea = function (req, res) {
 
             // Update details
             area.name = req.body.name;
-            area.details = req.body.details;
+            area.postalCode = req.body.postalCode;
+            area.district = req.body.district;
 
             // Send data to database
             area.save()

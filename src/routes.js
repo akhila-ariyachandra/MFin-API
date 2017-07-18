@@ -36,10 +36,11 @@ router.route("/cashCollector")
     // Get all Cash Collectors
     .get(getCashCollectors);
 
-router.route("/cashCollector/:cashCollector")
+router.route("/cashCollector/:cashCollectorID")
     // Get the Cash Collector with this ID
-    .get(getCashCollector);
-
+    .get(getCashCollector)
+    // Update the Cash Collector with this ID
+    .put(updateCashCollector);
 router.route("/area")
     // Create an Area
     .post(createArea)
