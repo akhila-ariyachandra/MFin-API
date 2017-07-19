@@ -96,16 +96,16 @@ var authenticateUser = function (req, res) {
             } else if (user) {
                 // Run password checking asynchronously to avoid blocking the server
                 bcrypt.compare(req.body.password, user.password).then(function (result) {
-                    // check if password matches
+                    // Check if password matches
                     if (!result) {
                         res.json({ success: false, message: "Authentication failed. Wrong password." });
                     } else {
-                        // if user is found and password is right
-                        // create a token
+                        // If user is found and password is right
+                        // Create a token
                         var token = jwt.sign(user, app.get("superSecret"), {
                             expiresIn: config.tokenExpireTime
                         });
-                        // return the information including token as JSON
+                        // Return the information including token as JSON
                         res.json({
                             success: true,
                             message: "Authentication success.",
