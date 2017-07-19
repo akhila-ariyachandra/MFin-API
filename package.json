@@ -8,7 +8,7 @@
     "start": "set NODE_ENV=dev&&node build/app.min.js",
 
     "pretest": "gulp build",
-    "test": "set NODE_ENV=test&&mocha --timeout 10000"
+    "test": "set NODE_ENV=test&&mocha --timeout 10000 --reporter"
   },
   "repository": {
     "type": "git",
