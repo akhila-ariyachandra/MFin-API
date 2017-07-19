@@ -21,8 +21,9 @@ fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // Create a rotating write stream 
 var accessLogStream = rfs("access.log", {
-  interval: "1d", // Rotate daily 
-  path: logDirectory
+  interval: "7d", // Rotate weekly 
+  path: logDirectory,
+  compress: true
 });
 
 // Don't show the log when it is test
