@@ -11,11 +11,15 @@ var mockgoose = new Mockgoose(mongoose);
 if (process.env.NODE_ENV === "test") {
     // While testing use mockgoose
     mockgoose.prepareStorage().then(function () {
-        mongoose.connect(config.dbPath);
+        mongoose.connect(config.dbPath, {
+            useMongoClient: true,
+        });
     });
 } else {
     // Else use the web database
-    mongoose.connect(config.dbPath);
+    mongoose.connect(config.dbPath, {
+        useMongoClient: true,
+    });
 }
 
 var db = mongoose.connection;
