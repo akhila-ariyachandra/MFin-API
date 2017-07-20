@@ -344,6 +344,17 @@ describe("Loans", () => {
                     res.should.have.status(200);
                     should.exist(res.body);
                     res.body.should.be.a("object");
+                    res.body.should.have.property("__v");
+                    res.body.should.have.property("loanID").eql(1);
+                    res.body.should.have.property("loanType").eql("Fix Deposit");
+                    res.body.should.have.property("date").eql("04-03-1998");
+                    res.body.should.have.property("loanAmount").eql(250000);
+                    res.body.should.have.property("duration").eql(12);
+                    res.body.should.have.property("interest").eql(5);
+                    res.body.should.have.property("customerID").eql(1);
+                    res.body.should.have.property("manager").eql("Not set");
+                    res.body.should.have.property("status").eql("Pending");
+                    res.body.should.have.property("_id");
                     done();
                 });
         });
