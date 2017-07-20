@@ -23,7 +23,7 @@ describe("Cash Collectors", () => {
 
     // Reset the counter of cashCollectorID before running tests
     before((done) => {
-        CashCollector.counterReset("customerID", (err) => {
+        CashCollector.counterReset("cashCollectorID", (err) => {
             done();
         });
     });
