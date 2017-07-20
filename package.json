@@ -6,7 +6,6 @@
   "scripts": {
     "prestart": "gulp build",
     "start": "set NODE_ENV=dev&&node build/app.min.js",
-
     "pretest": "gulp build",
     "test": "set NODE_ENV=test&&mocha --timeout 10000 --reporter"
   },
@@ -32,6 +31,7 @@
     "cors": "^2.8.3",
     "express": "^4.15.3",
     "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",

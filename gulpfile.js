@@ -1,5 +1,6 @@
 /*--------------------Dependencies--------------------*/
 const gulp = require("gulp");
+const babel = require('gulp-babel');
 const concat = require("gulp-concat");
 const rename = require("gulp-rename");
 const uglify = require("gulp-uglify");
@@ -30,9 +31,12 @@ gulp.task("build", function () {
 
 	// Concat and minify Javascript files
     gulp.src(appFiles)
-		.pipe(concat("app.js"))
-		.pipe(gulp.dest(dest))
-		.pipe(rename("app.min.js"))
+        .pipe(concat("app.js"))
+        .pipe(gulp.dest(dest))
+        .pipe(babel({
+            presets: ["es2015"]
+        }))        
+        .pipe(rename("app.min.js"))
 		.pipe(uglify())
 		.pipe(gulp.dest(dest));
 
