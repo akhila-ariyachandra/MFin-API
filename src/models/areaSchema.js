@@ -6,6 +6,6 @@ schema = {
 };
 
 collectionName = "area";
-var areaSchema = mongoose.Schema(schema);
+const areaSchema = mongoose.Schema(schema);
 areaSchema.plugin(autoIncrement, { inc_field: "areaID" });
-var Area = mongoose.model(collectionName, areaSchema);
+const Area = mongoose.model(collectionName, areaSchema);

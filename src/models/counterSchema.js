@@ -5,5 +5,5 @@ schema = {
 };
 
 collectionName = "counter";
-var counterSchema = mongoose.Schema(schema);
-var Counter = mongoose.model(collectionName, counterSchema);
+const counterSchema = mongoose.Schema(schema);
+const Counter = mongoose.model(collectionName, counterSchema);

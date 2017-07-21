@@ -1,7 +1,7 @@
 /*--------------------Routes--------------------*/
 // Router is used for all the protected routes
-var router = express.Router(); // Create instance of express router
-var path = require("path");
+const router = express.Router(); // Create instance of express router
+const path = require("path");
 
 // Protect routes with authentication middleware
 router.use(authenticate);

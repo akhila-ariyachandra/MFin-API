@@ -1,16 +1,16 @@
 /*--------------------Database--------------------*/
 
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 // Use mockgoose for automated testing
 // Mockgoose is for a temporary DB stored in RAM
-var Mockgoose = require("mockgoose").Mockgoose;
-var mockgoose = new Mockgoose(mongoose);
+const Mockgoose = require("mockgoose").Mockgoose;
+const mockgoose = new Mockgoose(mongoose);
 
 if (process.env.NODE_ENV === "test") {
     // While testing use mockgoose
-    mockgoose.prepareStorage().then(function () {
+    mockgoose.prepareStorage().then(() => {
         mongoose.connect(config.dbPath, {
             useMongoClient: true,
         });
@@ -22,12 +22,12 @@ if (process.env.NODE_ENV === "test") {
     });
 }
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 
-db.on("error", function () {
+db.on("error", () => {
     console.log("Error occured from the database");
 });
 
-db.once("open", function dbOpen() {
+db.once("open", () => {
     console.log("Successfully opened the database");
 });

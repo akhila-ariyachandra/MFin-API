@@ -1,26 +1,26 @@
 /*--------------------Server--------------------*/
 "use strict";
 
-var bluebird = require("bluebird");
-var bodyParser = require("body-parser");
-var compression = require("compression");
-var config = require("config");
-var express = require("express");
-var app = express();
-var fs = require("fs");
-var jwt = require("jsonwebtoken");
-var morgan = require("morgan");
-var rfs = require("rotating-file-stream");
+const bluebird = require("bluebird");
+const bodyParser = require("body-parser");
+const compression = require("compression");
+const config = require("config");
+const express = require("express");
+const app = express();
+const fs = require("fs");
+const jwt = require("jsonwebtoken");
+const morgan = require("morgan");
+const rfs = require("rotating-file-stream");
 
 global.Promise = bluebird;
 
-var logDirectory = __dirname;
+const logDirectory = __dirname;
 
 // Ensure log directory exists 
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // Create a rotating write stream 
-var accessLogStream = rfs("access.log", {
+const accessLogStream = rfs("access.log", {
   interval: "7d", // Rotate weekly 
   path: logDirectory,
   compress: true
@@ -36,5 +36,5 @@ if (config.util.getEnv("NODE_ENV") !== "test") {
 
 app.set("superSecret", config.secret); // Secret variable
 
-var portNo = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || config.port;
-var ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0";
+const portNo = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || config.port;
+const ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0";

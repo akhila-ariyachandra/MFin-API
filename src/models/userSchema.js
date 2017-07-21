@@ -6,5 +6,5 @@ schema = {
 };
 
 collectionName = "user";
-var userSchema = mongoose.Schema(schema);
-var User = mongoose.model(collectionName, userSchema);
+const userSchema = mongoose.Schema(schema);
+const User = mongoose.model(collectionName, userSchema);

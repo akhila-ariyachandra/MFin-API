@@ -1,15 +1,15 @@
 /*--------------------Middleware--------------------*/
 // Authenticate User
-var authenticate = function (req, res, next) {
+const authenticate = (req, res, next) => {
 
     // Check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token || req.headers["x-access-token"];
+    const token = req.body.token || req.query.token || req.headers["x-access-token"];
 
     // Decode token
     if (token) {
 
         // Verifies secret and checks exp
-        jwt.verify(token, app.get("superSecret"), function (err, decoded) {
+        jwt.verify(token, app.get("superSecret"), (err, decoded) => {
             if (err) {
                 return res.status(401).send({
                     success: false,
@@ -45,5 +45,5 @@ app.use(bodyParser.json({ type: "application/json" }));
 app.use(compression());
 
 // CORS (for browser issues)
-var cors = require("cors");
+const cors = require("cors");
 app.use(cors());

@@ -11,6 +11,6 @@ schema = {
 };
 
 collectionName = "loan";
-var loanSchema = mongoose.Schema(schema);
+const loanSchema = mongoose.Schema(schema);
 loanSchema.plugin(autoIncrement, { inc_field: "loanID" });
-var Loan = mongoose.model(collectionName, loanSchema);
+const Loan = mongoose.model(collectionName, loanSchema);

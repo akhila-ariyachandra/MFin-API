@@ -1,55 +1,55 @@
 // Area Controller
 
 // Creating a new Area
-var createArea = function (req, res) {
-    var name = req.body.name;
-    var postalCode = req.body.postalCode;
-    var district = req.body.district;
+const createArea = (req, res) => {
+    const name = req.body.name;
+    const postalCode = req.body.postalCode;
+    const district = req.body.district;
 
     Area.create({
         name: name,
-        postalCode:postalCode,
-        district:district
+        postalCode: postalCode,
+        district: district
     })
-        .then(function (result) {
+        .then((result) => {
             return res.json({ "result": result, "status": "successfully saved" });
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.send({ "error": err });
         });
 };
 
 // Getting details of one area
-var getArea = function (req, res) {
-    var areaID = req.params.areaID;
-    
+const getArea = (req, res) => {
+    const areaID = req.params.areaID;
+
     Area.findOne({ "areaID": areaID })
-    .then(function (result) {
-        return res.json(result);
-    })
-    .catch(function(err){
-        return res.send({ "error": err });
-    });
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((err) => {
+            return res.send({ "error": err });
+        });
 };
 
 // Fetching Details of all areas
-var getAreas = function (req, res) {
+const getAreas = (req, res) => {
     Area.find({})
-        .then(function (result) {
+        .then((result) => {
             return res.json(result);
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.send({ "error": err });
         });
 };
 
 // Update Area details
-var updateArea = function (req, res) {
-    var areaID = req.params.areaID;
+const updateArea = (req, res) => {
+    const areaID = req.params.areaID;
 
     // Get existing details of area
     Area.findOne({ "areaID": areaID })
-        .then(function (area) {
+        .then((area) => {
             if (!area) {
                 // If area doesn't exist i.e. the wrong areaID was given
                 return res.json({ "error": "Record does not exist" });
@@ -62,14 +62,14 @@ var updateArea = function (req, res) {
 
             // Send data to database
             area.save()
-                .then(function (result) {
+                .then((result) => {
                     return res.json({ "result": result });
                 })
-                .catch(function (err) {
+                .catch((err) => {
                     return res.json({ "error": err });
                 });
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.json({ "error": err });
         });
 };

@@ -9,6 +9,6 @@ schema = {
 };
 
 collectionName = "cashCollector";
-var cashCollectorSchema = mongoose.Schema(schema);
+const cashCollectorSchema = mongoose.Schema(schema);
 cashCollectorSchema.plugin(autoIncrement, { inc_field: "cashCollectorID" });
-var CashCollector = mongoose.model(collectionName, cashCollectorSchema);
+const CashCollector = mongoose.model(collectionName, cashCollectorSchema);

@@ -8,6 +8,6 @@ schema = {
 };
 
 collectionName = "transaction";
-var transactionSchema = mongoose.Schema(schema);
+const transactionSchema = mongoose.Schema(schema);
 transactionSchema.plugin(autoIncrement, { inc_field: "transactionID" });
-var Transaction = mongoose.model(collectionName, transactionSchema);
+const Transaction = mongoose.model(collectionName, transactionSchema);

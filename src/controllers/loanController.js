@@ -1,12 +1,12 @@
 //This Controller deals with all functionalities of Customer
 
-var createLoan = function (req, res) {
-    var loanType = req.body.loanType;
-    var date = req.body.date;
-    var loanAmount = req.body.loanAmount;
-    var duration = req.body.duration;
-    var interest = req.body.interest;
-    var customerID = req.body.customerID;
+const createLoan = (req, res) => {
+    const loanType = req.body.loanType;
+    const date = req.body.date;
+    const loanAmount = req.body.loanAmount;
+    const duration = req.body.duration;
+    const interest = req.body.interest;
+    const customerID = req.body.customerID;
 
     Loan.create({
         loanType: loanType,
@@ -16,45 +16,45 @@ var createLoan = function (req, res) {
         interest: interest,
         customerID: customerID
     })
-        .then(function (result) {
+        .then((result) => {
             return res.json({ "result": result, "status": "successfully saved" });
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.send({ "error": err });
         });
 };
 
 // Fetching Details of all loans
-var getLoans = function (req, res) {
+const getLoans = (req, res) => {
     Loan.find({})
-        .then(function (result) {
+        .then((result) => {
             return res.json(result);
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.send({ "error": err });
         });
 };
 
 // Fetching Details of one loan
-var getLoan = function (req, res) {
-    var loanID = req.params.loanID;
+const getLoan = (req, res) => {
+    const loanID = req.params.loanID;
 
     Loan.findOne({ "loanID": loanID })
-        .then(function (result) {
+        .then((result) => {
             return res.json(result);
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.send({ "error": err });
         });
 };
 
 // Update Loan details
-var updateLoan = function (req, res) {
-    var loanID = req.params.loanID;
+const updateLoan = (req, res) => {
+    const loanID = req.params.loanID;
 
     // Get existing details of loan
     Loan.findOne({ "loanID": loanID })
-        .then(function (loan) {
+        .then((loan) => {
             if (!loan) {
                 // If loan doesn't exist i.e. the wrong loanID was given
                 return res.json({ "error": "Record does not exist" });
@@ -72,14 +72,14 @@ var updateLoan = function (req, res) {
 
             // Send data to database
             loan.save()
-                .then(function (result) {
+                .then((result) => {
                     return res.json({ "Loan Details": result });
                 })
-                .catch(function (err) {
+                .catch((err) => {
                     return res.send({ "error": err });
                 });
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.send({ "error": err });
         });
 };

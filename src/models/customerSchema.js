@@ -12,6 +12,6 @@ schema = {
 };
 
 collectionName = "customer";
-var customerSchema = mongoose.Schema(schema);
+const customerSchema = mongoose.Schema(schema);
 customerSchema.plugin(autoIncrement, { inc_field: "customerID" });
-var Customer = mongoose.model(collectionName, customerSchema);
+const Customer = mongoose.model(collectionName, customerSchema);

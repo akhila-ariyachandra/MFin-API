@@ -1,16 +1,16 @@
 //This Controller deals with all functionalities of Customer
 
 // Creating New Customer
-var createCustomer = function (req, res) {
-    var name = req.body.name;
-    var surname = req.body.surname;
-    var nic = req.body.nic;
-    var address = req.body.address;
-    var dob = req.body.dob;
-    var phone = req.body.phone;
-    var areaID = req.body.areaID;
-    var longitude = req.body.longitude;
-    var latitude = req.body.latitude;
+const createCustomer = (req, res) => {
+    const name = req.body.name;
+    const surname = req.body.surname;
+    const nic = req.body.nic;
+    const address = req.body.address;
+    const dob = req.body.dob;
+    const phone = req.body.phone;
+    const areaID = req.body.areaID;
+    const longitude = req.body.longitude;
+    const latitude = req.body.latitude;
 
     Customer.create({
         name: name,
@@ -23,45 +23,45 @@ var createCustomer = function (req, res) {
         longitude: longitude,
         latitude: latitude
     })
-        .then(function (result) {
+        .then((result) => {
             return res.json({ "result": result, "status": "successfully saved" });
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.send({ "error": err });
         });
 };
 
 // Fetching Details of one Customer
-var getCustomer = function (req, res) {
-    var customerID = req.params.customerID;
+const getCustomer = (req, res) => {
+    const customerID = req.params.customerID;
 
     Customer.findOne({ "customerID": customerID })
-        .then(function (result) {
+        .then((result) => {
             return res.json(result);
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.send({ "error": err });
         });
 };
 
 // Fetching Details of all Customers
-var getCustomers = function (req, res) {
+const getCustomers = (req, res) => {
     Customer.find({})
-        .then(function (result) {
+        .then((result) => {
             return res.json(result);
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.send({ "error": err });
         });
 };
 
 // Update Customer details
-var updateCustomer = function (req, res) {
-    var customerID = req.params.customerID;
+const updateCustomer = (req, res) => {
+    const customerID = req.params.customerID;
 
     // Get existing details of customer
     Customer.findOne({ "customerID": customerID })
-        .then(function (customer) {
+        .then((customer) => {
             if (!customer) {
                 // If customer doesn't exist i.e. the wrong customerID was given
                 return res.json({ "error": "Record does not exist" });
@@ -80,14 +80,14 @@ var updateCustomer = function (req, res) {
 
             // Send data to database
             customer.save()
-                .then(function (result) {
+                .then((result) => {
                     return res.json({ "result": result });
                 })
-                .catch(function (err) {
+                .catch((err) => {
                     return res.json({ "error": err });
                 });
         })
-        .catch(function (err) {
+        .catch((err) => {
             return res.json({ "error": err });
         });
 };
