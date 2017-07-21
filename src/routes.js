@@ -64,6 +64,18 @@ router.route("/user/:username")
     // Update the User with this username
     .put(updateUser);
 
+router.route("/transaction")
+    // Create an Transaction
+    .post(createTransaction)
+    // Get all Transactions
+    .get(getTransactions);
+
+router.route("/transaction/:transactionID")
+    // Get the Transaction with this ID
+    .get(getTransaction)
+    // Update the Transaction with this ID
+    .put(updateTransaction);
+
 // Unprotected routes
 // View documentation
 app.get("/", function (req, res) {
