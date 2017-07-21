@@ -46,4 +46,7 @@ app.use(compression());
 
 // CORS (for browser issues)
 const cors = require("cors");
-app.use(cors());
+app.use(cors({
+    methods: ["POST", "GET", "PUT"],
+    allowedHeaders: ["Content-Type", "x-access-token"]
+}));
