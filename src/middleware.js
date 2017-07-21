@@ -19,7 +19,7 @@ const authenticate = (req, res, next) => {
             } else {
                 // If everything is good, save to request for use in other routes
                 req.decoded = decoded;
-                next();
+                return next();
             }
         });
 
