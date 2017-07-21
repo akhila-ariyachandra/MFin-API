@@ -1,6 +1,6 @@
 /*--------------------Dependencies--------------------*/
 const gulp = require("gulp");
-const babel = require('gulp-babel');
+const babel = require("gulp-babel");
 const concat = require("gulp-concat");
 const rename = require("gulp-rename");
 const uglify = require("gulp-uglify");
