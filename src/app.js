@@ -7,22 +7,16 @@ const compression = require("compression");
 const config = require("config");
 const express = require("express");
 const app = express();
-const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const morgan = require("morgan");
 const rfs = require("rotating-file-stream");
 
 global.Promise = bluebird;
 
-const logDirectory = __dirname;
-
-// Ensure log directory exists 
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
-
 // Create a rotating write stream 
 const accessLogStream = rfs("access.log", {
   interval: "7d", // Rotate weekly 
-  path: logDirectory,
+  path: __dirname,
   compress: true
 });
 
