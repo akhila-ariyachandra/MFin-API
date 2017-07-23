@@ -13,21 +13,6 @@ const rfs = require("rotating-file-stream");
 
 global.Promise = bluebird;
 
-// Create a rotating write stream 
-const accessLogStream = rfs("access.log", {
-  interval: "7d", // Rotate weekly 
-  path: __dirname,
-  compress: true
-});
-
-// Don't show the log when it is test
-if (config.util.getEnv("NODE_ENV") !== "test") {
-  // Use morgan to log requests to the log file
-  app.use(morgan("combined", { stream: accessLogStream }));
-  // Use morgan to log requests to the console
-  app.use(morgan("dev"));
-}
-
 app.set("superSecret", config.secret); // Secret variable
 
 const portNo = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || config.port;

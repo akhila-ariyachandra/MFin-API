@@ -35,6 +35,22 @@ const authenticate = (req, res, next) => {
     }
 };
 
+// Logging
+// Create a rotating write stream 
+const accessLogStream = rfs("access.log", {
+  interval: "7d", // Rotate weekly 
+  path: __dirname,
+  compress: true
+});
+
+// Don't show the log when it is test
+if (config.util.getEnv("NODE_ENV") !== "test") {
+  // Use morgan to log requests to the log file
+  app.use(morgan("combined", { stream: accessLogStream }));
+  // Use morgan to log requests to the console
+  app.use(morgan("dev"));
+}
+
 // Body parsers
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
