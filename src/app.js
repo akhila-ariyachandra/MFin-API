@@ -13,7 +13,5 @@ const rfs = require("rotating-file-stream");
 
 global.Promise = bluebird;
 
-app.set("superSecret", config.secret); // Secret variable
-
 const portNo = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || config.port;
 const ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0";

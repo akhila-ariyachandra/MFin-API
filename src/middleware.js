@@ -1,5 +1,7 @@
 /*--------------------Middleware--------------------*/
 // Authenticate User
+app.set("superSecret", config.secret); // Secret variable
+
 const authenticate = (req, res, next) => {
 
     // Check header or url parameters or post parameters for token
