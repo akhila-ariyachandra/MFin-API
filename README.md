@@ -8,10 +8,17 @@ cd [folder path]
 * Download files, use the URL provided by BitBucket
 * Open folder that was created by git clone command in Visual Studio Code (2017_ccpd_2017)
 * Open the terminal in VS Code, ctrl+`
-* Run the following commands
+* To install the dependencies
 ```
 npm install
+```
+* To run the server in production mode
+```
 npm start
+```
+* To run the server in development mode
+```
+npm run dev
 ```
 * To stop server
 ```

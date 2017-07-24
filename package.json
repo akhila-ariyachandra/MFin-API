@@ -5,9 +5,11 @@
   "main": "app.js",
   "scripts": {
     "prestart": "gulp build",
-    "start": "set NODE_ENV=dev&&node clusters.js",
+    "start": "set NODE_ENV=production&&node clusters.js",
     "pretest": "gulp build",
-    "test": "set NODE_ENV=test&&mocha --timeout 10000 --reporter"
+    "test": "set NODE_ENV=test&&mocha --timeout 10000 --reporter",
+    "predev": "gulp build",
+    "dev": "set NODE_ENV=dev&&node clusters.js"
   },
   "repository": {
     "type": "git",
