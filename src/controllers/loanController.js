@@ -37,9 +37,6 @@ const getLoans = (req, res) => {
                     if (err) {
                         return res.send({ "error": err });
                     }
-                    if(success) {
-                        console.log(key);
-                    }
                 });
             }
             
