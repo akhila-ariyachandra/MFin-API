@@ -9,7 +9,7 @@
     "pretest": "gulp build",
     "test": "set NODE_ENV=test&&mocha --timeout 10000 --reporter",
     "predev": "gulp build",
-    "dev": "set NODE_ENV=dev&&node clusters.js"
+    "dev": "set NODE_ENV=dev&&node build/app.min.js"
   },
   "repository": {
     "type": "git",
