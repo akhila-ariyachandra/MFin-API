@@ -39,7 +39,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "jsonwebtoken": "^7.4.1",
-    "minimatch": "^3.0.4",
     "mockgoose": "^7.3.3",
     "mongoose": "^4.11.1",
     "mongoose-sequence": "^3.2.0",
