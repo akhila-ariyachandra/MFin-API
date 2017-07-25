@@ -341,6 +341,16 @@ describe("Cash Collectors", () => {
                     res.should.have.status(200);
                     should.exist(res.body);
                     res.body.should.be.a("object");
+                    // Check for all fields
+                    res.body.should.have.property("__v");
+                    res.body.should.have.property("cashCollectorID").eql(1);
+                    res.body.should.have.property("name").eql("Dananjaya");
+                    res.body.should.have.property("surname").eql("Raj");
+                    res.body.should.have.property("nic").eql("923456548V");
+                    res.body.should.have.property("address").eql("Gampaha");
+                    res.body.should.have.property("phone").eql("0712564218");
+                    res.body.should.have.property("areaID").eql(2);
+                    res.body.should.have.property("_id");
                     done();
                 });
         });

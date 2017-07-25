@@ -35,19 +35,52 @@ const createCustomer = (req, res) => {
 const getCustomer = (req, res) => {
     const customerID = req.params.customerID;
 
-    Customer.findOne({ "customerID": customerID })
-        .then((result) => {
-            return res.json(result);
-        })
-        .catch((err) => {
+    const key = "customer" + customerID;
+
+    // Search cache for value
+    cache.get(key, (err, cacheResult) => {
+        if (err) {
             return res.send({ "error": err });
-        });
+        }
+
+        // If the key doesn't exist
+        if (cacheResult == undefined) {
+            Customer.findOne({ "customerID": customerID })
+                .then((result) => {
+                    // Store the value in cache
+                    cache.set(key, result, (err, success) => {
+                        if (err) {
+                            return res.send({ "error": err });
+                        }
+                        return res.json(result);
+                    });
+                })
+                .catch((err) => {
+                    return res.send({ "error": err });
+                });
+        } else {
+            // Return cached value
+            return res.json(cacheResult);
+        }
+    });
 };
 
 // Fetching Details of all Customers
 const getCustomers = (req, res) => {
     Customer.find({})
         .then((result) => {
+            
+            // Store each of the value in the array in the cache
+            for (var i=0; i < result.length; i++) {
+                const key = "customer" + result[i].customerID;
+                
+                cache.set(key, result[i], (err, success) => {
+                    if (err) {
+                        return res.send({ "error": err });
+                    }
+                });
+            }
+            
             return res.json(result);
         })
         .catch((err) => {

@@ -44,6 +44,7 @@
     "mongoose": "^4.11.1",
     "mongoose-sequence": "^3.2.0",
     "morgan": "^1.8.2",
+    "node-cache": "^4.1.1",
     "rotating-file-stream": "^1.2.2"
   },
   "devDependencies": {

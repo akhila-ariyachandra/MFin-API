@@ -9,6 +9,8 @@ const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken");
 const morgan = require("morgan");
+const NodeCache = require("node-cache");
+const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 const rfs = require("rotating-file-stream");
 
 global.Promise = bluebird;

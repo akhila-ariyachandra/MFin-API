@@ -29,20 +29,54 @@ const createCashCollector = (req, res) => {
 const getCashCollector = (req, res) => {
 	const cashCollectorID = req.params.cashCollectorID;
 
-	CashCollector.findOne({ "cashCollectorID": cashCollectorID })
-		.then((result) => {
-			return res.json(result);
-		})
-		.catch((err) => {
+	const key = "cashCollector" + cashCollectorID;
+
+	// Search cache for value
+	cache.get(key, (err, cacheResult) => {
+		if (err) {
 			return res.send({ "error": err });
-		});
+		}
+
+		// If the key doesn't exist
+		if (cacheResult == undefined) {
+
+			CashCollector.findOne({ "cashCollectorID": cashCollectorID })
+				.then((result) => {
+					// Store the value in cache
+                    cache.set(key, result, (err, success) => {
+                        if (err) {
+                            return res.send({ "error": err });
+                        }
+                        return res.json(result);
+                    });
+				})
+				.catch((err) => {
+					return res.send({ "error": err });
+				});
+		} else {
+			// Return cached value
+			return res.json(cacheResult);
+		}
+	});
 };
 
 // Fetching Details of cash collectors
 const getCashCollectors = (req, res) => {
 	CashCollector.find({})
 		.then((result) => {
-			return res.json(result);
+			
+            // Store each of the value in the array in the cache
+            for (var i=0; i < result.length; i++) {
+                const key = "cashCollector" + result[i].cashCollectorID;
+                
+                cache.set(key, result[i], (err, success) => {
+                    if (err) {
+                        return res.send({ "error": err });
+                    }
+                });
+            }
+            
+            return res.json(result);
 		})
 		.catch((err) => {
 			return res.send({ "error": err });

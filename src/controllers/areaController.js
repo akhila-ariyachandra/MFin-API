@@ -23,19 +23,52 @@ const createArea = (req, res) => {
 const getArea = (req, res) => {
     const areaID = req.params.areaID;
 
-    Area.findOne({ "areaID": areaID })
-        .then((result) => {
-            return res.json(result);
-        })
-        .catch((err) => {
+    const key = "area" + areaID;
+
+    // Search cache for value
+    cache.get(key, (err, cacheResult) => {
+        if (err) {
             return res.send({ "error": err });
-        });
+        }
+
+        // If the key doesn't exist88
+        if (cacheResult == undefined) {
+            Area.findOne({ "areaID": areaID })
+                .then((result) => {
+                    // Store the value in cache
+                    cache.set(key, result, (err, success) => {
+                        if (err) {
+                            return res.send({ "error": err });
+                        }
+                        return res.json(result);
+                    });
+                })
+                .catch((err) => {
+                    return res.send({ "error": err });
+                });
+        } else {
+            // Return cached value
+            return res.json(cacheResult);
+        }
+    });
 };
 
 // Fetching Details of all areas
 const getAreas = (req, res) => {
     Area.find({})
         .then((result) => {
+            
+            // Store each of the value in the array in the cache
+            for (var i=0; i < result.length; i++) {
+                const key = "area" + result[i].areaID;
+                
+                cache.set(key, result[i], (err, success) => {
+                    if (err) {
+                        return res.send({ "error": err });
+                    }
+                });
+            }
+            
             return res.json(result);
         })
         .catch((err) => {

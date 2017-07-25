@@ -28,6 +28,21 @@ const createLoan = (req, res) => {
 const getLoans = (req, res) => {
     Loan.find({})
         .then((result) => {
+            
+            // Store each of the value in the array in the cache
+            for (var i=0; i < result.length; i++) {
+                const key = "loan" + result[i].loanID;
+                
+                cache.set(key, result[i], (err, success) => {
+                    if (err) {
+                        return res.send({ "error": err });
+                    }
+                    if(success) {
+                        console.log(key);
+                    }
+                });
+            }
+            
             return res.json(result);
         })
         .catch((err) => {
@@ -39,13 +54,34 @@ const getLoans = (req, res) => {
 const getLoan = (req, res) => {
     const loanID = req.params.loanID;
 
-    Loan.findOne({ "loanID": loanID })
-        .then((result) => {
-            return res.json(result);
-        })
-        .catch((err) => {
+    const key = "loan" + loanID;
+
+    // Search cache for value
+    cache.get(key, (err, cacheResult) => {
+        if (err) {
             return res.send({ "error": err });
-        });
+        }
+
+        // If the key doesn't exist
+        if (cacheResult == undefined) {
+            Loan.findOne({ "loanID": loanID })
+                .then((result) => {
+                    // Store the value in cache
+                    cache.set(key, result, (err, success) => {
+                        if (err) {
+                            return res.send({ "error": err });
+                        }
+                        return res.json(result);
+                    });
+                })
+                .catch((err) => {
+                    return res.send({ "error": err });
+                });
+        } else {
+            // Return cached value
+            return res.json(cacheResult);
+        }
+    });
 };
 
 // Update Loan details
