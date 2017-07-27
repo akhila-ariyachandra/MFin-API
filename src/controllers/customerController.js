@@ -1,7 +1,6 @@
 "use strict";
 
 const Customer = require("../models/customerSchema");
-const cache = require("../app").cache;
 
 module.exports = {
     // Creating New Customer
@@ -37,6 +36,8 @@ module.exports = {
 
     // Fetching Details of one Customer
     getCustomer: (req, res) => {
+        const cache = require("../app").cache;
+        
         const customerID = req.params.customerID;
 
         const key = "customer" + customerID;
@@ -71,6 +72,8 @@ module.exports = {
 
     // Fetching Details of all Customers
     getCustomers: (req, res) => {
+        const cache = require("../app").cache;
+        
         Customer.find({})
             .then((result) => {
 

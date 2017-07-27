@@ -1,7 +1,6 @@
 "user strict";
 
 const Loan = require("../models/loanSchema");
-const cache = require("../app").cache;
 
 module.exports = {
     // Create a new loan
@@ -31,6 +30,8 @@ module.exports = {
 
     // Fetching Details of all loans
     getLoans: (req, res) => {
+        const cache = require("../app").cache;
+        
         Loan.find({})
             .then((result) => {
 
@@ -54,6 +55,8 @@ module.exports = {
 
     // Fetching Details of one loan
     getLoan: (req, res) => {
+        const cache = require("../app").cache;
+        
         const loanID = req.params.loanID;
 
         const key = "loan" + loanID;

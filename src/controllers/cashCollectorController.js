@@ -1,7 +1,6 @@
 "use strict";
 
 const CashCollector = require("../models/cashCollectorSchema");
-const cache = require("../app").cache;
 
 module.exports = {
 	// Creating New Cash Collector
@@ -31,6 +30,8 @@ module.exports = {
 
 	// Fetching Details of one cash collector
 	getCashCollector: (req, res) => {
+		const cache = require("../app").cache;
+		
 		const cashCollectorID = req.params.cashCollectorID;
 
 		const key = "cashCollector" + cashCollectorID;
@@ -66,6 +67,8 @@ module.exports = {
 
 	// Fetching Details of cash collectors
 	getCashCollectors: (req, res) => {
+		const cache = require("../app").cache;
+		
 		CashCollector.find({})
 			.then((result) => {
 

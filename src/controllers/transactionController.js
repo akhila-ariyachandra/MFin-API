@@ -27,6 +27,8 @@ module.exports = {
 
     // Fetching Details of one Transaction
     getTransaction: (req, res) => {
+        const cache = require("../app").cache;
+        
         const transactionID = req.params.transactionID;
 
         const key = "transaction" + transactionID;
@@ -61,6 +63,8 @@ module.exports = {
 
     // Fetching Details of all Transactions
     getTransactions: (req, res) => {
+        const cache = require("../app").cache;
+        
         Transaction.find({})
             .then((result) => {
 

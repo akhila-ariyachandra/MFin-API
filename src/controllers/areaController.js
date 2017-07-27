@@ -1,7 +1,6 @@
 "use strict";
 
 const Area = require("../models/areaSchema");
-const cache = require("../app").cache;
 
 module.exports = {
     // Creating a new Area
@@ -25,6 +24,8 @@ module.exports = {
 
     // Getting details of one area
     getArea: (req, res) => {
+        const cache = require("../app").cache;
+        
         const areaID = req.params.areaID;
 
         const key = "area" + areaID;
@@ -59,6 +60,8 @@ module.exports = {
 
     // Fetching Details of all areas
     getAreas: (req, res) => {
+        const cache = require("../app").cache;
+        
         Area.find({})
             .then((result) => {
 

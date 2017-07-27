@@ -33,6 +33,8 @@ module.exports = {
 
     // Fetching Details of one User
     getUser: (req, res) => {
+        const cache = require("../app").cache;
+        
         const username = req.params.username;
 
         const key = "user" + username;
@@ -67,6 +69,8 @@ module.exports = {
 
     // Fetching Details of all Users
     getUsers: (req, res) => {
+        const cache = require("../app").cache;
+        
         User.find({})
             .then((result) => {
 
