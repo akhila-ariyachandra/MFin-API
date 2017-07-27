@@ -4,7 +4,7 @@
   "description": "API test",
   "main": "src/app.js",
   "scripts": {
-    "start": "set NODE_ENV=production&&nodemon clusters.js",
+    "start": "set NODE_ENV=production&&nodemon src/app.js",
     "test": "set NODE_ENV=test&&mocha --timeout 10000 --reporter",
     "dev": "set NODE_ENV=dev&&nodemon src/app.js"
   },

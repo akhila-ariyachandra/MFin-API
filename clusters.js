@@ -18,5 +18,5 @@ if (cluster.isMaster) {
         cluster.fork();
     });
 } else {
-    require("./build/app.min.js").Server;
+    require("./src/app").app;
 }
