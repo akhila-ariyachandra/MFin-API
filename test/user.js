@@ -1,11 +1,10 @@
 "use strict";
 
-const app = require("../build/app.min");
+const app = require("../src/app").app;
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const server = app.Server;
-const User = app.User;
+const User = require("../src/models/userSchema");
 const should = chai.should();
 
 chai.use(chaiHttp);
@@ -27,7 +26,7 @@ describe("Users", () => {
                 "password": "sliit123"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/user")
                 .send(user)
                 .end((err, res) => {
@@ -48,7 +47,7 @@ describe("Users", () => {
                 "username": "mfindev"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/user")
                 .send(user)
                 .end((err, res) => {
@@ -66,7 +65,7 @@ describe("Users", () => {
                 "password": "mfindev"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/user")
                 .send(user)
                 .end((err, res) => {
@@ -93,7 +92,7 @@ describe("Users", () => {
                 "password": "mfindev"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/authenticate")
                 .send(user)
                 .end((err, res) => {
@@ -110,7 +109,7 @@ describe("Users", () => {
                 "username": "mfindev"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/authenticate")
                 .send(user)
                 .end((err, res) => {
@@ -128,7 +127,7 @@ describe("Users", () => {
                 "password": "mfindev"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/authenticate")
                 .send(user)
                 .end((err, res) => {
@@ -146,7 +145,7 @@ describe("Users", () => {
                 "password": "mfindev1"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/authenticate")
                 .send(user)
                 .end((err, res) => {
@@ -164,7 +163,7 @@ describe("Users", () => {
                 "password": "mfindev"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/authenticate")
                 .send(user)
                 .end((err, res) => {
@@ -182,7 +181,7 @@ describe("Users", () => {
     // Test the GET /api/user route
     describe("GET /api/user", (done) => {
         it("it should not get all the users without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/user")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -195,7 +194,7 @@ describe("Users", () => {
         });
 
         it("it should get all the users", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/user")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -211,7 +210,7 @@ describe("Users", () => {
     // Test the GET /api/user/:username route
     describe("GET /api/user/:username", (done) => {
         it("it should not get the user without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/user/mfindev")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -224,7 +223,7 @@ describe("Users", () => {
         });
 
         it("it should get null if a wrong username is given", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/user/mfindev1")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -235,7 +234,7 @@ describe("Users", () => {
         });
 
         it("it should get the user", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/user/mfindev")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -255,7 +254,7 @@ describe("Users", () => {
     // Test the PUT /api/user/:username route
     describe("PUT /api/user/:username", () => {
         it("it should not update the user without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .put("/api/user/mfindev")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -272,7 +271,7 @@ describe("Users", () => {
                 "password": "mfindev"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/user/mfindev1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -288,7 +287,7 @@ describe("Users", () => {
             const customer = {
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/user/mfindev")
                 .set("x-access-token", token)
                 .send(customer)
@@ -305,7 +304,7 @@ describe("Users", () => {
                 "password": "mfindev1"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/user/mfindev")
                 .set("x-access-token", token)
                 .send(customer)

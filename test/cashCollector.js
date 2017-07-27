@@ -1,12 +1,11 @@
 "use strict";
 
-const app = require("../build/app.min");
+const app = require("../src/app").app;
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const server = app.Server;
-const CashCollector = app.CashCollector;
-const User = app.User;
+const CashCollector = require("../src/models/cashCollectorSchema");
+const User = require("../src/models/userSchema");
 const should = chai.should();
 
 chai.use(chaiHttp);
@@ -42,7 +41,7 @@ describe("Cash Collectors", () => {
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/user")
             .send(user)
             .end((err, result) => {
@@ -61,7 +60,7 @@ describe("Cash Collectors", () => {
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/authenticate")
             .send(user)
             .end((err, result) => {
@@ -77,7 +76,7 @@ describe("Cash Collectors", () => {
     // Test the  GET /api/cashCollector route
     describe("GET /api/cashCollector", () => {
         it("it should not get all the cash collectors without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/cashCollector")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -90,7 +89,7 @@ describe("Cash Collectors", () => {
         });
 
         it("it should get all the cash collectors", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/cashCollector")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -115,7 +114,7 @@ describe("Cash Collectors", () => {
                 "areaID": "2"          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/cashCollector")
                 .send(cashCollector)
                 .end((err, res) => {
@@ -137,7 +136,7 @@ describe("Cash Collectors", () => {
                 "areaID": "2"          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/cashCollector")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -163,7 +162,7 @@ describe("Cash Collectors", () => {
                 "areaID": "2"          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/cashCollector")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -189,7 +188,7 @@ describe("Cash Collectors", () => {
                 "areaID": "2"          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/cashCollector")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -215,7 +214,7 @@ describe("Cash Collectors", () => {
                 "areaID": "2"          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/cashCollector")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -241,7 +240,7 @@ describe("Cash Collectors", () => {
                 "areaID": "2"          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/cashCollector")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -267,7 +266,7 @@ describe("Cash Collectors", () => {
                 "phone": "0712564218"        
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/cashCollector")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -294,7 +293,7 @@ describe("Cash Collectors", () => {
                 "areaID": 2          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/cashCollector")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -321,7 +320,7 @@ describe("Cash Collectors", () => {
     // Test the GET /api/cashCollector/:cashCollectorID route
     describe("GET /api/cashCollector/:cashCollectorID", () => {
         it("it should not get the cash collector without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/cashCollector/1")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -334,7 +333,7 @@ describe("Cash Collectors", () => {
         });
 
         it("it should get the cash collector", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/cashCollector/1")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -368,7 +367,7 @@ describe("Cash Collectors", () => {
                 "areaID": 2          
             };
             
-            chai.request(server)
+            chai.request(app)
                 .put("/api/cashCollector/1")
                 .send(cashCollector)
                 .end((err, res) => {
@@ -391,7 +390,7 @@ describe("Cash Collectors", () => {
                 "areaID": 2          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/cashCollector/3")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -412,7 +411,7 @@ describe("Cash Collectors", () => {
                 "areaID": 2          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/cashCollector/1")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -438,7 +437,7 @@ describe("Cash Collectors", () => {
                 "areaID": 2          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/cashCollector/1")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -464,7 +463,7 @@ describe("Cash Collectors", () => {
                 "areaID": 2          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/cashCollector/1")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -490,7 +489,7 @@ describe("Cash Collectors", () => {
                 "areaID": 2          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/cashCollector/1")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -516,7 +515,7 @@ describe("Cash Collectors", () => {
                 "areaID": 2          
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/cashCollector/1")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -542,7 +541,7 @@ describe("Cash Collectors", () => {
                 "phone": "0712564218"         
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/cashCollector/1")
                 .set("x-access-token", token)
                 .send(cashCollector)
@@ -569,7 +568,7 @@ describe("Cash Collectors", () => {
                 "areaID": 2          
             });
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/cashCollector/1")
                 .set("x-access-token", token)
                 .send(cashCollector)

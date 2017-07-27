@@ -1,12 +1,11 @@
 "use strict";
 
-const app = require("../build/app.min");
+const app = require("../src/app").app;
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const server = app.Server;
-const Loan = app.Loan;
-const User = app.User;
+const Loan = require("../src/models/loanSchema");
+const User = require("../src/models/userSchema");
 const should = chai.should();
 
 chai.use(chaiHttp);
@@ -42,7 +41,7 @@ describe("Loans", () => {
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/user")
             .send(user)
             .end((err, result) => {
@@ -61,7 +60,7 @@ describe("Loans", () => {
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/authenticate")
             .send(user)
             .end((err, result) => {
@@ -77,7 +76,7 @@ describe("Loans", () => {
     // Test the GET /api/loan route
     describe("GET /api/loan", () => {
         it("it should not get all the loans without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/loan")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -90,7 +89,7 @@ describe("Loans", () => {
         });
 
         it("it should get all the loans", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/loan")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -115,7 +114,7 @@ describe("Loans", () => {
                 "customerID": 1
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/loan")
                 .send(loan)
                 .end((err, res) => {
@@ -139,7 +138,7 @@ describe("Loans", () => {
                 "customerID": 1
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/loan")
                 .send(loan)
                 .end((err, res) => {
@@ -165,7 +164,7 @@ describe("Loans", () => {
                 "customerID": 1
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/loan")
                 .send(loan)
                 .end((err, res) => {
@@ -191,7 +190,7 @@ describe("Loans", () => {
                 "customerID": 1
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/loan")
                 .send(loan)
                 .end((err, res) => {
@@ -217,7 +216,7 @@ describe("Loans", () => {
                 "customerID": 1
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/loan")
                 .send(loan)
                 .end((err, res) => {
@@ -243,7 +242,7 @@ describe("Loans", () => {
                 "customerID": 1
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/loan")
                 .send(loan)
                 .end((err, res) => {
@@ -269,7 +268,7 @@ describe("Loans", () => {
                 "interest": 5
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/loan")
                 .send(loan)
                 .end((err, res) => {
@@ -296,7 +295,7 @@ describe("Loans", () => {
                 "customerID": 1
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/loan")
                 .send(loan)
                 .end((err, res) => {
@@ -324,7 +323,7 @@ describe("Loans", () => {
     //Test the GET /api/loan/:loanID route
     describe("GET /api/loan/:loanID", () => {
         it("it should not get the loan without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/loan/1")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -337,7 +336,7 @@ describe("Loans", () => {
         });
 
         it("it should get the loan", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/loan/1")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -374,7 +373,7 @@ describe("Loans", () => {
                 "manager": "Dineth"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/1")
                 .send(loan)
                 .end((err, res) => {
@@ -399,7 +398,7 @@ describe("Loans", () => {
                 "manager": "Dineth"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/2")
                 .set("x-access-token", token)
                 .send(loan)
@@ -422,7 +421,7 @@ describe("Loans", () => {
                 "manager": "Dineth"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/1")
                 .set("x-access-token", token)
                 .send(loan)
@@ -450,7 +449,7 @@ describe("Loans", () => {
                 "manager": "Dineth"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/1")
                 .set("x-access-token", token)
                 .send(loan)
@@ -478,7 +477,7 @@ describe("Loans", () => {
                 "manager": "Dineth"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/1")
                 .set("x-access-token", token)
                 .send(loan)
@@ -506,7 +505,7 @@ describe("Loans", () => {
                 "manager": "Dineth"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/1")
                 .set("x-access-token", token)
                 .send(loan)
@@ -534,7 +533,7 @@ describe("Loans", () => {
                 "manager": "Dineth"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/1")
                 .set("x-access-token", token)
                 .send(loan)
@@ -562,7 +561,7 @@ describe("Loans", () => {
                 "manager": "Dineth"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/1")
                 .set("x-access-token", token)
                 .send(loan)
@@ -590,7 +589,7 @@ describe("Loans", () => {
                 "manager": "Dineth"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/1")
                 .set("x-access-token", token)
                 .send(loan)
@@ -618,7 +617,7 @@ describe("Loans", () => {
                 "status": "Approved"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/loan/1")
                 .set("x-access-token", token)
                 .send(loan)

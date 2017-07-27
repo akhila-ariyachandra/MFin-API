@@ -1,12 +1,11 @@
 "use strict";
 
-const app = require("../build/app.min");
+const app = require("../src/app").app;
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const server = app.Server;
-const Transaction = app.Transaction;
-const User = app.User;
+const Transaction = require("../src/models/transactionSchema");
+const User = require("../src/models/userSchema");
 const should = chai.should();
 
 chai.use(chaiHttp);
@@ -42,7 +41,7 @@ var token = null; // Store authentication token
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/user")
             .send(user)
             .end((err, result) => {
@@ -61,7 +60,7 @@ var token = null; // Store authentication token
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/authenticate")
             .send(user)
             .end((err, result) => {
@@ -77,7 +76,7 @@ var token = null; // Store authentication token
     // Test the  GET /api/transaction route
     describe("GET /api/transaction", () => {
         it("it should not get all the transactions without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/transaction")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -90,7 +89,7 @@ var token = null; // Store authentication token
         });
 
         it("it should get all the transactions", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/transaction")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -113,7 +112,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/transaction")
                 .send(transaction)
                 .end((err, res) => {
@@ -133,7 +132,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/transaction")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -157,7 +156,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/transaction")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -181,7 +180,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/transaction")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -206,7 +205,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/transaction")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -236,7 +235,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/transaction")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -262,7 +261,7 @@ var token = null; // Store authentication token
     // Test the GET /api/transaction/:transactionID route
     describe("GET /api/transaction/:transactionID", () => {
         it("it should not get the transaction without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/transaction/1")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -275,7 +274,7 @@ var token = null; // Store authentication token
         });
 
         it("it should get the transaction", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/transaction/1")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -298,7 +297,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/transaction/1")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -319,7 +318,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/transaction/3")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -339,7 +338,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/transaction/1")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -364,7 +363,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/transaction/1")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -389,7 +388,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/transaction/1")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -414,7 +413,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/transaction/1")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -439,7 +438,7 @@ var token = null; // Store authentication token
                 "cashCollectorID": 1
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/transaction/1")
                 .set("x-access-token", token)
                 .send(transaction)
@@ -465,7 +464,7 @@ var token = null; // Store authentication token
                 "status": "unpaid"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/transaction/1")
                 .set("x-access-token", token)
                 .send(transaction)

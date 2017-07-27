@@ -1,12 +1,11 @@
 "use strict";
 
-const app = require("../build/app.min");
+const app = require("../src/app").app;
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const server = app.Server;
-const Area = app.Area;
-const User = app.User;
+const Area = require("../src/models/areaSchema");
+const User = require("../src/models/userSchema");
 const should = chai.should();
 
 chai.use(chaiHttp);
@@ -42,7 +41,7 @@ describe("Areas", () => {
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/user")
             .send(user)
             .end((err, result) => {
@@ -61,7 +60,7 @@ describe("Areas", () => {
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/authenticate")
             .send(user)
             .end((err, result) => {
@@ -77,7 +76,7 @@ describe("Areas", () => {
     // Test the  GET /api/area route
     describe("GET /api/area", () => {
         it("it should not get all the areas without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/area")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -90,7 +89,7 @@ describe("Areas", () => {
         });
 
         it("it should get all the areas", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/area")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -112,7 +111,7 @@ describe("Areas", () => {
                 "district": "Colombo"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/area")
                 .send(area)
                 .end((err, res) => {
@@ -132,7 +131,7 @@ describe("Areas", () => {
                 "district": "Colombo"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/area")
                 .set("x-access-token", token)
                 .send(area)
@@ -155,7 +154,7 @@ describe("Areas", () => {
                 "district": "Colombo"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/area")
                 .set("x-access-token", token)
                 .send(area)
@@ -178,7 +177,7 @@ describe("Areas", () => {
                 "postalCode": 10640
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/area")
                 .set("x-access-token", token)
                 .send(area)
@@ -202,7 +201,7 @@ describe("Areas", () => {
                 "district": "Colombo"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/area")
                 .set("x-access-token", token)
                 .send(area)
@@ -226,7 +225,7 @@ describe("Areas", () => {
     // Test the GET /api/area/:areaID route
     describe("GET /api/area/:areaID", () => {
         it("it should not get the area without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/area/1")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -239,7 +238,7 @@ describe("Areas", () => {
         });
 
         it("it should get the area", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/area/1")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -260,7 +259,7 @@ describe("Areas", () => {
                 "district": "Colombo"
             });
             
-            chai.request(server)
+            chai.request(app)
                 .put("/api/area/1")
                 .send(area)
                 .end((err, res) => {
@@ -280,7 +279,7 @@ describe("Areas", () => {
                 "district": "Colombo"
             });
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/area/3")
                 .set("x-access-token", token)
                 .send(area)
@@ -299,7 +298,7 @@ describe("Areas", () => {
             };
 
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/area/1")
                 .set("x-access-token", token)
                 .send(area)
@@ -322,7 +321,7 @@ describe("Areas", () => {
                 "district": "Colombo"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/area/1")
                 .set("x-access-token", token)
                 .send(area)
@@ -345,7 +344,7 @@ describe("Areas", () => {
                 "postalCode": 10640
             });
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/area/1")
                 .set("x-access-token", token)
                 .send(area)
@@ -369,7 +368,7 @@ describe("Areas", () => {
                 "district": "Colombo"
             });
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/area/1")
                 .set("x-access-token", token)
                 .send(area)

@@ -1,12 +1,11 @@
 "use strict";
 
-const app = require("../build/app.min");
+const app = require("../src/app").app;
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const server = app.Server;
-const Customer = app.Customer;
-const User = app.User;
+const Customer = require("../src/models/customerSchema");
+const User = require("../src/models/userSchema");
 const should = chai.should();
 
 chai.use(chaiHttp);
@@ -42,7 +41,7 @@ describe("Customers", () => {
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/user")
             .send(user)
             .end((err, result) => {
@@ -61,7 +60,7 @@ describe("Customers", () => {
             "password": "sliitcpp"
         };
 
-        chai.request(server)
+        chai.request(app)
             .post("/authenticate")
             .send(user)
             .end((err, result) => {
@@ -77,7 +76,7 @@ describe("Customers", () => {
     // Test the  GET /api/customer route
     describe("GET /api/customer", () => {
         it("it should not get all the customers without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/customer")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -90,7 +89,7 @@ describe("Customers", () => {
         });
 
         it("it should get all the customers", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/customer")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -118,7 +117,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .send(customer)
                 .end((err, res) => {
@@ -143,7 +142,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -172,7 +171,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -201,7 +200,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -230,7 +229,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -259,7 +258,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -288,7 +287,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -317,7 +316,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -346,7 +345,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -375,7 +374,7 @@ describe("Customers", () => {
                 "longitude": "6°54'52.8 N"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -405,7 +404,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -444,7 +443,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .post("/api/customer")
                 .set("x-access-token", token)
                 .send(customer)
@@ -474,7 +473,7 @@ describe("Customers", () => {
     // Test the GET /api/customer/:customerID route
     describe("GET /api/customer/:customerID", () => {
         it("it should not get the customer without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/customer/1")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -487,7 +486,7 @@ describe("Customers", () => {
         });
 
         it("it should get the customer", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .get("/api/customer/1")
                 .set("x-access-token", token)
                 .end((err, res) => {
@@ -502,7 +501,7 @@ describe("Customers", () => {
     // Test the PUT /api/customer/:customerID route
     describe("PUT /api/customer/:customerID", () => {
         it("it should not update the customer without an authorization token", (done) => {
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -527,7 +526,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             });
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/3")
                 .set("x-access-token", token)
                 .send(customer)
@@ -551,7 +550,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -580,7 +579,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -609,7 +608,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -638,7 +637,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -667,7 +666,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -696,7 +695,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -725,7 +724,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -754,7 +753,7 @@ describe("Customers", () => {
                 "latitude": "79°58'24.1 E"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -783,7 +782,7 @@ describe("Customers", () => {
                 "longitude": "6°54'52.8 N"
             };
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
@@ -814,7 +813,7 @@ describe("Customers", () => {
                 latitude: "79°58'24.1 E"
             });
 
-            chai.request(server)
+            chai.request(app)
                 .put("/api/customer/1")
                 .set("x-access-token", token)
                 .send(customer)
