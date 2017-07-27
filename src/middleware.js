@@ -11,12 +11,15 @@ module.exports = {
         app.set("superSecret", config.secret); // Secret variable
 
         // Logging
+        const path = require("path");
+        const logPath = path.join(__dirname + "/../");
+
         // Don't show the log when it is test
         if (config.util.getEnv("NODE_ENV") !== "test") {
             // Create a rotating write stream 
             const accessLogStream = rfs("access.log", {
                 interval: "7d", // Rotate weekly 
-                path: __dirname,
+                path: logPath,
                 compress: true
             });
 
