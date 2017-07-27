@@ -1,5 +1,8 @@
 // Model for the Loan
-schema = {
+const mongoose = require("../db");
+const autoIncrement = require("mongoose-sequence");
+
+const schema = {
     loanType: { type: String, required: true },
     date: { type: Date, required: true },
     loanAmount: { type: Number, required: true },
@@ -10,7 +13,9 @@ schema = {
     status: { type: String, default: "Pending", required: true }
 };
 
-collectionName = "loan";
+const collectionName = "loan";
 const loanSchema = mongoose.Schema(schema);
 loanSchema.plugin(autoIncrement, { inc_field: "loanID" });
 const Loan = mongoose.model(collectionName, loanSchema);
+
+module.exports = Loan;

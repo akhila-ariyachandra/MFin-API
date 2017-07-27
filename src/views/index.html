@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <style>
+        h1{
+            text-align: center;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        table {
+            width: 100%
+        }
+
+        .entity {
+            width: 10%
+        }
+
+        .route {
+            width: 15%
+        }
+
+        .type {
+            width: 5%
+        }
+
+        .description {
+            width: 35%
+        }
+
+        .parameters {
+            width: 35%
+        }
+    </style>
+    <title>
+        MFin API
+    </title>
+</head>
+
+<body>
+    <h1>MFin API Documentation</h1>
+
+    <br>
+
+    <h2>Authorization</h2>
+    <p>
+        The API uses JSON web tokens for authorization. Any route with the
+        prefix <b>/api</b> is protected and will require a token to be 
+        accessed. New users can use the route <b>POST /user</b> to register 
+        and <b>POST /authenticate</b> to get the token. The tokens are 
+        set to expire after 30 mins. The token can be passed in the header 
+        as <b>x-access-token</b> or as <b>token</b> in the query or body.
+    </p>
+
+    <br>
+
+    <h2>Routes currently implemented</h2>
+
+    <table>
+        <tr>
+            <th class="entity">Entity</th>
+            <th class="route">Route</th>
+            <th class="type">Type</th>
+            <th class="description">Description</th>
+            <th class="parameters">Parameters</th>
+        </tr>
+<!--Create new area-->
+<tr>
+    <td>Area</td>
+    <td>/api/area</td>
+    <td>POST</td>
+    <td>Create a new area</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>name (String)</li>
+            <li>postalCode (Number)</li>
+            <li>district (String)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get the details of one area-->
+<tr>
+    <td>Area</td>
+    <td>/api/area/:areaID</td>
+    <td>GET</td>
+    <td>Get the details of one area</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+            <li>areaID (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get the details of all areas-->
+<tr>
+    <td>Area</td>
+    <td>/api/area</td>
+    <td>GET</td>
+    <td>Get the details of all areas</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Update area details-->
+<tr>
+    <td>Area</td>
+    <td>/api/area/:areaID</td>
+    <td>PUT</td>
+    <td>Update the area details</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>areaID (String)</li>
+            <li>name (String)</li>
+            <li>details (String)</li>
+        </ul>
+    </td>
+</tr>
+<!--Create new cash collector-->
+<tr>
+    <td>Cash Collector</td>
+    <td>/api/cashCollector</td>
+    <td>POST</td>
+    <td>Create a new cash collector</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>name (String)</li>
+            <li>surname (string)</li>
+            <li>nic (String)</li>
+            <li>address (String)</li>
+            <li>phone (String)</li>
+            <li>areaID (String)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get one cash collector details-->
+<tr>
+    <td>Cash Collector</td>
+    <td>/api/cashCollector/:cashCollectorID</td>
+    <td>GET</td>
+    <td>Get the details of one cash collector</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+            <li>cashCollectorID</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get all cash collector details-->
+<tr>
+    <td>Cash Collector</td>
+    <td>/api/cashCollector</td>
+    <td>GET</td>
+    <td>Get the details of all cash collectors</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+        </ul>
+    </td>
+</tr>
+<!--Create new Customer-->
+<tr>
+    <td>Customer</td>
+    <td>/api/customer</td>
+    <td>POST</td>
+    <td>Create a new customer</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>name (String)</li>
+            <li>surname (String)</li>
+            <li>nic (String)</li>
+            <li>address (String)</li>
+            <li>dob (Date) [MM-dd-YYYY]</li>
+            <li>phone (String)</li>
+            <li>areaID (Number)</li>
+            <li>longitude (String)</li>
+            <li>latitude (String)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get one Customer's details-->
+<tr>
+    <td>Customer</td>
+    <td>/api/customer/:customerID</td>
+    <td>GET</td>
+    <td>Get the details of one customer</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+            <li>customerID (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get all Customer details-->
+<tr>
+    <td>Customer</td>
+    <td>/api/customer</td>
+    <td>GET</td>
+    <td>Get the details of all customers</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Update customer details-->
+<tr>
+    <td>Customer</td>
+    <td>/api/customer/:customerID</td>
+    <td>PUT</td>
+    <td>Update the details of the customer</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>customerID (Number)</li>
+            <li>name (String)</li>
+            <li>surname (String)</li>
+            <li>nic (String)</li>
+            <li>address (String)</li>
+            <li>dob (Date) [MM-dd-YYYY]</li>
+            <li>phone (String)</li>
+            <li>areaID (Number)</li>
+            <li>longitude (String)</li>
+            <li>latitude (String)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Create new loan-->
+<tr>
+    <td>Loan</td>
+    <td>/api/loan</td>
+    <td>POST</td>
+    <td>Create a new loan</td>
+    <td>
+        <ul>
+            <li>token (string)</li>
+            <li>loanType (String)</li>
+            <li>date (Date) [MM-dd-YYYY]</li>
+            <li>loanAmount (Number)</li>
+            <li>duration (Number)</li>
+            <li>interest (Number)</li>
+            <li>customerID (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get details of one loan-->
+<tr>
+    <td>Loan</td>
+    <td>/api/loan/:loanID</td>
+    <td>GET</td>
+    <td>Get the details of one loan</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+            <li>loanID (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get details of all loans-->
+<tr>
+    <td>Loan</td>
+    <td>/api/loan</td>
+    <td>GET</td>
+    <td>Get the details of all loans</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Update the details of loan-->
+<tr>
+    <td>Loan</td>
+    <td>/api/loan/:loanID</td>
+    <td>PUT</td>
+    <td>Update the details of a loan</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>loanID (Number)</li>
+            <li>loanType (String)</li>
+            <li>date (Date) [MM-dd-YYYY]</li>
+            <li>loanAmount (Number)</li>
+            <li>duration (Number)</li>
+            <li>interest (Number)</li>
+            <li>customerID (Number)</li>
+            <li>manager (String)</li>
+            <li>status (String)</li>
+        </ul>
+    </td>
+</tr>
+<!--Create new loan-->
+<tr>
+    <td>Log</td>
+    <td>/log</td>
+    <td>GET</td>
+    <td>View all loans</td>
+    <td>
+    </td>
+</tr>
+<!--Create new Transaction-->
+<tr>
+    <td>Transaction</td>
+    <td>/api/transaction</td>
+    <td>POST</td>
+    <td>Create a new transaction</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>loanID (Number)</li>
+            <li>amount (Number)</li>
+            <li>cashCollectorID (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get one Transaction's details-->
+<tr>
+    <td>Transaction</td>
+    <td>/api/transaction/:transactionID</td>
+    <td>GET</td>
+    <td>Get the details of one transaction</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+            <li>transactionID (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get all Transaction details-->
+<tr>
+    <td>transaction</td>
+    <td>/api/transaction</td>
+    <td>GET</td>
+    <td>Get the details of all transactions</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Update Transaction details-->
+<tr>
+    <td>Transaction</td>
+    <td>/api/transaction/:transactionID</td>
+    <td>PUT</td>
+    <td>Update the details of the transaction</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>transactionID (Number)</li>
+            <li>loanID (Number)</li>
+            <li>date (Date) [MM-dd-YYYY]</li>
+            <li>amount (Number)</li>
+            <li>cashCollectorID (Number)</li>
+            <li>status (String)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Create new a user-->
+<tr>
+    <td>User</td>
+    <td>/user</td>
+    <td>POST</td>
+    <td>Create a new user</td>
+    <td>
+        <ul>
+            <li>username (string)</li>
+            <li>password (String)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get details of one user-->
+<tr>
+    <td>User</td>
+    <td>/api/user/:username</td>
+    <td>GET</td>
+    <td>Get the details of one user</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+            <li>username (Number)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Get details of all users-->
+<tr>
+    <td>User</td>
+    <td>/api/user</td>
+    <td>GET</td>
+    <td>Get the details of all users</td>
+    <td>
+        <ul>
+            <li>x-access-token[header] or token[query] (string)</li>
+        </ul>
+    </td>
+</tr>
+
+<!--Update the details of a user-->
+<tr>
+    <td>User</td>
+    <td>/api/user/:username</td>
+    <td>PUT</td>
+    <td>Update the details of a user</td>
+    <td>
+        <ul>
+            <li>token (String)</li>
+            <li>password (String)</li>
+        </ul>
+    </td>
+</tr>
+
+    </table>
+</body>
+
+</html>

@@ -1,11 +1,16 @@
 // Model for Area
-schema = {
+const mongoose = require("../db");
+const autoIncrement = require("mongoose-sequence");
+
+const schema = {
     name: { type: String, required: true },
-    postalCode: { type: Number, required: true},
-    district: {type: String, required: true},
+    postalCode: { type: Number, required: true },
+    district: { type: String, required: true },
 };
 
-collectionName = "area";
+const collectionName = "area";
 const areaSchema = mongoose.Schema(schema);
 areaSchema.plugin(autoIncrement, { inc_field: "areaID" });
 const Area = mongoose.model(collectionName, areaSchema);
+
+module.exports = Area;

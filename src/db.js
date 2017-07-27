@@ -1,6 +1,8 @@
-/*--------------------Database--------------------*/
+"use strict";
 
 const mongoose = require("mongoose");
+const config = require("config");
+
 mongoose.Promise = global.Promise;
 
 // Use mockgoose for automated testing
@@ -31,3 +33,5 @@ db.on("error", () => {
 db.once("open", () => {
     console.log("Successfully opened the database");
 });
+
+module.exports = mongoose;

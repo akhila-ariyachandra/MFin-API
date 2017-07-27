@@ -1,157 +1,170 @@
-// This Controller deals with all functionalities of User
+"use strict";
 
-// Creating New User
-const createUser = (req, res) => {
-    // Run hashing asynchronously to avoid blocking the server
-    bcrypt.hash(req.body.password, saltRounds).then((hash) => {
-        const username = req.body.username;
-        const password = hash;
+const User = require("../models/userSchema");
+const cache = require("../app").cache;
 
-        User.create({
-            username: username,
-            password: password
-        })
-            .then((result) => {
-                return res.json({ "result": result, "status": "successfully saved" });
+// Used for hashing password
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
+module.exports = {
+    // Creating New User
+    createUser: (req, res) => {
+        // Run hashing asynchronously to avoid blocking the server
+        bcrypt.hash(req.body.password, saltRounds).then((hash) => {
+            const username = req.body.username;
+            const password = hash;
+
+            User.create({
+                username: username,
+                password: password
             })
-            .catch((err) => {
-                return res.json({ "error": err });
-            });
-    })
-        .catch((err) => {
-            return res.json({ "error": "password is required" });
-        });
-};
-
-// Fetching Details of one User
-const getUser = (req, res) => {
-    const username = req.params.username;
-
-    const key = "user" + username;
-
-    // Search cache for value
-    cache.get(key, (err, cacheResult) => {
-        if (err) {
-            return res.send({ "error": err });
-        }
-
-        // If the key doesn't exist
-        if (cacheResult == undefined) {
-            User.findOne({ "username": username })
                 .then((result) => {
-                    // Store the value in cache
-                    cache.set(key, result, (err, success) => {
-                        if (err) {
-                            return res.send({ "error": err });
-                        }
-                        return res.json(result);
-                    });
+                    return res.json({ "result": result, "status": "successfully saved" });
                 })
                 .catch((err) => {
                     return res.json({ "error": err });
                 });
-        } else {
-            // Return cached value
-            return res.json(cacheResult);
-        }
-    });
-};
-
-// Fetching Details of all Users
-const getUsers = (req, res) => {
-    User.find({})
-        .then((result) => {
-            
-            // Store each of the value in the array in the cache
-            for (var i=0; i < result.length; i++) {
-                const key = "user" + result[i].username;
-                
-                cache.set(key, result[i], (err, success) => {
-                    if (err) {
-                        return res.send({ "error": err });
-                    }
-                });
-            }
-            
-            return res.json(result);
         })
-        .catch((err) => {
-            return res.json({ "error": err });
-        });
-};
+            .catch((err) => {
+                return res.json({ "error": "password is required" });
+            });
+    },
 
-// Update User details
-const updateUser = (req, res) => {
-    const username = req.params.username;
+    // Fetching Details of one User
+    getUser: (req, res) => {
+        const username = req.params.username;
 
-    if (!req.body.password) {
-        return res.json({ "error": "No password given" });
-    }
+        const key = "user" + username;
 
-    // Get existing details of user
-    User.findOne({ "username": username })
-        .then((user) => {
-            if (!user) {
-                // If User doesn't exist i.e. the wrong username was given
-                return res.json({ "error": "Record does not exist" });
+        // Search cache for value
+        cache.get(key, (err, cacheResult) => {
+            if (err) {
+                return res.send({ "error": err });
             }
 
-            // Update password
-            // Run hashing asynchronously to avoid blocking the server
-            bcrypt.hash(req.body.password, saltRounds).then((hash) => {
-                user.password = hash;
-
-                user.save()
+            // If the key doesn't exist
+            if (cacheResult == undefined) {
+                User.findOne({ "username": username })
                     .then((result) => {
-                        return res.json({ "result": result, "status": "successfully saved" });
+                        // Store the value in cache
+                        cache.set(key, result, (err, success) => {
+                            if (err) {
+                                return res.send({ "error": err });
+                            }
+                            return res.json(result);
+                        });
                     })
                     .catch((err) => {
                         return res.json({ "error": err });
                     });
-            });
-        })
-        .catch((err) => {
-            return res.json({ "error": err });
-        });
-};
-
-// Authenticate the User
-const authenticateUser = (req, res) => {
-    const username = req.body.username;
-
-    // Find the User
-    User.findOne({
-        username: username
-    })
-        .then((user) => {
-            if (!user) {
-                res.json({ success: false, message: "Authentication failed. User not found." });
-            } else if (user) {
-                // Run password checking asynchronously to avoid blocking the server
-                bcrypt.compare(req.body.password, user.password).then((result) => {
-                    // Check if password matches
-                    if (!result) {
-                        res.json({ success: false, message: "Authentication failed. Wrong password." });
-                    } else {
-                        // If user is found and password is right
-                        // Create a token
-                        const token = jwt.sign(user, app.get("superSecret"), {
-                            expiresIn: config.tokenExpireTime
-                        });
-                        // Return the information including token as JSON
-                        res.json({
-                            success: true,
-                            message: "Authentication success.",
-                            token: token
-                        });
-                    }
-                })
-                    .catch((err) => {
-                        res.json({ success: false, message: "Authentication failed. No password given." });
-                    });
+            } else {
+                // Return cached value
+                return res.json(cacheResult);
             }
-        })
-        .catch((err) => {
-            throw err;
         });
+    },
+
+    // Fetching Details of all Users
+    getUsers: (req, res) => {
+        User.find({})
+            .then((result) => {
+
+                // Store each of the value in the array in the cache
+                for (var i = 0; i < result.length; i++) {
+                    const key = "user" + result[i].username;
+
+                    cache.set(key, result[i], (err, success) => {
+                        if (err) {
+                            return res.send({ "error": err });
+                        }
+                    });
+                }
+
+                return res.json(result);
+            })
+            .catch((err) => {
+                return res.json({ "error": err });
+            });
+    },
+
+    // Update User details
+    updateUser: (req, res) => {
+        const username = req.params.username;
+
+        if (!req.body.password) {
+            return res.json({ "error": "No password given" });
+        }
+
+        // Get existing details of user
+        User.findOne({ "username": username })
+            .then((user) => {
+                if (!user) {
+                    // If User doesn't exist i.e. the wrong username was given
+                    return res.json({ "error": "Record does not exist" });
+                }
+
+                // Update password
+                // Run hashing asynchronously to avoid blocking the server
+                bcrypt.hash(req.body.password, saltRounds).then((hash) => {
+                    user.password = hash;
+
+                    user.save()
+                        .then((result) => {
+                            return res.json({ "result": result, "status": "successfully saved" });
+                        })
+                        .catch((err) => {
+                            return res.json({ "error": err });
+                        });
+                });
+            })
+            .catch((err) => {
+                return res.json({ "error": err });
+            });
+    },
+
+    // Authenticate the User
+    authenticateUser: (req, res) => {
+        const app = require("../app").app;
+        const jwt = require("jsonwebtoken");
+        const config = require("config");
+
+        const username = req.body.username;
+
+        // Find the User
+        User.findOne({
+            username: username
+        })
+            .then((user) => {
+                if (!user) {
+                    res.json({ success: false, message: "Authentication failed. User not found." });
+                } else if (user) {
+                    // Run password checking asynchronously to avoid blocking the server
+                    bcrypt.compare(req.body.password, user.password).then((result) => {
+                        // Check if password matches
+                        if (!result) {
+                            res.json({ success: false, message: "Authentication failed. Wrong password." });
+                        } else {
+                            // If user is found and password is right
+                            // Create a token
+                            const token = jwt.sign(user, app.get("superSecret"), {
+                                expiresIn: config.tokenExpireTime
+                            });
+                            // Return the information including token as JSON
+                            res.json({
+                                success: true,
+                                message: "Authentication success.",
+                                token: token
+                            });
+                        }
+                    })
+                        .catch((err) => {
+                            res.json({ success: false, message: "Authentication failed. No password given." });
+                        });
+                }
+            })
+            .catch((err) => {
+                throw err;
+            });
+    }
 };
