@@ -8,9 +8,10 @@ cd [folder path]
 * Download files, use the URL provided by BitBucket
 * Open folder that was created by git clone command in Visual Studio Code (2017_ccpd_2017)
 * Open the terminal in VS Code, ctrl+`
-* To install the dependencies
+* To install the dependencies, first install the yarn package manager
 ```
-npm install
+npm install yarn -g
+yarn install
 ```
 * To run the server in production mode
 ```
