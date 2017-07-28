@@ -27,21 +27,8 @@ ctrl+c
 
 ## Running the automated testing ##
 ```
-npm test -- [reporter]
+npm test
 ```
-Replace [reporter] with the type of reporter you want to show the 
-result of the testing in.
-For example,
-```
-npm test -- spec
-```
-will show the results as hierarchical view nested just as the test 
-cases are, and
-```
-npm test -- progress
-```
-will show the results as a progress bar.
-
 ### Running for the first time ###
 Running the testing for the first time will result in the entire
 online database(~250MB) being downloaded to the computer. To avoid
@@ -53,10 +40,3 @@ Change the line
 ```
 Once the database has been downloaded and the test cases have been
 run, revert the changes made to the package.json file.
-
-
-## Optional ##
-### Install Gulp globally ###
-```
-npm install --global gulp-cli
-```
