@@ -78,6 +78,10 @@ const routes = (app) => {
         // Update the User with this username
         .put(user.updateUser);
 
+    router.route("/reauthenticate")
+        // Get new a new token
+        .post(user.reauthenticateUser);
+
     router.route("/transaction")
         // Create an Transaction
         .post(transaction.createTransaction)

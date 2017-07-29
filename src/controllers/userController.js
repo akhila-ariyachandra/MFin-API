@@ -11,30 +11,36 @@ module.exports = {
     // Creating New User
     createUser: (req, res) => {
         // Run hashing asynchronously to avoid blocking the server
-        bcrypt.hash(req.body.password, saltRounds).then((hash) => {
-            const username = req.body.username;
-            const password = hash;
+        Promise.all([
+            bcrypt.hash(req.body.password, saltRounds),
+            bcrypt.hash(req.body.pin, saltRounds)
+        ])
+            .then((hashResult) => {
+                const username = req.body.username;
+                const password = hashResult[0];
+                const pin = hashResult[1];
 
-            User.create({
-                username: username,
-                password: password
-            })
-                .then((result) => {
-                    return res.json({ "result": result, "status": "successfully saved" });
+                User.create({
+                    username: username,
+                    password: password,
+                    pin: pin
                 })
-                .catch((err) => {
-                    return res.json({ "error": err });
-                });
-        })
+                    .then((result) => {
+                        return res.json({ "result": result, "status": "successfully saved" });
+                    })
+                    .catch((err) => {
+                        return res.json({ "error": err });
+                    });
+            })
             .catch((err) => {
-                return res.json({ "error": "password is required" });
+                return res.json({ "error": "password and pin are required" });
             });
     },
 
     // Fetching Details of one User
     getUser: (req, res) => {
         const cache = require("../app").cache;
-        
+
         const username = req.params.username;
 
         const key = "user" + username;
@@ -70,7 +76,7 @@ module.exports = {
     // Fetching Details of all Users
     getUsers: (req, res) => {
         const cache = require("../app").cache;
-        
+
         User.find({})
             .then((result) => {
 
@@ -98,6 +104,8 @@ module.exports = {
 
         if (!req.body.password) {
             return res.json({ "error": "No password given" });
+        } else if (!req.body.pin) {
+            return res.json({ "error": "No pin given" });
         }
 
         // Get existing details of user
@@ -108,19 +116,24 @@ module.exports = {
                     return res.json({ "error": "Record does not exist" });
                 }
 
-                // Update password
+                // Update password and pin
                 // Run hashing asynchronously to avoid blocking the server
-                bcrypt.hash(req.body.password, saltRounds).then((hash) => {
-                    user.password = hash;
+                Promise.all([
+                    bcrypt.hash(req.body.password, saltRounds),
+                    bcrypt.hash(req.body.pin, saltRounds)
+                ])
+                    .then((hashResult) => {
+                        user.password = hashResult[0];
+                        user.pin = hashResult[1];
 
-                    user.save()
-                        .then((result) => {
-                            return res.json({ "result": result, "status": "successfully saved" });
-                        })
-                        .catch((err) => {
-                            return res.json({ "error": err });
-                        });
-                });
+                        user.save()
+                            .then((result) => {
+                                return res.json({ "result": result, "status": "successfully saved" });
+                            })
+                            .catch((err) => {
+                                return res.json({ "error": err });
+                            });
+                    });
             })
             .catch((err) => {
                 return res.json({ "error": err });
@@ -164,6 +177,49 @@ module.exports = {
                     })
                         .catch((err) => {
                             res.json({ success: false, message: "Authentication failed. No password given." });
+                        });
+                }
+            })
+            .catch((err) => {
+                throw err;
+            });
+    },
+
+    reauthenticateUser: (req, res) => {
+        const app = require("../app").app;
+        const jwt = require("jsonwebtoken");
+        const config = require("config");
+
+        const username = req.body.username;
+
+        User.findOne({
+            username: username
+        })
+            .then((user) => {
+                if (!user) {
+                    res.json({ success: false, message: "Authentication failed. User not found." });
+                } else if (user) {
+                    // Run password checking asynchronously to avoid blocking the server
+                    bcrypt.compare(req.body.pin, user.pin).then((result) => {
+                        // Check if password matches
+                        if (!result) {
+                            res.json({ success: false, message: "Authentication failed. Wrong pin." });
+                        } else {
+                            // If user is found and pin is right
+                            // Create a token
+                            const token = jwt.sign(user, app.get("superSecret"), {
+                                expiresIn: config.tokenExpireTime
+                            });
+                            // Return the information including token as JSON
+                            res.json({
+                                success: true,
+                                message: "Authentication success.",
+                                token: token
+                            });
+                        }
+                    })
+                        .catch((err) => {
+                            res.json({ success: false, message: "Authentication failed. No pin given." });
                         });
                 }
             })

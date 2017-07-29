@@ -4,6 +4,7 @@ const mongoose = require("../db");
 const schema = {
     username: { type: String, required: true },
     password: { type: String, required: true },
+    pin: { type: String, required: true},
     admin: { type: Boolean, default: false }
 };
 

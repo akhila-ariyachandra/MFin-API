@@ -68,6 +68,20 @@
             <th class="parameters">Parameters</th>
         </tr>
 
+        <!--Reauthenticate user-->
+        <tr>
+            <td>User</td>
+            <td>/api/reauthenticate</td>
+            <td>POST</td>
+            <td>Get a new user token using the PIN</td>
+            <td>
+                <ul>
+                    <li>username (String)</li>
+                    <li>pin (String)</li>
+                </ul>
+            </td>
+        </tr>
+
         <!--Create new area-->
         <tr>
             <td>Area</td>
@@ -312,7 +326,7 @@
                 </ul>
             </td>
         </tr>
-        
+
         <!--Create new loan-->
         <tr>
             <td>Log</td>
@@ -394,6 +408,7 @@
                 <ul>
                     <li>username (string)</li>
                     <li>password (String)</li>
+                    <li>pin (String)</li>
                 </ul>
             </td>
         </tr>
@@ -435,6 +450,7 @@
                 <ul>
                     <li>token (String)</li>
                     <li>password (String)</li>
+                    <li>pin (String)</li>
                 </ul>
             </td>
         </tr>
