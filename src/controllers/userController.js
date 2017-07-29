@@ -1,7 +1,6 @@
 "use strict";
 
 const User = require("../models/userSchema");
-const cache = require("../app").cache;
 
 // Used for hashing password
 const bcrypt = require("bcrypt");
