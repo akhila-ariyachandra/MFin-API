@@ -82,6 +82,10 @@ const routes = (app) => {
         // Get new a new token
         .post(user.reauthenticateUser);
 
+    router.route("/logout")
+        // Logout user
+        .post(user.logout);
+
     router.route("/transaction")
         // Create an Transaction
         .post(transaction.createTransaction)

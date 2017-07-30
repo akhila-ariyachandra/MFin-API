@@ -188,6 +188,7 @@ module.exports = {
         const app = require("../app").app;
         const jwt = require("jsonwebtoken");
         const config = require("config");
+        const tokenCache = require("../app").tokenCache;
 
         const username = req.body.username;
 
@@ -205,11 +206,25 @@ module.exports = {
                             res.json({ success: false, message: "Authentication failed. Wrong pin." });
                         } else {
                             // If user is found and pin is right
+
+                            // First add existing token to blacklist
+                            let token = req.body.token || req.query.token || req.headers["x-access-token"];
+
+                            const dummyObject = { "value": null };
+
+                            // Add token to blacklist
+                            tokenCache.set(token, dummyObject, (err, success) => {
+                                if (err) {
+                                    return res.send({ "error": err });
+                                }
+                            });
+
                             // Create a token
-                            const token = jwt.sign(user, app.get("superSecret"), {
+                            token = jwt.sign(user, app.get("superSecret"), {
                                 expiresIn: config.tokenExpireTime
                             });
                             // Return the information including token as JSON
+
                             res.json({
                                 success: true,
                                 message: "Authentication success.",
@@ -225,5 +240,22 @@ module.exports = {
             .catch((err) => {
                 throw err;
             });
+    },
+
+    logout: (req, res) => {
+        const tokenCache = require("../app").tokenCache;
+
+        const token = req.body.token || req.query.token || req.headers["x-access-token"];
+
+        const dummyObject = { "value": null };
+
+        // Add token to blacklist
+        tokenCache.set(token, dummyObject, (err, success) => {
+            if (err) {
+                return res.send({ "error": err });
+            } else if (success) {
+                return res.json({ "status": "Successfully logged out" });
+            }
+        });
     }
 };
