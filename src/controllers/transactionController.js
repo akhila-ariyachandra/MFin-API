@@ -1,7 +1,6 @@
 "use strict";
 
 const Transaction = require("../models/transactionSchema");
-const cache = require("../app").cache;
 
 module.exports = {
     // Creating a new Transaction
