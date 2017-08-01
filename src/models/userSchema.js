@@ -8,7 +8,7 @@ const schema = {
     admin: { type: Boolean, default: false }
 };
 
-collectionName = "user";
+const collectionName = "user";
 const userSchema = mongoose.Schema(schema);
 const User = mongoose.model(collectionName, userSchema);
 
