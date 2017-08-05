@@ -38,7 +38,8 @@ describe("Areas", () => {
     before((done) => {
         const user = {
             "username": "mfindev",
-            "password": "sliitcpp"
+            "password": "sliitcpp",
+            "pin": "1234"
         };
 
         chai.request(app)

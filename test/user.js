@@ -23,7 +23,8 @@ describe("Users", () => {
     describe("POST /user", () => {
         it("it should not create a user without the username field", (done) => {
             const user = {
-                "password": "sliit123"
+                "password": "sliit123",
+                "pin": "1234"
             };
 
             chai.request(app)
@@ -44,7 +45,8 @@ describe("Users", () => {
 
         it("it should not create a user without the password field", (done) => {
             const user = {
-                "username": "mfindev"
+                "username": "mfindev",
+                "pin": "1234"
             };
 
             chai.request(app)
@@ -54,7 +56,25 @@ describe("Users", () => {
                     // Go through the properties one by one
                     res.should.have.status(200);
                     res.body.should.be.a("object");
-                    res.body.should.have.property("error").eql("password is required");
+                    res.body.should.have.property("error").eql("password and pin are required");
+                    done();
+                });
+        });
+
+        it("it should not create a user without the pin field", (done) => {
+            const user = {
+                "username": "mfindev",
+                "password": "sliit123"
+            };
+
+            chai.request(app)
+                .post("/user")
+                .send(user)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("error").eql("password and pin are required");
                     done();
                 });
         });
@@ -62,7 +82,8 @@ describe("Users", () => {
         it("it should create a new user", (done) => {
             const user = {
                 "username": "mfindev",
-                "password": "mfindev"
+                "password": "mfindev",
+                "pin": "1234"
             };
 
             chai.request(app)
@@ -78,6 +99,7 @@ describe("Users", () => {
                     res.body.result.should.have.property("__v");
                     res.body.result.should.have.property("username").eql("mfindev");
                     res.body.result.should.have.property("password");
+                    res.body.result.should.have.property("pin");
                     res.body.result.should.have.property("_id");
                     res.body.result.should.have.property("admin");
                     done();
@@ -268,7 +290,8 @@ describe("Users", () => {
 
         it("it should not update the user if the wrong username is given", (done) => {
             const customer = {
-                "password": "mfindev"
+                "password": "mfindev",
+                "pin": "1234"
             };
 
             chai.request(app)
@@ -285,6 +308,7 @@ describe("Users", () => {
 
         it("it should not update the user without the password field", (done) => {
             const customer = {
+                "pin": "1234"
             };
 
             chai.request(app)
@@ -299,9 +323,27 @@ describe("Users", () => {
                 });
         });
 
-        it("it should update the user given the username", (done) => {
+        it("it should not update the user without the pin field", (done) => {
             const customer = {
                 "password": "mfindev1"
+            };
+
+            chai.request(app)
+                .put("/api/user/mfindev")
+                .set("x-access-token", token)
+                .send(customer)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("error").eql("No pin given");
+                    done();
+                });
+        });
+
+        it("it should update the user given the username", (done) => {
+            const customer = {
+                "password": "mfindev1",
+                "pin": "1234"
             };
 
             chai.request(app)
@@ -317,6 +359,7 @@ describe("Users", () => {
                     res.body.result.should.have.property("_id");
                     res.body.result.should.have.property("username").eql("mfindev");
                     res.body.result.should.have.property("password");
+                    res.body.result.should.have.property("pin");
                     res.body.result.should.have.property("__v");
                     res.body.result.should.have.property("admin");
                     res.body.should.have.property("status").eql("successfully saved");

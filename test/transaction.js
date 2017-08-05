@@ -38,7 +38,8 @@ var token = null; // Store authentication token
     before((done) => {
         const user = {
             "username": "mfindev",
-            "password": "sliitcpp"
+            "password": "sliitcpp",
+            "pin": "1234"
         };
 
         chai.request(app)
