@@ -10,7 +10,8 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 describe("Users", () => {
-    var token = null; // Store authentication token
+    let token = null; // Store authentication token
+    let newToken = null; // Store token returned by /api/reauthenticate
 
     // Empty the database before each test
     before((done) => {
@@ -201,7 +202,7 @@ describe("Users", () => {
     });
 
     // Test the GET /api/user route
-    describe("GET /api/user", (done) => {
+    describe("GET /api/user", () => {
         it("it should not get all the users without an authorization token", (done) => {
             chai.request(app)
                 .get("/api/user")
@@ -230,7 +231,7 @@ describe("Users", () => {
     });
 
     // Test the GET /api/user/:username route
-    describe("GET /api/user/:username", (done) => {
+    describe("GET /api/user/:username", () => {
         it("it should not get the user without an authorization token", (done) => {
             chai.request(app)
                 .get("/api/user/mfindev")
@@ -289,7 +290,7 @@ describe("Users", () => {
         });
 
         it("it should not update the user if the wrong username is given", (done) => {
-            const customer = {
+            const user = {
                 "password": "mfindev",
                 "pin": "1234"
             };
@@ -297,7 +298,7 @@ describe("Users", () => {
             chai.request(app)
                 .put("/api/user/mfindev1")
                 .set("x-access-token", token)
-                .send(customer)
+                .send(user)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a("object");
@@ -307,14 +308,14 @@ describe("Users", () => {
         });
 
         it("it should not update the user without the password field", (done) => {
-            const customer = {
+            const user = {
                 "pin": "1234"
             };
 
             chai.request(app)
                 .put("/api/user/mfindev")
                 .set("x-access-token", token)
-                .send(customer)
+                .send(user)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a("object");
@@ -324,14 +325,14 @@ describe("Users", () => {
         });
 
         it("it should not update the user without the pin field", (done) => {
-            const customer = {
+            const user = {
                 "password": "mfindev1"
             };
 
             chai.request(app)
                 .put("/api/user/mfindev")
                 .set("x-access-token", token)
-                .send(customer)
+                .send(user)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a("object");
@@ -341,7 +342,7 @@ describe("Users", () => {
         });
 
         it("it should update the user given the username", (done) => {
-            const customer = {
+            const user = {
                 "password": "mfindev1",
                 "pin": "1234"
             };
@@ -349,7 +350,7 @@ describe("Users", () => {
             chai.request(app)
                 .put("/api/user/mfindev")
                 .set("x-access-token", token)
-                .send(customer)
+                .send(user)
                 .end((err, res) => {
                     res.should.have.status(200);
                     should.exist(res.body);
@@ -363,6 +364,147 @@ describe("Users", () => {
                     res.body.result.should.have.property("__v");
                     res.body.result.should.have.property("admin");
                     res.body.should.have.property("status").eql("successfully saved");
+                    done();
+                });
+        });
+    });
+
+    // Test the POST /api/reauthenticate route
+    describe("POST /api/reauthenticate", () => {
+        it("it should not get a new token without an authorization token", (done) => {
+            const user = {
+                "username": "mfindev",
+                "pin": "1234"
+            };
+
+            chai.request(app)
+                .post("/api/reauthenticate")
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Unauthorised");
+                    done();
+                });
+        });
+
+        it("it should not get a new token with the wrong username", (done) => {
+            const user = {
+                "username": "mfindev1",
+                "pin": "1234"
+            };
+
+            chai.request(app)
+                .post("/api/reauthenticate")
+                .set("x-access-token", token)
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Authentication failed. User not found.");
+                    done();
+                });
+        });
+
+        it("it should not get a new token with the wrong pin", (done) => {
+            const user = {
+                "username": "mfindev",
+                "pin": "12345"
+            };
+
+            chai.request(app)
+                .post("/api/reauthenticate")
+                .set("x-access-token", token)
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Authentication failed. Wrong pin.");
+                    done();
+                });
+        });
+
+        it("it should get a new token with the correct username and pin", (done) => {
+            const user = {
+                "username": "mfindev",
+                "pin": "1234"
+            };
+
+            chai.request(app)
+                .post("/api/reauthenticate")
+                .set("x-access-token", token)
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("success").eql(true);
+                    res.body.should.have.property("message").eql("Authentication success.");
+                    res.body.should.have.property("token");
+                    newToken = res.body.token;
+                    done();
+                });
+        });
+
+        it("it should invalidate the previous token", (done) => {
+            chai.request(app)
+                .get("/api/user")
+                .set("x-access-token", token)
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Unauthorised");
+                    done();
+                });
+        });
+    });
+
+    // Test the POST /api/logout route
+    describe("POST /api/logout", () => {
+        it("it should not logout without an authorization token", (done) => {
+            chai.request(app)
+                .post("/api/logout")
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Unauthorised");
+                    done();
+                });
+        });
+
+        it("it should logout when the token is given", (done) => {
+            chai.request(app)
+                .post("/api/logout")
+                .set("x-access-token", newToken)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("status").eql("Successfully logged out");
+                    done();
+                });
+        });
+
+        it("it should invalidate the token", (done) => {
+            chai.request(app)
+                .get("/api/user")
+                .set("x-access-token", newToken)
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Unauthorised");
                     done();
                 });
         });
