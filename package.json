@@ -20,13 +20,13 @@
     "bcrypt": "^1.0.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
-    "compression": "^1.6.2",
+    "compression": "^1.7.0",
     "config": "^1.26.1",
-    "cors": "^2.8.3",
-    "express": "^4.15.3",
-    "jsonwebtoken": "^7.4.1",
+    "cors": "^2.8.4",
+    "express": "^4.15.4",
+    "jsonwebtoken": "^7.4.2",
     "mockgoose": "^7.3.3",
-    "mongoose": "^4.11.1",
+    "mongoose": "^4.11.6",
     "mongoose-sequence": "^4.0.0",
     "morgan": "^1.8.2",
     "node-cache": "^4.1.1",
@@ -34,8 +34,8 @@
     "rotating-file-stream": "^1.2.2"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.1.1",
     "chai-http": "^3.0.0",
-    "mocha": "^3.4.1"
+    "mocha": "^3.5.0"
   }
 }

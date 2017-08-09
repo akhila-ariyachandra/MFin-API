@@ -1,6 +1,6 @@
 // Model for Transaction
 const mongoose = require("../db");
-const autoIncrement = require("mongoose-sequence");
+const autoIncrement = require("mongoose-sequence")(mongoose);
 
 const schema = {
     loanID: { type: Number, required: true },

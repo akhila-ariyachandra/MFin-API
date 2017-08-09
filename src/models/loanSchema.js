@@ -1,6 +1,6 @@
 // Model for the Loan
 const mongoose = require("../db");
-const autoIncrement = require("mongoose-sequence");
+const autoIncrement = require("mongoose-sequence")(mongoose);
 
 const schema = {
     loanType: { type: String, required: true },

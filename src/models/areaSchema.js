@@ -1,6 +1,6 @@
 // Model for Area
 const mongoose = require("../db");
-const autoIncrement = require("mongoose-sequence");
+const autoIncrement = require("mongoose-sequence")(mongoose);
 
 const schema = {
     name: { type: String, required: true },
