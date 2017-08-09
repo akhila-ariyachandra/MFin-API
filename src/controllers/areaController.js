@@ -66,7 +66,7 @@ module.exports = {
             .then((result) => {
 
                 // Store each of the value in the array in the cache
-                for (var i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length; i++) {
                     const key = "area" + result[i].areaID;
 
                     cache.set(key, result[i], (err, success) => {
