@@ -1,4 +1,3 @@
-/*--------------------Server--------------------*/
 "use strict";
 
 const bluebird = require("bluebird");
