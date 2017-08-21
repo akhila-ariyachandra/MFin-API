@@ -12,7 +12,7 @@ module.exports = {
 
         // Logging
         const path = require("path");
-        const logPath = path.join(__dirname + "/../");
+        const logPath = path.join(__dirname + "/../.log/");
 
         // Don't show the log when it is test
         if (config.util.getEnv("NODE_ENV") !== "test") {

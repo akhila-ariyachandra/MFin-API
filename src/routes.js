@@ -112,7 +112,7 @@ const routes = (app) => {
 
     // View log
     app.get("/log", function (req, res) {
-        res.sendFile(path.join(__dirname + "/../access.log"));
+        res.sendFile(path.join(__dirname + "/../.log/access.log"));
     });
 
     // Register routes
