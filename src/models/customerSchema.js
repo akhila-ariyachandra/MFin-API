@@ -9,6 +9,7 @@ const schema = {
     address: { type: String, required: true },
     dob: { type: Date, required: true },
     phone: { type: String, required: true },
+    email: { type: String, required: true },
     areaID: { type: Number, required: true },
     longitude: { type: String, required: true },
     latitude: { type: String, required: true }

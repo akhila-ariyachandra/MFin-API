@@ -113,6 +113,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -138,6 +139,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -167,6 +169,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -196,6 +199,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -225,6 +229,7 @@ describe("Customers", () => {
                 "nic": "801234567V",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -254,6 +259,7 @@ describe("Customers", () => {
                 "nic": "801234567V",
                 "address": "123/X Baker St., Narnia",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -283,6 +289,7 @@ describe("Customers", () => {
                 "nic": "801234567V",
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -305,6 +312,36 @@ describe("Customers", () => {
                 });
         });
 
+        it("it should not create a customer without the email field", (done) => {
+            const customer = {
+                "name": "John",
+                "surname": "Doe",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(app)
+                .post("/api/customer")
+                .set("x-access-token", token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("error");
+                    res.body.error.should.have.property("errors");
+                    res.body.error.errors.should.have.property("email");
+                    res.body.error.errors.email.should.have.property("properties");
+                    res.body.error.errors.email.properties.should.have.property("type").eql("required");
+                    done();
+                });
+        });
+
         it("it should not create a customer without the areaID field", (done) => {
             const customer = {
                 "name": "John",
@@ -313,6 +350,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             };
@@ -342,6 +380,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "latitude": "79°58'24.1 E"
             };
@@ -371,6 +410,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N"
             };
@@ -400,6 +440,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -439,6 +480,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -522,6 +564,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-02-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -546,6 +589,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -575,6 +619,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -604,6 +649,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -633,6 +679,7 @@ describe("Customers", () => {
                 "nic": "801234567V",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -662,6 +709,7 @@ describe("Customers", () => {
                 "nic": "801234567V",
                 "address": "123/X Baker St., Narnia",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -691,6 +739,7 @@ describe("Customers", () => {
                 "nic": "801234567V",
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
@@ -713,6 +762,36 @@ describe("Customers", () => {
                 });
         });
 
+        it("it should not update the customer without the phone field", (done) => {
+            const customer = {
+                "name": "John",
+                "surname": "Doe",
+                "nic": "801234567V",
+                "address": "123/X Baker St., Narnia",
+                "dob": "01-01-1980",
+                "phone": "123456789",
+                "areaID": "1",
+                "longitude": "6°54'52.8 N",
+                "latitude": "79°58'24.1 E"
+            };
+
+            chai.request(app)
+                .put("/api/customer/1")
+                .set("x-access-token", token)
+                .send(customer)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("error");
+                    res.body.error.should.have.property("errors");
+                    res.body.error.errors.should.have.property("email");
+                    res.body.error.errors.email.should.have.property("properties");
+                    res.body.error.errors.email.properties.should.have.property("type").eql("required");
+                    done();
+                });
+        });
+
         it("it should not update the customer without the areaID field", (done) => {
             const customer = {
                 "name": "John",
@@ -721,6 +800,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             };
@@ -750,6 +830,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "latitude": "79°58'24.1 E"
             };
@@ -779,6 +860,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
+                "email": "jane@doe.com",
                 "areaID": "1",
                 "longitude": "6°54'52.8 N"
             };
@@ -809,6 +891,7 @@ describe("Customers", () => {
                 address: "123/X Baker St., Narnia",
                 dob: "01-02-1980",
                 phone: "123456789",
+                "email": "jane@doe.com",
                 areaID: 1,
                 longitude: "6°54'52.8 N",
                 latitude: "79°58'24.1 E"

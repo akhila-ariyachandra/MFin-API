@@ -11,6 +11,7 @@ module.exports = {
         const address = req.body.address;
         const dob = req.body.dob;
         const phone = req.body.phone;
+        const email = req.body.email;
         const areaID = req.body.areaID;
         const longitude = req.body.longitude;
         const latitude = req.body.latitude;
@@ -22,6 +23,7 @@ module.exports = {
             address: address,
             dob: dob,
             phone: phone,
+            email: email,
             areaID: areaID,
             longitude: longitude,
             latitude: latitude
@@ -114,6 +116,7 @@ module.exports = {
                 customer.address = req.body.address;
                 customer.dob = req.body.dob;
                 customer.phone = req.body.phone;
+                customer.email = req.body.email;
                 customer.areaID = req.body.areaID;
                 customer.longitude = req.body.longitude;
                 customer.latitude = req.body.latitude;
