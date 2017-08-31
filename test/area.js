@@ -5,51 +5,53 @@ const app = require("../src/app").app;
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const Area = require("../src/models/areaSchema");
-const User = require("../src/models/userSchema");
+const Employee = require("../src/models/employeeSchema");
+const Counter = require("../src/models/counterSchema");
 const should = chai.should();
+
+// Used for hashing password and pin
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 chai.use(chaiHttp);
 
 describe("Areas", () => {
-    var token = null; // Store authentication token
+    let token = null; // Store authentication token
 
-    // Empty the database before each test
+    /* Remove all employees, areas and counters 
+    , and create a new employee
+    before running tests*/
     before((done) => {
-        Area.remove({}, (err) => {
-            done();
-        });
-    });
-
-    // Reset the counter of areaID before running tests
-    before((done) => {
-        Area.counterReset("areaID", (err) => {
-            done();
-        });
-    });
-
-    // Remove all users before running tests
-    before((done) => {
-        User.remove({}, (err) => {
-            done();
-        });
-    });
-
-    // Create a new user before running tests
-    before((done) => {
-        const user = {
-            "username": "mfindev",
+        let employee = {
+            "name": "John",
+            "surname": "Doe",
+            "nic": "123456789V",
+            "address": "nowhere",
+            "dob": "1980-01-01",
+            "email": "john.doe@gmail.com",
+            "username": "john",
             "password": "sliitcpp",
-            "pin": "1234"
+            "pin": "1234",
+            "accountType": "admin",
+            "phone": {
+                "work": "1234567890",
+                "personal": "0987654321"
+            }
         };
 
-        chai.request(app)
-            .post("/user")
-            .send(user)
-            .end((err, result) => {
-                // Go through the properties one by one
-                result.should.have.status(200);
-                result.body.should.be.a("object");
-                result.body.should.have.property("status").eql("successfully saved");
+        Employee.remove({})
+            .then(() => Area.remove({}))
+            .then(() => Counter.remove({}))
+            .then(() => Promise.all([
+                bcrypt.hash(employee.password, saltRounds),
+                bcrypt.hash(employee.pin, saltRounds)
+            ]))
+            .then((hashResult) => {
+                employee.password = hashResult[0];
+                employee.pin = hashResult[1];
+            })
+            .then(() => Employee.create(employee))
+            .then((result) => {
                 done();
             });
     });
@@ -57,18 +59,19 @@ describe("Areas", () => {
     // Get a new authentication token
     before((done) => {
         const user = {
-            "username": "mfindev",
+            "username": "john",
             "password": "sliitcpp"
         };
 
         chai.request(app)
-            .post("/authenticate")
+            .post("/employee/authenticate")
             .send(user)
             .end((err, result) => {
                 // Go through the properties one by one
                 result.should.have.status(200);
                 result.body.should.be.a("object");
                 result.body.should.have.property("success").eql(true);
+                result.body.should.have.property("accountType").eql("admin");
                 token = result.body.token;
                 done();
             });
@@ -125,7 +128,7 @@ describe("Areas", () => {
                 });
         });
 
-        
+
         it("it should not create an area without the name field", (done) => {
             const area = {
                 "postalCode": 10640,
@@ -222,7 +225,7 @@ describe("Areas", () => {
                 });
         });
     });
-    
+
     // Test the GET /api/area/:areaID route
     describe("GET /api/area/:areaID", () => {
         it("it should not get the area without an authorization token", (done) => {
@@ -259,7 +262,7 @@ describe("Areas", () => {
                 "postalCode": 10640,
                 "district": "Colombo"
             });
-            
+
             chai.request(app)
                 .put("/api/area/1")
                 .send(area)

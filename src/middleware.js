@@ -55,7 +55,7 @@ module.exports = {
         const tokenCache = require("./app").tokenCache;
 
         // Check header or url parameters or post parameters for token
-        const token = req.body.token || req.query.token || req.headers["x-access-token"];
+        const token = req.headers["x-access-token"];
 
         // Check if token is blacklisted
         tokenCache.get(token, (err, cacheResult) => {

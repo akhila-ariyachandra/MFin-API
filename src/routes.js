@@ -10,10 +10,9 @@ const routes = (app) => {
     // Controllers
     const customer = require("./controllers/customerController");
     const loan = require("./controllers/loanController");
-    const cashCollector = require("./controllers/cashCollectorController");
     const area = require("./controllers/areaController");
-    const user = require("./controllers/userController");
     const transaction = require("./controllers/transactionController");
+    const employee = require("./controllers/employeeController");
 
     const authenticate = require("./middleware").authenticate;
 
@@ -44,18 +43,6 @@ const routes = (app) => {
         // Update the Loan with this ID
         .put(loan.updateLoan);
 
-    router.route("/cashCollector")
-        // Create a Cash Collector
-        .post(cashCollector.createCashCollector)
-        // Get all Cash Collectors
-        .get(cashCollector.getCashCollectors);
-
-    router.route("/cashCollector/:cashCollectorID")
-        // Get the Cash Collector with this ID
-        .get(cashCollector.getCashCollector)
-        // Update the Cash Collector with this ID
-        .put(cashCollector.updateCashCollector);
-
     router.route("/area")
         // Create an Area
         .post(area.createArea)
@@ -67,24 +54,6 @@ const routes = (app) => {
         .get(area.getArea)
         // Update the Area with this ID
         .put(area.updateArea);
-
-    router.route("/user")
-        // Get all Users
-        .get(user.getUsers);
-
-    router.route("/user/:username")
-        // Get the User with this username
-        .get(user.getUser)
-        // Update the User with this username
-        .put(user.updateUser);
-
-    router.route("/reauthenticate")
-        // Get new a new token
-        .post(user.reauthenticateUser);
-
-    router.route("/logout")
-        // Logout user
-        .post(user.logout);
 
     router.route("/transaction")
         // Create an Transaction
@@ -98,17 +67,34 @@ const routes = (app) => {
         // Update the Transaction with this ID
         .put(transaction.updateTransaction);
 
+    router.route("/employee")
+        // Create an Employee
+        .post(employee.createEmployee)
+        // Get all Employess
+        .get(employee.getEmployees);
+
+    router.route("/employee/:employeeID")
+        // Get the Employee with this ID
+        .get(employee.getEmployee)
+        // Update the Employee with this ID
+        .put(employee.updateEmployee);
+
+    router.route("/employee/reauthenticate")
+        // Get new a new token
+        .post(employee.reauthenticateEmployee);
+
+    router.route("/employee/logout")
+        // Logout Employee
+        .post(employee.logout);
+
     // Unprotected routes
     // View documentation
     app.get("/", function (req, res) {
         res.sendFile(path.join(__dirname + "/views/index.html"));
     });
 
-    // Create a User 
-    app.post("/user", user.createUser);
-
-    // Authenticate User
-    app.post("/authenticate", user.authenticateUser);
+    // Authenticate Employee
+    app.post("/employee/authenticate", employee.authenticateEmployee);
 
     // View log
     app.get("/log", function (req, res) {

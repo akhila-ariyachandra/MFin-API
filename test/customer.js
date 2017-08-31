@@ -5,51 +5,53 @@ const app = require("../src/app").app;
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const Customer = require("../src/models/customerSchema");
-const User = require("../src/models/userSchema");
+const Employee = require("../src/models/employeeSchema");
+const Counter = require("../src/models/counterSchema");
 const should = chai.should();
+
+// Used for hashing password and pin
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 chai.use(chaiHttp);
 
 describe("Customers", () => {
-    var token = null; // Store authentication token
+    let token = null; // Store authentication token
 
-    // Empty the database before each test
+    /* Remove all employees, loans and counters 
+    , and create a new employee
+    before running tests*/
     before((done) => {
-        Customer.remove({}, (err) => {
-            done();
-        });
-    });
-
-    // Reset the counter of customerID before running tests
-    before((done) => {
-        Customer.counterReset("customerID", (err) => {
-            done();
-        });
-    });
-
-    // Remove all users before running tests
-    before((done) => {
-        User.remove({}, (err) => {
-            done();
-        });
-    });
-
-    // Create a new user before running tests
-    before((done) => {
-        const user = {
-            "username": "mfindev",
+        let employee = {
+            "name": "John",
+            "surname": "Doe",
+            "nic": "123456789V",
+            "address": "nowhere",
+            "dob": "1980-01-01",
+            "email": "john.doe@gmail.com",
+            "username": "john",
             "password": "sliitcpp",
-            "pin": "1234"
+            "pin": "1234",
+            "accountType": "admin",
+            "phone": {
+                "work": "1234567890",
+                "personal": "0987654321"
+            }
         };
 
-        chai.request(app)
-            .post("/user")
-            .send(user)
-            .end((err, result) => {
-                // Go through the properties one by one
-                result.should.have.status(200);
-                result.body.should.be.a("object");
-                result.body.should.have.property("status").eql("successfully saved");
+        Employee.remove({})
+            .then(() => Customer.remove({}))
+            .then(() => Counter.remove({}))
+            .then(() => Promise.all([
+                bcrypt.hash(employee.password, saltRounds),
+                bcrypt.hash(employee.pin, saltRounds)
+            ]))
+            .then((hashResult) => {
+                employee.password = hashResult[0];
+                employee.pin = hashResult[1];
+            })
+            .then(() => Employee.create(employee))
+            .then((result) => {
                 done();
             });
     });
@@ -57,18 +59,19 @@ describe("Customers", () => {
     // Get a new authentication token
     before((done) => {
         const user = {
-            "username": "mfindev",
+            "username": "john",
             "password": "sliitcpp"
         };
 
         chai.request(app)
-            .post("/authenticate")
+            .post("/employee/authenticate")
             .send(user)
             .end((err, result) => {
                 // Go through the properties one by one
                 result.should.have.status(200);
                 result.body.should.be.a("object");
                 result.body.should.have.property("success").eql(true);
+                result.body.should.have.property("accountType").eql("admin");
                 token = result.body.token;
                 done();
             });
