@@ -64,7 +64,7 @@ describe("Customers", () => {
         };
 
         chai.request(app)
-            .post("/employee/authenticate")
+            .post("/user/authenticate")
             .send(user)
             .end((err, result) => {
                 // Go through the properties one by one

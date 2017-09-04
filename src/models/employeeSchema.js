@@ -27,7 +27,7 @@ const schema = {
         required: true
     },
     meta: {
-        areaID: { type: String } // Used if the employee is a Cash Collector
+        areaID: { type: Number } // Used if the employee is a Cash Collector
     }
 };
 

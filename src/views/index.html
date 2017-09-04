@@ -68,12 +68,26 @@
             <th class="parameters">Parameters</th>
         </tr>
 
-        <!--Reauthenticate user-->
+        <!--Get an authorization token-->
         <tr>
-            <td>User</td>
-            <td>/api/reauthenticate</td>
+            <td>Employee</td>
+            <td>/user/authenticate</td>
             <td>POST</td>
-            <td>Get a new user token using the PIN</td>
+            <td>Authenticate the user and get a token</td>
+            <td>
+                <ul>
+                    <li>username (String)</li>
+                    <li>password (String)</li>
+                </ul>
+            </td>
+        </tr>
+
+        <!--Renew authorization token-->
+        <tr>
+            <td>Employee</td>
+            <td>/api/user/reauthenticate</td>
+            <td>POST</td>
+            <td>Get new a token</td>
             <td>
                 <ul>
                     <li>username (String)</li>
@@ -84,14 +98,11 @@
 
         <!--Logout user-->
         <tr>
-            <td>User</td>
-            <td>/api/logout</td>
-            <td>POST</td>
-            <td>Logout the current user</td>
+            <td>Employee</td>
+            <td>/api/user/logout</td>
+            <td>GET</td>
+            <td>Logout the user</td>
             <td>
-                <ul>
-                    <li>token (string) [can be passed in the header as x-access-token]</li>
-                </ul>
             </td>
         </tr>
 
@@ -150,52 +161,6 @@
                     <li>areaID (String)</li>
                     <li>name (String)</li>
                     <li>details (String)</li>
-                </ul>
-            </td>
-        </tr>
-
-        <!--Create new cash collector-->
-        <tr>
-            <td>Cash Collector</td>
-            <td>/api/cashCollector</td>
-            <td>POST</td>
-            <td>Create a new cash collector</td>
-            <td>
-                <ul>
-                    <li>token (String)</li>
-                    <li>name (String)</li>
-                    <li>surname (string)</li>
-                    <li>nic (String)</li>
-                    <li>address (String)</li>
-                    <li>phone (String)</li>
-                    <li>areaID (String)</li>
-                </ul>
-            </td>
-        </tr>
-
-        <!--Get one cash collector details-->
-        <tr>
-            <td>Cash Collector</td>
-            <td>/api/cashCollector/:cashCollectorID</td>
-            <td>GET</td>
-            <td>Get the details of one cash collector</td>
-            <td>
-                <ul>
-                    <li>x-access-token[header] or token[query] (string)</li>
-                    <li>cashCollectorID</li>
-                </ul>
-            </td>
-        </tr>
-
-        <!--Get all cash collector details-->
-        <tr>
-            <td>Cash Collector</td>
-            <td>/api/cashCollector</td>
-            <td>GET</td>
-            <td>Get the details of all cash collectors</td>
-            <td>
-                <ul>
-                    <li>x-access-token[header] or token[query] (string)</li>
                 </ul>
             </td>
         </tr>
@@ -270,6 +235,103 @@
                     <li>areaID (Number)</li>
                     <li>longitude (String)</li>
                     <li>latitude (String)</li>
+                </ul>
+            </td>
+        </tr>
+
+        <!--Create a new Employee-->
+        <tr>
+            <td>Employee</td>
+            <td>/api/employee</td>
+            <td>POST</td>
+            <td>Create a new employee</td>
+            <td>
+                <ul>
+                    <li>name (String)</li>
+                    <li>surname (String)</li>
+                    <li>nic (String)</li>
+                    <li>address (String)</li>
+                    <li>dob (Date) [MM-dd-YYYY]</li>
+                    <li>
+                        phone
+                        <ul>
+                            <li>work (String)</li>
+                            <li>personal (String) (Optional)</li>
+                        </ul>
+                    </li>
+                    <li>email (String)</li>
+                    <li>username (String)</li>
+                    <li>password (String)</li>
+                    <li>pin (String)</li>
+                    <li>
+                        accountType (String) [admin/manager/receptionist/cashCollector]
+                    </li>
+                    <li>
+                        meta
+                        <ul>
+                            <li>areaID (String) (Optional)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+
+        <!--Get details of one employee-->
+        <tr>
+            <td>Employee</td>
+            <td>/api/employee/:employeeID</td>
+            <td>GET</td>
+            <td>Get the details of one employee</td>
+            <td>
+                <ul>
+                    <li>loanID (Number)</li>
+                </ul>
+            </td>
+        </tr>
+
+        <!--Get details of all employees-->
+        <tr>
+            <td>Employee</td>
+            <td>/api/employee</td>
+            <td>GET</td>
+            <td>Get the details of all employees</td>
+            <td>
+            </td>
+        </tr>
+
+        <!--Update an Employee-->
+        <tr>
+            <td>Employee</td>
+            <td>/api/employee/:employeeID</td>
+            <td>PUT</td>
+            <td>Create a new employee</td>
+            <td>
+                <ul>
+                    <li>name (String)</li>
+                    <li>surname (String)</li>
+                    <li>nic (String)</li>
+                    <li>address (String)</li>
+                    <li>dob (Date) [MM-dd-YYYY]</li>
+                    <li>
+                        phone
+                        <ul>
+                            <li>work (String)</li>
+                            <li>personal (String) (Optional)</li>
+                        </ul>
+                    </li>
+                    <li>email (String)</li>
+                    <li>username (String)</li>
+                    <li>password (String)</li>
+                    <li>pin (String)</li>
+                    <li>
+                        accountType (String) [admin/manager/receptionist/cashCollector]
+                    </li>
+                    <li>
+                        meta
+                        <ul>
+                            <li>areaID (String) (Optional)</li>
+                        </ul>
+                    </li>
                 </ul>
             </td>
         </tr>
@@ -351,6 +413,7 @@
             <td>
             </td>
         </tr>
+
         <!--Create new Transaction-->
         <tr>
             <td>Transaction</td>
@@ -412,64 +475,6 @@
                 </ul>
             </td>
         </tr>
-
-        <!--Create new a user-->
-        <tr>
-            <td>User</td>
-            <td>/user</td>
-            <td>POST</td>
-            <td>Create a new user</td>
-            <td>
-                <ul>
-                    <li>username (string)</li>
-                    <li>password (String)</li>
-                    <li>pin (String)</li>
-                </ul>
-            </td>
-        </tr>
-
-        <!--Get details of one user-->
-        <tr>
-            <td>User</td>
-            <td>/api/user/:username</td>
-            <td>GET</td>
-            <td>Get the details of one user</td>
-            <td>
-                <ul>
-                    <li>x-access-token[header] or token[query] (string)</li>
-                    <li>username (Number)</li>
-                </ul>
-            </td>
-        </tr>
-
-        <!--Get details of all users-->
-        <tr>
-            <td>User</td>
-            <td>/api/user</td>
-            <td>GET</td>
-            <td>Get the details of all users</td>
-            <td>
-                <ul>
-                    <li>x-access-token[header] or token[query] (string)</li>
-                </ul>
-            </td>
-        </tr>
-
-        <!--Update the details of a user-->
-        <tr>
-            <td>User</td>
-            <td>/api/user/:username</td>
-            <td>PUT</td>
-            <td>Update the details of a user</td>
-            <td>
-                <ul>
-                    <li>token (String)</li>
-                    <li>password (String)</li>
-                    <li>pin (String)</li>
-                </ul>
-            </td>
-        </tr>
-
     </table>
 </body>
 

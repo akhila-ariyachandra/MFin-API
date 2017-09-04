@@ -235,18 +235,18 @@ module.exports = {
 
         const username = req.body.username;
 
-        User.findOne({
+        Employee.findOne({
             username: username
         })
-            .then((user) => {
-                if (!user) {
+            .then((employee) => {
+                if (!employee) {
                     res.status(401).json({
                         success: false,
                         message: "Authentication failed. User not found."
                     });
-                } else if (user) {
+                } else if (employee) {
                     // Run password checking asynchronously to avoid blocking the server
-                    bcrypt.compare(req.body.pin, user.pin).then((result) => {
+                    bcrypt.compare(req.body.pin, employee.pin).then((result) => {
                         // Check if password matches
                         if (!result) {
                             res.status(401).json({
@@ -269,7 +269,7 @@ module.exports = {
                             });
 
                             // Create a token
-                            token = jwt.sign(user, app.get("superSecret"), {
+                            token = jwt.sign(employee, app.get("superSecret"), {
                                 expiresIn: config.tokenExpireTime
                             });
                             // Return the information including token as JSON

@@ -79,13 +79,13 @@ const routes = (app) => {
         // Update the Employee with this ID
         .put(employee.updateEmployee);
 
-    router.route("/employee/reauthenticate")
+    router.route("/user/reauthenticate")
         // Get new a new token
         .post(employee.reauthenticateEmployee);
 
-    router.route("/employee/logout")
+    router.route("/user/logout")
         // Logout Employee
-        .post(employee.logout);
+        .get(employee.logout);
 
     // Unprotected routes
     // View documentation
@@ -94,7 +94,7 @@ const routes = (app) => {
     });
 
     // Authenticate Employee
-    app.post("/employee/authenticate", employee.authenticateEmployee);
+    app.post("/user/authenticate", employee.authenticateEmployee);
 
     // View log
     app.get("/log", function (req, res) {
