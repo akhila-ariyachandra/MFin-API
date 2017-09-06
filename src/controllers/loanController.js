@@ -114,7 +114,7 @@ module.exports = {
                 // Send data to database
                 loan.save()
                     .then((result) => {
-                        return res.json({ "Loan Details": result });
+                        return res.json({ "result": result, "status": "successfully updated" });
                     })
                     .catch((err) => {
                         return res.send({ "error": err });

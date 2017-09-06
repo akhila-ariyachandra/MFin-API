@@ -10,7 +10,16 @@ const schema = {
     interest: { type: Number, required: true },
     customerID: { type: Number, required: true },
     manager: { type: String, default: "Not set", required: true },
-    status: { type: String, default: "Pending", required: true }
+    status: { 
+        type: String, 
+        enum: [
+            "pending",
+            "approved",
+            "rejected"
+        ],
+        default: "pending", 
+        required: true 
+    }
 };
 
 const collectionName = "loan";

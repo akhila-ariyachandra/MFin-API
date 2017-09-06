@@ -324,7 +324,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("interest");
                     res.body.result.should.have.property("customerID");
                     res.body.result.should.have.property("manager").eql("Not set");
-                    res.body.result.should.have.property("status").eql("Pending");
+                    res.body.result.should.have.property("status").eql("pending");
                     res.body.result.should.have.property("_id");
                     done();
                 });
@@ -363,7 +363,7 @@ describe("Loans", () => {
                     res.body.should.have.property("interest").eql(5);
                     res.body.should.have.property("customerID").eql(1);
                     res.body.should.have.property("manager").eql("Not set");
-                    res.body.should.have.property("status").eql("Pending");
+                    res.body.should.have.property("status").eql("pending");
                     res.body.should.have.property("_id");
                     done();
                 });
@@ -641,6 +641,109 @@ describe("Loans", () => {
                     res.body.error.errors.should.have.property("manager");
                     res.body.error.errors.manager.should.have.property("properties");
                     res.body.error.errors.manager.properties.should.have.property("type").eql("required");
+                    done();
+                });
+        });
+
+        it("it should not update the loan with an invalid status", (done) => {
+            const loan = {
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1,
+                "status": "ongoing",
+                "manager": "john"
+            };
+
+            chai.request(app)
+                .put("/api/loan/1")
+                .set("x-access-token", token)
+                .send(loan)
+                .end((err, res) => {
+                    // Go through the properties one by one
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("error");
+                    res.body.error.should.have.property("errors");
+                    res.body.error.errors.should.have.property("status");
+                    res.body.error.errors.status.should.have.property("message")
+                        .eql("`ongoing` is not a valid enum value for path `status`.");
+                    done();
+                });
+        });
+
+        it("it should update the loan with the status equal to approved", (done) => {
+            const loan = {
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1,
+                "status": "approved",
+                "manager": "john"
+            };
+
+            chai.request(app)
+                .put("/api/loan/1")
+                .set("x-access-token", token)
+                .send(loan)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("status").eql("successfully updated");
+                    res.body.should.have.property("result");
+                    // Check for all fields
+                    res.body.result.should.have.property("__v");
+                    res.body.result.should.have.property("loanID").eql(1);
+                    res.body.result.should.have.property("loanType");
+                    res.body.result.should.have.property("date");
+                    res.body.result.should.have.property("loanAmount");
+                    res.body.result.should.have.property("duration");
+                    res.body.result.should.have.property("interest");
+                    res.body.result.should.have.property("customerID");
+                    res.body.result.should.have.property("manager").eql("john");
+                    res.body.result.should.have.property("status").eql("approved");
+                    res.body.result.should.have.property("_id");
+                    done();
+                });
+        });
+
+        it("it should update the loan with the status equal to rejected", (done) => {
+            const loan = {
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1,
+                "status": "rejected",
+                "manager": "john"
+            };
+
+            chai.request(app)
+                .put("/api/loan/1")
+                .set("x-access-token", token)
+                .send(loan)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("status").eql("successfully updated");
+                    res.body.should.have.property("result");
+                    // Check for all fields
+                    res.body.result.should.have.property("__v");
+                    res.body.result.should.have.property("loanID").eql(1);
+                    res.body.result.should.have.property("loanType");
+                    res.body.result.should.have.property("date");
+                    res.body.result.should.have.property("loanAmount");
+                    res.body.result.should.have.property("duration");
+                    res.body.result.should.have.property("interest");
+                    res.body.result.should.have.property("customerID");
+                    res.body.result.should.have.property("manager").eql("john");
+                    res.body.result.should.have.property("status").eql("rejected");
+                    res.body.result.should.have.property("_id");
                     done();
                 });
         });
