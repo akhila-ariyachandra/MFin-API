@@ -19,7 +19,7 @@ describe("Loans", () => {
     let token = null; // Store authentication token
 
     /* Remove all employees, loans and counters 
-    , and create a new employee
+    , and create a new employee and new loans
     before running tests*/
     before((done) => {
         let employee = {
@@ -39,6 +39,26 @@ describe("Loans", () => {
             }
         };
 
+        const loan1 = {
+            "loanType": "Fix Deposit",
+            "date": "01-01-2000",
+            "loanAmount": 5000,
+            "duration": 6,
+            "interest": 2,
+            "customerID": 2
+        };
+
+        const loan2 = {
+            "loanType": "Student Loan",
+            "date": "06-04-2010",
+            "loanAmount": 10000,
+            "duration": 24,
+            "interest": 15,
+            "customerID": 1,
+            "manager": "John",
+            "status": "approved"
+        };
+
         Employee.remove({})
             .then(() => Loan.remove({}))
             .then(() => Counter.remove({}))
@@ -51,7 +71,9 @@ describe("Loans", () => {
                 employee.pin = hashResult[1];
             })
             .then(() => Employee.create(employee))
-            .then((result) => {
+            .then(() => Loan.create(loan1))
+            .then(() => Loan.create(loan2))
+            .then(() => {
                 done();
             });
     });
@@ -100,7 +122,59 @@ describe("Loans", () => {
                     res.should.have.status(200);
                     should.exist(res.body);
                     res.body.should.be.a("array");
-                    res.body.length.should.be.eql(0);
+                    res.body.length.should.be.eql(2);
+                    done();
+                });
+        });
+
+        it("it should get loans based on status if specified in the query", (done) => {
+            chai.request(app)
+                .get("/api/loan?status=approved")
+                .set("x-access-token", token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("array");
+                    res.body.length.should.be.eql(1);
+                    done();
+                });
+        });
+
+        it("it should get loans based on manager if specified in the query", (done) => {
+            chai.request(app)
+                .get("/api/loan?manager=Not+set")
+                .set("x-access-token", token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("array");
+                    res.body.length.should.be.eql(1);
+                    done();
+                });
+        });
+
+        it("it should get loans based on customerID if specified in the query", (done) => {
+            chai.request(app)
+                .get("/api/loan?customerID=1")
+                .set("x-access-token", token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("array");
+                    res.body.length.should.be.eql(1);
+                    done();
+                });
+        });
+
+        it("it should get loans based on loan type if specified in the query", (done) => {
+            chai.request(app)
+                .get("/api/loan?loanType=Student+Loan")
+                .set("x-access-token", token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("array");
+                    res.body.length.should.be.eql(1);
                     done();
                 });
         });
@@ -316,7 +390,7 @@ describe("Loans", () => {
                     res.body.should.have.property("result");
                     // Check for all fields
                     res.body.result.should.have.property("__v");
-                    res.body.result.should.have.property("loanID").eql(1);
+                    res.body.result.should.have.property("loanID").eql(3);
                     res.body.result.should.have.property("loanType");
                     res.body.result.should.have.property("date");
                     res.body.result.should.have.property("loanAmount");
@@ -335,7 +409,7 @@ describe("Loans", () => {
     describe("GET /api/loan/:loanID", () => {
         it("it should not get the loan without an authorization token", (done) => {
             chai.request(app)
-                .get("/api/loan/1")
+                .get("/api/loan/3")
                 .end((err, res) => {
                     res.should.have.status(401);
                     should.exist(res.body);
@@ -348,14 +422,14 @@ describe("Loans", () => {
 
         it("it should get the loan", (done) => {
             chai.request(app)
-                .get("/api/loan/1")
+                .get("/api/loan/3")
                 .set("x-access-token", token)
                 .end((err, res) => {
                     res.should.have.status(200);
                     should.exist(res.body);
                     res.body.should.be.a("object");
                     res.body.should.have.property("__v");
-                    res.body.should.have.property("loanID").eql(1);
+                    res.body.should.have.property("loanID").eql(3);
                     res.body.should.have.property("loanType").eql("Fix Deposit");
                     res.body.should.have.property("date");
                     res.body.should.have.property("loanAmount").eql(250000);
@@ -385,7 +459,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .send(loan)
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -410,7 +484,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/2")
+                .put("/api/loan/4")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -433,7 +507,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -461,7 +535,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -489,7 +563,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -517,7 +591,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -545,7 +619,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -573,7 +647,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -601,7 +675,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -629,7 +703,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -658,7 +732,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -687,7 +761,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -697,7 +771,7 @@ describe("Loans", () => {
                     res.body.should.have.property("result");
                     // Check for all fields
                     res.body.result.should.have.property("__v");
-                    res.body.result.should.have.property("loanID").eql(1);
+                    res.body.result.should.have.property("loanID").eql(3);
                     res.body.result.should.have.property("loanType");
                     res.body.result.should.have.property("date");
                     res.body.result.should.have.property("loanAmount");
@@ -724,7 +798,7 @@ describe("Loans", () => {
             };
 
             chai.request(app)
-                .put("/api/loan/1")
+                .put("/api/loan/3")
                 .set("x-access-token", token)
                 .send(loan)
                 .end((err, res) => {
@@ -734,7 +808,7 @@ describe("Loans", () => {
                     res.body.should.have.property("result");
                     // Check for all fields
                     res.body.result.should.have.property("__v");
-                    res.body.result.should.have.property("loanID").eql(1);
+                    res.body.result.should.have.property("loanID").eql(3);
                     res.body.result.should.have.property("loanType");
                     res.body.result.should.have.property("date");
                     res.body.result.should.have.property("loanAmount");

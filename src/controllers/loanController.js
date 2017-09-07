@@ -31,8 +31,32 @@ module.exports = {
     // Fetching Details of all loans
     getLoans: (req, res) => {
         const cache = require("../app").cache;
-        
-        Loan.find({})
+
+        // Setting search options for data retrieval from the database
+        let searchOptions = {};
+
+        // Add manager to search limiter if specified in route query
+        if (req.query.manager) {
+            searchOptions.manager = req.query.manager;
+        }
+
+        // Add status to search limiter if specified in route query
+        if (req.query.status) {
+            searchOptions.status = req.query.status;
+        }
+
+        // Add customerID to search limiter if specified in route query
+        if (req.query.customerID) {
+            searchOptions.customerID = req.query.customerID;
+        }
+
+        // Add loanType to search limiter if specified in route query
+        if (req.query.loanType) {
+            searchOptions.loanType = req.query.loanType;
+        }
+
+        // Get data from database
+        Loan.find(searchOptions)
             .then((result) => {
 
                 // Store each of the value in the array in the cache
@@ -56,7 +80,7 @@ module.exports = {
     // Fetching Details of one loan
     getLoan: (req, res) => {
         const cache = require("../app").cache;
-        
+
         const loanID = req.params.loanID;
 
         const key = "loan" + loanID;
