@@ -43,6 +43,14 @@ const routes = (app) => {
         // Update the Loan with this ID
         .put(loan.updateLoan);
 
+    router.route("/loan/:loanID/approve")
+        // Approve the loan
+        .patch(loan.approveLoan);
+
+    router.route("/loan/:loanID/reject")
+        // Reject the loan
+        .patch(loan.rejectLoan);
+
     router.route("/area")
         // Create an Area
         .post(area.createArea)

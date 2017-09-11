@@ -822,4 +822,130 @@ describe("Loans", () => {
                 });
         });
     });
+
+    // Test the PATCH /api/loan/:loanID/approve route
+    describe("PATCH /api/loan/:loanID/approve", () => {
+        it("it should not approve the loan without an authorization token", (done) => {
+            chai.request(app)
+                .patch("/api/loan/3/approve")
+                .send({ "manager": "john" })
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Unauthorised");
+                    done();
+                });
+        });
+
+        it("it should not approve the loan with the wrong loanID", (done) => {
+            chai.request(app)
+                .patch("/api/loan/4/approve")
+                .set("x-access-token", token)
+                .send({ "manager": "john" })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("error").eql("Record does not exist");
+                    done();
+                });
+        });
+
+        it("it should not approve the loan without the manager", (done) => {
+            chai.request(app)
+                .patch("/api/loan/3/approve")
+                .set("x-access-token", token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("error");
+                    res.body.error.should.have.property("errors");
+                    res.body.error.errors.should.have.property("manager");
+                    res.body.error.errors.manager.should.have.property("properties");
+                    res.body.error.errors.manager.properties.should.have.property("type").eql("required");
+                    done();
+                });
+        });
+
+        it("it should approve the loan", (done) => {
+            chai.request(app)
+                .patch("/api/loan/3/approve")
+                .set("x-access-token", token)
+                .send({ "manager": "john" })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    // Check for all fields
+                    res.body.should.have.property("loanID").eql(3);
+                    res.body.should.have.property("manager").eql("john");
+                    res.body.should.have.property("status").eql("approved");
+                    done();
+                });
+        });
+    });
+
+    // Test the PATCH /api/loan/:loanID/reject route
+    describe("PATCH /api/loan/:loanID/reject", () => {
+        it("it should not reject the loan without an authorization token", (done) => {
+            chai.request(app)
+                .patch("/api/loan/3/reject")
+                .send({ "manager": "john" })
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Unauthorised");
+                    done();
+                });
+        });
+
+        it("it should not reject the loan with the wrong loanID", (done) => {
+            chai.request(app)
+                .patch("/api/loan/4/reject")
+                .set("x-access-token", token)
+                .send({ "manager": "john" })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    should.exist(res.body);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("error").eql("Record does not exist");
+                    done();
+                });
+        });
+
+        it("it should not reject the loan without the manager", (done) => {
+            chai.request(app)
+                .patch("/api/loan/3/reject")
+                .set("x-access-token", token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("error");
+                    res.body.error.should.have.property("errors");
+                    res.body.error.errors.should.have.property("manager");
+                    res.body.error.errors.manager.should.have.property("properties");
+                    res.body.error.errors.manager.properties.should.have.property("type").eql("required");
+                    done();
+                });
+        });
+
+        it("it should reject the loan", (done) => {
+            chai.request(app)
+                .patch("/api/loan/3/reject")
+                .set("x-access-token", token)
+                .send({ "manager": "john" })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("object");
+                    // Check for all fields
+                    res.body.should.have.property("loanID").eql(3);
+                    res.body.should.have.property("manager").eql("john");
+                    res.body.should.have.property("status").eql("rejected");
+                    done();
+                });
+        });
+    });
 });

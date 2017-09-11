@@ -407,15 +407,32 @@
             </td>
         </tr>
 
-        <!--Create new loan-->
+        <!--Approve a loan-->
         <tr>
-            <td>Log</td>
-            <td>/log</td>
-            <td>GET</td>
-            <td>View all loans</td>
+            <td>Loan</td>
+            <td>/api/loan/:loanID/approve</td>
+            <td>PATCH</td>
+            <td>Approve a loan</td>
             <td>
+                <ul>
+                    <li>manager (String)</li>
+                </ul>
             </td>
         </tr>
+
+        <!--Reject a loan-->
+        <tr>
+            <td>Loan</td>
+            <td>/api/loan/:loanID/reject</td>
+            <td>PATCH</td>
+            <td>Reject a loan</td>
+            <td>
+                <ul>
+                    <li>manager (String)</li>
+                </ul>
+            </td>
+        </tr>
+
 
         <!--Create new Transaction-->
         <tr>

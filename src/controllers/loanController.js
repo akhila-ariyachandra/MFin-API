@@ -147,5 +147,63 @@ module.exports = {
             .catch((err) => {
                 return res.send({ "error": err });
             });
+    },
+
+    // Approve the loan
+    approveLoan: (req, res) => {
+        const loanID = req.params.loanID;
+
+        // Get details of loan to be approved
+        Loan.findOne({ "loanID": loanID })
+            .then((loan) => {
+                if (!loan) {
+                    // If loan doesn't exist i.e. the wrong loanID was given
+                    return res.json({ "error": "Record does not exist" });
+                }
+
+                // Change details
+                loan.manager = req.body.manager;
+                loan.status = "approved";
+
+                loan.save()
+                    .then((result) => {
+                        return res.json(result);
+                    })
+                    .catch((err) => {
+                        return res.json({ "error": err });
+                    });
+            })
+            .catch((err) => {
+                return res.json({ "error": err });
+            });
+    },
+
+    // Reject the loan
+    rejectLoan: (req, res) => {
+        const loanID = req.params.loanID;
+
+        // Get details of loan to be rejected
+        Loan.findOne({ "loanID": loanID })
+            .then((loan) => {
+                if (!loan) {
+                    // If loan doesn't exist i.e. the wrong loanID was given
+                    return res.json({ "error": "Record does not exist" });
+                }
+
+                // Change details
+                loan.manager = req.body.manager;
+                loan.status = "rejected";
+
+                loan.save()
+                    .then((result) => {
+                        return res.json(result);
+                    })
+                    .catch((err) => {
+                        return res.json({ "error": err });
+                    });
+            })
+            .catch((err) => {
+                return res.json({ "error": err });
+            });
     }
 };
