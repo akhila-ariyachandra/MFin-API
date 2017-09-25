@@ -6,6 +6,7 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 const Transaction = require("../src/models/transactionSchema");
 const Employee = require("../src/models/employeeSchema");
+const Loan = require("../src/models/loanSchema");
 const Counter = require("../src/models/counterSchema");
 const should = chai.should();
 
@@ -17,6 +18,8 @@ chai.use(chaiHttp);
 
 describe("Transactions", () => {
     let token = null; // Store authentication token
+    let cashCollector = null; // Store the cashCollector
+    let loan = null; // Store the loan
 
     /* Remove all employees, loans and counters 
     , and create a new employee
@@ -39,6 +42,15 @@ describe("Transactions", () => {
             }
         };
 
+        const loanInput = {
+            "loanType": "Test Loan",
+            "date": new Date(),
+            "loanAmount": 10000,
+            "duration": 14,
+            "interest": 10,
+            "customerID": 1            
+        };
+
         Employee.remove({})
             .then(() => Transaction.remove({}))
             .then(() => Counter.remove({}))
@@ -50,8 +62,13 @@ describe("Transactions", () => {
                 employee.password = hashResult[0];
                 employee.pin = hashResult[1];
             })
-            .then(() => Employee.create(employee))
+            .then(() => Promise.all([
+                Employee.create(employee),
+                Loan.create(loanInput)
+            ]))
             .then((result) => {
+                cashCollector = result[0];
+                loan = result[1];
                 done();
             });
     });
@@ -110,9 +127,9 @@ describe("Transactions", () => {
     describe("POST /api/transaction", () => {
         it("it should not create a transaction without an authorization token", (done) => {
             const transaction = {
-                "loanID": 1,
+                "loan": loan._id,
                 "amount": 10000,
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -129,10 +146,10 @@ describe("Transactions", () => {
                 });
         });
 
-        it("it should not create a transaction without the loanID field", (done) => {
+        it("it should not create a transaction without the loan field", (done) => {
             const transaction = {
                 "amount": 10000,
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -146,17 +163,17 @@ describe("Transactions", () => {
                     res.body.should.be.a("object");
                     res.body.should.have.property("error");
                     res.body.error.should.have.property("errors");
-                    res.body.error.errors.should.have.property("loanID");
-                    res.body.error.errors.loanID.should.have.property("properties");
-                    res.body.error.errors.loanID.properties.should.have.property("type").eql("required");
+                    res.body.error.errors.should.have.property("loan");
+                    res.body.error.errors.loan.should.have.property("properties");
+                    res.body.error.errors.loan.properties.should.have.property("type").eql("required");
                     done();
                 });
         });
 
         it("it should not create a transaction without the amount field", (done) => {
             const transaction = {
-                "loanID": 1,
-                "cashCollectorID": 1,
+                "loan": loan._id,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -177,9 +194,9 @@ describe("Transactions", () => {
                 });
         });
 
-        it("it should not create a transaction without the cashCollectorID field", (done) => {
+        it("it should not create a transaction without the cashCollector field", (done) => {
             const transaction = {
-                "loanID": 1,
+                "loan": loan._id,
                 "amount": 10000,
                 "status": "unpaid"
             };
@@ -194,18 +211,18 @@ describe("Transactions", () => {
                     res.body.should.be.a("object");
                     res.body.should.have.property("error");
                     res.body.error.should.have.property("errors");
-                    res.body.error.errors.should.have.property("cashCollectorID");
-                    res.body.error.errors.cashCollectorID.should.have.property("properties");
-                    res.body.error.errors.cashCollectorID.properties.should.have.property("type").eql("required");
+                    res.body.error.errors.should.have.property("cashCollector");
+                    res.body.error.errors.cashCollector.should.have.property("properties");
+                    res.body.error.errors.cashCollector.properties.should.have.property("type").eql("required");
                     done();
                 });
         });
 
         it("it should create a transaction", (done) => {
             const transaction = {
-                "loanID": 1,
+                "loan": loan._id,
                 "amount": 10000,
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -221,10 +238,10 @@ describe("Transactions", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v");
                     res.body.result.should.have.property("transactionID").eql(1);
-                    res.body.result.should.have.property("loanID").eql(1);
+                    res.body.result.should.have.property("loan");
                     res.body.result.should.have.property("date");
                     res.body.result.should.have.property("amount").eql(10000);
-                    res.body.result.should.have.property("cashCollectorID").eql(1);
+                    res.body.result.should.have.property("cashCollector");
                     res.body.result.should.have.property("status").eql("unpaid");
                     res.body.result.should.have.property("_id");
                     done();
@@ -233,9 +250,9 @@ describe("Transactions", () => {
 
         it("it should create the 2nd transaction with transactionID 2", (done) => {
             const transaction = {
-                "loanID": 2,
+                "loan": loan._id,
                 "amount": 10000,
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -251,10 +268,10 @@ describe("Transactions", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v");
                     res.body.result.should.have.property("transactionID").eql(2);
-                    res.body.result.should.have.property("loanID").eql(2);
+                    res.body.result.should.have.property("loan");
                     res.body.result.should.have.property("date");
                     res.body.result.should.have.property("amount").eql(10000);
-                    res.body.result.should.have.property("cashCollectorID").eql(1);
+                    res.body.result.should.have.property("cashCollector");
                     res.body.result.should.have.property("status").eql("unpaid");
                     res.body.result.should.have.property("_id");
                     done();
@@ -294,10 +311,10 @@ describe("Transactions", () => {
     describe("PUT /api/transaction/:transactionID", () => {
         it("it should not update the transaction without an authorization token", (done) => {
             const transaction = {
-                "loanID": 2,
+                "loan": loan._id,
                 "date": new Date(),
                 "amount": 10000,
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -315,10 +332,10 @@ describe("Transactions", () => {
 
         it("it should not update the transaction if the wrong transactionID is given", (done) => {
             const transaction = {
-                "loanID": 2,
+                "loan": loan._id,
                 "date": new Date(),
                 "amount": 10000,
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -334,11 +351,11 @@ describe("Transactions", () => {
                 });
         });
 
-        it("it should not update the transaction without the loanID field", (done) => {
+        it("it should not update the transaction without the loan field", (done) => {
             const transaction = {
                 "date": new Date(),
                 "amount": 10000,
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -352,18 +369,18 @@ describe("Transactions", () => {
                     res.body.should.be.a("object");
                     res.body.should.have.property("error");
                     res.body.error.should.have.property("errors");
-                    res.body.error.errors.should.have.property("loanID");
-                    res.body.error.errors.loanID.should.have.property("properties");
-                    res.body.error.errors.loanID.properties.should.have.property("type").eql("required");
+                    res.body.error.errors.should.have.property("loan");
+                    res.body.error.errors.loan.should.have.property("properties");
+                    res.body.error.errors.loan.properties.should.have.property("type").eql("required");
                     done();
                 });
         });
 
         it("it should not update the transaction without the date field", (done) => {
             const transaction = {
-                "loanID": 2,
+                "loan": loan._id,
                 "amount": 10000,
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -386,9 +403,9 @@ describe("Transactions", () => {
 
         it("it should not update the transaction without the amount field", (done) => {
             const transaction = {
-                "loanID": 2,
+                "loan": loan._id,
                 "date": new Date(),
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -409,9 +426,9 @@ describe("Transactions", () => {
                 });
         });
 
-        it("it should not update the transaction without the cashCollectorID field", (done) => {
+        it("it should not update the transaction without the cashCollector field", (done) => {
             const transaction = {
-                "loanID": 2,
+                "loan": loan._id,
                 "date": new Date(),
                 "amount": 10000,
                 "status": "unpaid"
@@ -427,19 +444,19 @@ describe("Transactions", () => {
                     res.body.should.be.a("object");
                     res.body.should.have.property("error");
                     res.body.error.should.have.property("errors");
-                    res.body.error.errors.should.have.property("cashCollectorID");
-                    res.body.error.errors.cashCollectorID.should.have.property("properties");
-                    res.body.error.errors.cashCollectorID.properties.should.have.property("type").eql("required");
+                    res.body.error.errors.should.have.property("cashCollector");
+                    res.body.error.errors.cashCollector.should.have.property("properties");
+                    res.body.error.errors.cashCollector.properties.should.have.property("type").eql("required");
                     done();
                 });
         });
 
         it("it should not update the transaction without the status field", (done) => {
             const transaction = {
-                "loanID": 2,
+                "loan": loan._id,
                 "date": new Date(),
                 "amount": 10000,
-                "cashCollectorID": 1
+                "cashCollector": cashCollector._id,
             };
 
             chai.request(app)
@@ -461,10 +478,10 @@ describe("Transactions", () => {
 
         it("it should update the transaction given the transactionID", (done) => {
             const transaction = {
-                "loanID": 2,
+                "loan": loan._id,
                 "date": new Date(),
                 "amount": 10000,
-                "cashCollectorID": 1,
+                "cashCollector": cashCollector._id,
                 "status": "unpaid"
             };
 
@@ -479,10 +496,10 @@ describe("Transactions", () => {
                     // Check for all fields
                     res.body.result.should.have.property("_id");
                     res.body.result.should.have.property("transactionID").eql(1);
-                    res.body.result.should.have.property("loanID").eql(2);
+                    res.body.result.should.have.property("loan");
                     res.body.result.should.have.property("date");
                     res.body.result.should.have.property("amount").eql(10000);
-                    res.body.result.should.have.property("cashCollectorID").eql(1);
+                    res.body.result.should.have.property("cashCollector");
                     res.body.result.should.have.property("status").eql("unpaid");
                     res.body.result.should.have.property("__v");
                     done();
