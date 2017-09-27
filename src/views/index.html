@@ -443,9 +443,9 @@
             <td>
                 <ul>
                     <li>token (String)</li>
-                    <li>loanID (Number)</li>
+                    <li>loan (ObjectID)</li>
                     <li>amount (Number)</li>
-                    <li>cashCollectorID (Number)</li>
+                    <li>cashCollector (ObjectID)</li>
                 </ul>
             </td>
         </tr>
@@ -458,7 +458,6 @@
             <td>Get the details of one transaction</td>
             <td>
                 <ul>
-                    <li>x-access-token[header] or token[query] (string)</li>
                     <li>transactionID (Number)</li>
                 </ul>
             </td>
@@ -472,7 +471,6 @@
             <td>Get the details of all transactions</td>
             <td>
                 <ul>
-                    <li>x-access-token[header] or token[query] (string)</li>
                 </ul>
             </td>
         </tr>
@@ -485,12 +483,11 @@
             <td>Update the details of the transaction</td>
             <td>
                 <ul>
-                    <li>token (String)</li>
                     <li>transactionID (Number)</li>
-                    <li>loanID (Number)</li>
+                    <li>loan (ObjectID)</li>
                     <li>date (Date) [MM-dd-YYYY]</li>
                     <li>amount (Number)</li>
-                    <li>cashCollectorID (Number)</li>
+                    <li>cashCollector (ObjectID)</li>
                     <li>status (String)</li>
                 </ul>
             </td>

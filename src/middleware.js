@@ -45,7 +45,7 @@ module.exports = {
         // CORS (for browser issues)
         const cors = require("cors");
         app.use(cors({
-            methods: ["POST", "GET", "PUT"],
+            methods: ["POST", "GET", "PUT", "PATCH"],
             allowedHeaders: ["Content-Type", "x-access-token"]
         }));
     },

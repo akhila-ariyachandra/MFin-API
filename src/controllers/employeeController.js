@@ -1,6 +1,16 @@
 "use strict";
 
 const Employee = require("../models/employeeSchema");
+const config = require("config");
+
+// Error logger
+const errorLogger = (routePath, err) => {
+    // Log errors to the console if the server is in production mode
+    if (config.util.getEnv("NODE_ENV") === "production") {
+        console.log(routePath);
+        console.log(err);
+    }
+};
 
 // Used for hashing password and pin
 const bcrypt = require("bcrypt");
@@ -53,6 +63,7 @@ module.exports = {
                 return res.json({ "result": result, "status": "successfully saved" });
             })
             .catch((err) => {
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             });
     },
@@ -70,6 +81,7 @@ module.exports = {
 
                     cache.set(key, result[i], (err, success) => {
                         if (err) {
+                            errorLogger(req.route.path, err);
                             return res.send({ "error": err });
                         }
                     });
@@ -78,6 +90,7 @@ module.exports = {
                 return res.json(result);
             })
             .catch((err) => {
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             });
     },
@@ -93,6 +106,7 @@ module.exports = {
         // Search cache for value
         cache.get(key, (err, cacheResult) => {
             if (err) {
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             }
 
@@ -103,12 +117,14 @@ module.exports = {
                         // Store the value in cache
                         cache.set(key, result, (err, success) => {
                             if (err) {
+                                errorLogger(req.route.path, err);
                                 return res.send({ "error": err });
                             }
                             return res.json(result);
                         });
                     })
                     .catch((err) => {
+                        errorLogger(req.route.path, err);
                         return res.send({ "error": err });
                     });
             } else {
@@ -167,6 +183,7 @@ module.exports = {
                 return res.json({ "result": result });
             })
             .catch((err) => {
+                errorLogger(req.route.path, err);
                 return res.json({ "error": err });
             });
     },
@@ -185,7 +202,7 @@ module.exports = {
         })
             .then((employee) => {
                 if (!employee) {
-                    res.status(401).json({
+                    return res.status(401).json({
                         success: false,
                         message: "Authentication failed. User not found."
                     });
@@ -205,7 +222,7 @@ module.exports = {
                                 expiresIn: config.tokenExpireTime
                             });
                             // Return the information including token as JSON
-                            res.json({
+                            return res.json({
                                 success: true,
                                 message: "Authentication success.",
                                 accountType: employee.accountType,
@@ -214,7 +231,8 @@ module.exports = {
                         }
                     })
                         .catch((err) => {
-                            res.status(401).json({
+                            errorLogger(req.route.path, err);
+                            return res.status(401).json({
                                 success: false,
                                 message: "Authentication failed. No password given."
                             });
@@ -222,7 +240,8 @@ module.exports = {
                 }
             })
             .catch((err) => {
-                throw err;
+                errorLogger(req.route.path, err);
+                return res.json({ "error": err });
             });
     },
 
@@ -240,7 +259,7 @@ module.exports = {
         })
             .then((employee) => {
                 if (!employee) {
-                    res.status(401).json({
+                    return res.status(401).json({
                         success: false,
                         message: "Authentication failed. User not found."
                     });
@@ -249,7 +268,7 @@ module.exports = {
                     bcrypt.compare(req.body.pin, employee.pin).then((result) => {
                         // Check if password matches
                         if (!result) {
-                            res.status(401).json({
+                            return res.status(401).json({
                                 success: false,
                                 message: "Authentication failed. Wrong pin."
                             });
@@ -264,7 +283,8 @@ module.exports = {
                             // Add token to blacklist
                             tokenCache.set(token, dummyObject, (err, success) => {
                                 if (err) {
-                                    return res.send({ "error": err });
+                                    errorLogger(req.route.path, err);
+                                    return res.json({ "error": err });
                                 }
                             });
 
@@ -274,7 +294,7 @@ module.exports = {
                             });
                             // Return the information including token as JSON
 
-                            res.json({
+                            return res.json({
                                 success: true,
                                 message: "Authentication success.",
                                 token: token
@@ -282,7 +302,8 @@ module.exports = {
                         }
                     })
                         .catch((err) => {
-                            res.status(401).json({
+                            errorLogger(req.route.path, err);
+                            return res.status(401).json({
                                 success: false,
                                 message: "Authentication failed. No pin given."
                             });
@@ -290,7 +311,8 @@ module.exports = {
                 }
             })
             .catch((err) => {
-                throw err;
+                errorLogger(req.route.path, err);
+                return res.json({ "error": err });
             });
     },
 
@@ -304,6 +326,7 @@ module.exports = {
         // Add token to blacklist
         tokenCache.set(token, dummyObject, (err, success) => {
             if (err) {
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             } else if (success) {
                 return res.json({ "status": "Successfully logged out" });

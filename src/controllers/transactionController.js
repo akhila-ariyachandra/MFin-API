@@ -1,25 +1,36 @@
 "use strict";
 
 const Transaction = require("../models/transactionSchema");
+const config = require("config");
+
+// Error logger
+const errorLogger = (routePath, err) => {
+    // Log errors to the console if the server is in production mode
+    if (config.util.getEnv("NODE_ENV") === "production") {
+        console.log(routePath);
+        console.log(err);
+    }
+};
 
 module.exports = {
     // Creating a new Transaction
     createTransaction: (req, res) => {
-        const loanID = req.body.loanID;
+        const loan = req.body.loan;
         const date = new Date();
         const amount = req.body.amount;
-        const cashCollectorID = req.body.cashCollectorID;
+        const cashCollector = req.body.cashCollector;
 
         Transaction.create({
-            "loanID": loanID,
+            "loan": loan,
             "date": date,
             "amount": amount,
-            "cashCollectorID": cashCollectorID
+            "cashCollector": cashCollector
         })
             .then((result) => {
                 return res.json({ "result": result, "status": "successfully saved" });
             })
             .catch((err) => {
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             });
     },
@@ -27,7 +38,7 @@ module.exports = {
     // Fetching Details of one Transaction
     getTransaction: (req, res) => {
         const cache = require("../app").cache;
-        
+
         const transactionID = req.params.transactionID;
 
         const key = "transaction" + transactionID;
@@ -35,22 +46,28 @@ module.exports = {
         // Search cache for value
         cache.get(key, (err, cacheResult) => {
             if (err) {
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             }
 
             // If the key doesn't exist
             if (cacheResult == undefined) {
                 Transaction.findOne({ "transactionID": transactionID })
+                    .populate("loan")
+                    .populate("cashCollector")
+                    .exec()
                     .then((result) => {
                         // Store the value in cache
                         cache.set(key, result, (err, success) => {
                             if (err) {
+                                errorLogger(req.route.path, err);
                                 return res.send({ "error": err });
                             }
                             return res.json(result);
                         });
                     })
                     .catch((err) => {
+                        errorLogger(req.route.path, err);
                         return res.send({ "error": err });
                     });
             } else {
@@ -63,8 +80,11 @@ module.exports = {
     // Fetching Details of all Transactions
     getTransactions: (req, res) => {
         const cache = require("../app").cache;
-        
+
         Transaction.find({})
+            .populate("loan")
+            .populate("cashCollector")
+            .exec()
             .then((result) => {
 
                 // Store each of the value in the array in the cache
@@ -73,6 +93,7 @@ module.exports = {
 
                     cache.set(key, result[i], (err, success) => {
                         if (err) {
+                            errorLogger(req.route.path, err);
                             return res.send({ "error": err });
                         }
                     });
@@ -81,6 +102,7 @@ module.exports = {
                 return res.json(result);
             })
             .catch((err) => {
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             });
     },
@@ -91,6 +113,9 @@ module.exports = {
 
         // Get existing details of Transaction
         Transaction.findOne({ "transactionID": transactionID })
+            .populate("loan")
+            .populate("cashCollector")
+            .exec()
             .then((transaction) => {
                 if (!transaction) {
                     // If transaction doesn't exist i.e. the wrong transactionID was given
@@ -98,10 +123,10 @@ module.exports = {
                 }
 
                 // Update details
-                transaction.loanID = req.body.loanID;
+                transaction.loan = req.body.loan;
                 transaction.date = req.body.date;
                 transaction.amount = req.body.amount;
-                transaction.cashCollectorID = req.body.cashCollectorID;
+                transaction.cashCollector = req.body.cashCollector;
                 transaction.status = req.body.status;
 
                 // Send data to database
@@ -110,10 +135,12 @@ module.exports = {
                         return res.json({ "result": result });
                     })
                     .catch((err) => {
+                        errorLogger(req.route.path, err);
                         return res.json({ "error": err });
                     });
             })
             .catch((err) => {
+                errorLogger(req.route.path, err);
                 return res.json({ "error": err });
             });
     }
