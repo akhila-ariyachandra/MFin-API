@@ -41,8 +41,6 @@ module.exports = {
 
     // Fetching Details of all loans
     getLoans: (req, res) => {
-        const cache = require("../app").cache;
-
         // Setting search options for data retrieval from the database
         let searchOptions = {};
 
@@ -69,19 +67,6 @@ module.exports = {
         // Get data from database
         Loan.find(searchOptions)
             .then((result) => {
-
-                // Store each of the value in the array in the cache
-                for (let i = 0; i < result.length; i++) {
-                    const key = "loan" + result[i].loanID;
-
-                    cache.set(key, result[i], (err, success) => {
-                        if (err) {
-                            errorLogger(req.route.path, err);
-                            return res.send({ "error": err });
-                        }
-                    });
-                }
-
                 return res.json(result);
             })
             .catch((err) => {
@@ -92,41 +77,16 @@ module.exports = {
 
     // Fetching Details of one loan
     getLoan: (req, res) => {
-        const cache = require("../app").cache;
-
         const loanID = req.params.loanID;
 
-        const key = "loan" + loanID;
-
-        // Search cache for value
-        cache.get(key, (err, cacheResult) => {
-            if (err) {
-                errorLogger(req.route.path, err);;
+        Loan.findOne({ "loanID": loanID })
+            .then((result) => {
+                return res.json(result);
+            })
+            .catch((err) => {
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
-            }
-
-            // If the key doesn't exist
-            if (cacheResult == undefined) {
-                Loan.findOne({ "loanID": loanID })
-                    .then((result) => {
-                        // Store the value in cache
-                        cache.set(key, result, (err, success) => {
-                            if (err) {
-                                errorLogger(req.route.path, err);
-                                return res.send({ "error": err });
-                            }
-                            return res.json(result);
-                        });
-                    })
-                    .catch((err) => {
-                        errorLogger(req.route.path, err);
-                        return res.send({ "error": err });
-                    });
-            } else {
-                // Return cached value
-                return res.json(cacheResult);
-            }
-        });
+            });
     },
 
     // Update Loan details

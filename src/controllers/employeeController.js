@@ -70,23 +70,8 @@ module.exports = {
 
     // Fetching Details of all Employees
     getEmployees: (req, res) => {
-        const cache = require("../app").cache;
-
         Employee.find({})
             .then((result) => {
-
-                // Store each of the value in the array in the cache
-                for (let i = 0; i < result.length; i++) {
-                    const key = "employee" + result[i].employeeID;
-
-                    cache.set(key, result[i], (err, success) => {
-                        if (err) {
-                            errorLogger(req.route.path, err);
-                            return res.send({ "error": err });
-                        }
-                    });
-                }
-
                 return res.json(result);
             })
             .catch((err) => {
@@ -97,41 +82,16 @@ module.exports = {
 
     // Fetching Details of one Employee
     getEmployee: (req, res) => {
-        const cache = require("../app").cache;
-
         const employeeID = req.params.employeeID;
 
-        const key = "employee" + employeeID;
-
-        // Search cache for value
-        cache.get(key, (err, cacheResult) => {
-            if (err) {
+        Employee.findOne({ "employeeID": employeeID })
+            .then((result) => {
+                return res.json(result);
+            })
+            .catch((err) => {
                 errorLogger(req.route.path, err);
                 return res.send({ "error": err });
-            }
-
-            // If the key doesn't exist
-            if (cacheResult == undefined) {
-                Employee.findOne({ "employeeID": employeeID })
-                    .then((result) => {
-                        // Store the value in cache
-                        cache.set(key, result, (err, success) => {
-                            if (err) {
-                                errorLogger(req.route.path, err);
-                                return res.send({ "error": err });
-                            }
-                            return res.json(result);
-                        });
-                    })
-                    .catch((err) => {
-                        errorLogger(req.route.path, err);
-                        return res.send({ "error": err });
-                    });
-            } else {
-                // Return cached value
-                return res.json(cacheResult);
-            }
-        });
+            });
     },
 
     // Update the Employee
