@@ -1,6 +1,16 @@
 "user strict";
 
 const Loan = require("../models/loanSchema");
+const config = require("config");
+
+// Error logger
+const errorLogger = (err) => {
+    // Log errors to the console if the server is in production mode
+    if (config.util.getEnv("NODE_ENV") === "production") {
+        console.log(req.route.path);
+        console.log(err);
+    }
+};
 
 module.exports = {
     // Create a new loan
@@ -24,6 +34,7 @@ module.exports = {
                 return res.json({ "result": result, "status": "successfully saved" });
             })
             .catch((err) => {
+                errorLogger(err);
                 return res.send({ "error": err });
             });
     },
@@ -65,6 +76,7 @@ module.exports = {
 
                     cache.set(key, result[i], (err, success) => {
                         if (err) {
+                            errorLogger(err);
                             return res.send({ "error": err });
                         }
                     });
@@ -73,6 +85,7 @@ module.exports = {
                 return res.json(result);
             })
             .catch((err) => {
+                errorLogger(err);
                 return res.send({ "error": err });
             });
     },
@@ -88,6 +101,7 @@ module.exports = {
         // Search cache for value
         cache.get(key, (err, cacheResult) => {
             if (err) {
+                errorLogger(err);;
                 return res.send({ "error": err });
             }
 
@@ -98,12 +112,14 @@ module.exports = {
                         // Store the value in cache
                         cache.set(key, result, (err, success) => {
                             if (err) {
+                                errorLogger(err);
                                 return res.send({ "error": err });
                             }
                             return res.json(result);
                         });
                     })
                     .catch((err) => {
+                        errorLogger(err);
                         return res.send({ "error": err });
                     });
             } else {
@@ -141,10 +157,12 @@ module.exports = {
                         return res.json({ "result": result, "status": "successfully updated" });
                     })
                     .catch((err) => {
+                        errorLogger(err);
                         return res.send({ "error": err });
                     });
             })
             .catch((err) => {
+                errorLogger(err);
                 return res.send({ "error": err });
             });
     },
@@ -170,10 +188,12 @@ module.exports = {
                         return res.json(result);
                     })
                     .catch((err) => {
+                        errorLogger(err);
                         return res.json({ "error": err });
                     });
             })
             .catch((err) => {
+                errorLogger(err);
                 return res.json({ "error": err });
             });
     },
@@ -199,10 +219,12 @@ module.exports = {
                         return res.json(result);
                     })
                     .catch((err) => {
+                        errorLogger(err);
                         return res.json({ "error": err });
                     });
             })
             .catch((err) => {
+                errorLogger(err);
                 return res.json({ "error": err });
             });
     }
