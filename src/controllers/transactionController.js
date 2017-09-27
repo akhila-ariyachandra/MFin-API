@@ -4,10 +4,10 @@ const Transaction = require("../models/transactionSchema");
 const config = require("config");
 
 // Error logger
-const errorLogger = (err) => {
+const errorLogger = (routePath, err) => {
     // Log errors to the console if the server is in production mode
     if (config.util.getEnv("NODE_ENV") === "production") {
-        console.log(req.route.path);
+        console.log(routePath);
         console.log(err);
     }
 };
@@ -30,7 +30,7 @@ module.exports = {
                 return res.json({ "result": result, "status": "successfully saved" });
             })
             .catch((err) => {
-                errorLogger(err);
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             });
     },
@@ -46,7 +46,7 @@ module.exports = {
         // Search cache for value
         cache.get(key, (err, cacheResult) => {
             if (err) {
-                errorLogger(err);
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             }
 
@@ -60,14 +60,14 @@ module.exports = {
                         // Store the value in cache
                         cache.set(key, result, (err, success) => {
                             if (err) {
-                                errorLogger(err);
+                                errorLogger(req.route.path, err);
                                 return res.send({ "error": err });
                             }
                             return res.json(result);
                         });
                     })
                     .catch((err) => {
-                        errorLogger(err);
+                        errorLogger(req.route.path, err);
                         return res.send({ "error": err });
                     });
             } else {
@@ -93,7 +93,7 @@ module.exports = {
 
                     cache.set(key, result[i], (err, success) => {
                         if (err) {
-                            errorLogger(err);
+                            errorLogger(req.route.path, err);
                             return res.send({ "error": err });
                         }
                     });
@@ -102,7 +102,7 @@ module.exports = {
                 return res.json(result);
             })
             .catch((err) => {
-                errorLogger(err);
+                errorLogger(req.route.path, err);
                 return res.send({ "error": err });
             });
     },
@@ -135,12 +135,12 @@ module.exports = {
                         return res.json({ "result": result });
                     })
                     .catch((err) => {
-                        errorLogger(err);
+                        errorLogger(req.route.path, err);
                         return res.json({ "error": err });
                     });
             })
             .catch((err) => {
-                errorLogger(err);
+                errorLogger(req.route.path, err);
                 return res.json({ "error": err });
             });
     }
