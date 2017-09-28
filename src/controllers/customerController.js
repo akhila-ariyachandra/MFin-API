@@ -49,62 +49,22 @@ module.exports = {
 
     // Fetching Details of one Customer
     getCustomer: (req, res) => {
-        const cache = require("../app").cache;
-
         const customerID = req.params.customerID;
 
-        const key = "customer" + customerID;
-
-        // Search cache for value
-        cache.get(key, (err, cacheResult) => {
-            if (err) {
+        Customer.findOne({ "customerID": customerID })
+            .then((result) => {
+                return res.json(result);
+            })
+            .catch((err) => {
                 errorLogger(req.route.path, err);
                 return res.send({ "error": err });
-            }
-
-            // If the key doesn't exist
-            if (cacheResult == undefined) {
-                Customer.findOne({ "customerID": customerID })
-                    .then((result) => {
-                        // Store the value in cache
-                        cache.set(key, result, (err, success) => {
-                            if (err) {
-                                errorLogger(req.route.path, err);
-                                return res.send({ "error": err });
-                            }
-                            return res.json(result);
-                        });
-                    })
-                    .catch((err) => {
-                        errorLogger(req.route.path, err);
-                        return res.send({ "error": err });
-                    });
-            } else {
-                // Return cached value
-                return res.json(cacheResult);
-            }
-        });
+            });
     },
 
     // Fetching Details of all Customers
     getCustomers: (req, res) => {
-        const cache = require("../app").cache;
-
         Customer.find({})
             .then((result) => {
-
-                // Store each of the value in the array in the cache
-                for (let i = 0; i < result.length; i++) {
-                    const key = "customer" + result[i].customerID;
-
-                    cache.set(key, result[i], (err, success) => {
-                        if (err) {
-                            errorLogger(req.route.path, err);
-                            return res.send({ "error": err });
-                        }
-                    });
-                }
-
                 return res.json(result);
             })
             .catch((err) => {
