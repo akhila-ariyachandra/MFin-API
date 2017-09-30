@@ -14,7 +14,7 @@ const routes = (app) => {
     const transaction = require("./controllers/transactionController");
     const employee = require("./controllers/employeeController");
 
-    const authenticate = require("./middleware").authenticate;
+    const authenticate = require("./middleware/authenticationMiddleware");
 
     // Protect routes with authentication middleware
     router.use(authenticate);
