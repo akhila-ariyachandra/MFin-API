@@ -1,117 +1,89 @@
-"use strict";
+"use strict"
 
 const routes = (app) => {
-    const express = require("express");
-
-    // Router is used for all the protected routes
-    const router = express.Router(); // Create instance of express router
-    const path = require("path");
+    // Dependencies
+    const path = require("path")
 
     // Controllers
-    const customer = require("./controllers/customerController");
-    const loan = require("./controllers/loanController");
-    const area = require("./controllers/areaController");
-    const transaction = require("./controllers/transactionController");
-    const employee = require("./controllers/employeeController");
+    const customer = require("./controllers/customerController")
+    const loan = require("./controllers/loanController")
+    const area = require("./controllers/areaController")
+    const transaction = require("./controllers/transactionController")
+    const employee = require("./controllers/employeeController")
 
-    const authenticate = require("./middleware/authenticationMiddleware");
+    const authenticate = require("./middleware/authenticationMiddleware")
 
-    // Protect routes with authentication middleware
-    router.use(authenticate);
+    // All Protected routes will be prefixed with /api
 
-    router.route("/customer")
-        // Create a Customer
-        .post(customer.createCustomer)
-        // Get all Customers
-        .get(customer.getCustomers);
+    // Area
+    // Create an Area
+    app.post("/api/area", authenticate, area.createArea)
+    // Get all Areas
+    app.get("/api/area", authenticate, area.getAreas)
+    // Get the Area with this ID
+    app.get("/api/area/:areaID", authenticate, area.getArea)
+    // Update the Area with this ID
+    app.put("/api/area/:areaID", authenticate, area.updateArea)
 
-    router.route("/customer/:customerID")
-        // Get the Customer with this ID
-        .get(customer.getCustomer)
-        // Update the Customer with this ID
-        .put(customer.updateCustomer);
+    // Customer
+    // Create a Customer
+    app.post("/api/customer", authenticate, customer.createCustomer)
+    // Get all Customers
+    app.get("/api/customer", authenticate, customer.getCustomers)
+    // Get the Customer with this ID
+    app.get("/api/customer/:customerID", authenticate, customer.getCustomer)
+    // Update the Customer with this ID
+    app.put("/api/customer/:customerID", authenticate, customer.updateCustomer)
 
-    router.route("/loan")
-        // Create a Loan
-        .post(loan.createLoan)
-        // Get all Loans
-        .get(loan.getLoans);
+    // Employee
+    // Create an Employee
+    app.post("/api/employee", authenticate, employee.createEmployee)
+    // Get all Employess
+    app.get("/api/employee", authenticate, employee.getEmployees)
+    // Get the Employee with this ID
+    app.get("/api/employee/:employeeID", authenticate, employee.getEmployee)
+    // Update the Employee with this ID
+    app.put("/api/employee/:employeeID", authenticate, employee.updateEmployee)
+    // Authenticate Employee
+    app.post("/user/authenticate", employee.authenticateEmployee)
+    // Get new a new token
+    app.post("/api/user/reauthenticate", authenticate, employee.reauthenticateEmployee)
+    // Logout Employee
+    app.get("/api/user/logout", authenticate, employee.logout)
 
-    router.route("/loan/:loanID")
-        // Get the Loan with this ID
-        .get(loan.getLoan)
-        // Update the Loan with this ID
-        .put(loan.updateLoan);
+    // Loan
+    // Create a loan
+    app.post("/api/loan", authenticate, loan.createLoan)
+    // Get all Loans
+    app.get("/api/loan", authenticate, loan.getLoans)
+    // Get the Loan with this ID
+    app.get("/api/loan/:loanID", authenticate, loan.getLoan)
+    // Update the Loan with this ID
+    app.put("/api/loan/:loanID", authenticate, loan.updateLoan)
+    // Approve the loan
+    app.patch("/api/loan/:loanID/approve", authenticate, loan.approveLoan)
+    // Reject the loan
+    app.patch("/api/loan/:loanID/reject", authenticate, loan.rejectLoan)
 
-    router.route("/loan/:loanID/approve")
-        // Approve the loan
-        .patch(loan.approveLoan);
+    // Transaction
+    // Create an Transaction
+    app.post("/api/transaction", authenticate, transaction.createTransaction)
+    // Get all Transactions
+    app.get("/api/transaction", authenticate, transaction.getTransactions)
+    // Get the Transaction with this ID
+    app.get("/api/transaction/:transactionID", authenticate, transaction.getTransaction)
+    // Update the Transaction with this ID
+    app.put("/api/transaction/:transactionID", authenticate, transaction.updateTransaction)
 
-    router.route("/loan/:loanID/reject")
-        // Reject the loan
-        .patch(loan.rejectLoan);
-
-    router.route("/area")
-        // Create an Area
-        .post(area.createArea)
-        // Get all Areas
-        .get(area.getAreas);
-
-    router.route("/area/:areaID")
-        // Get the Area with this ID
-        .get(area.getArea)
-        // Update the Area with this ID
-        .put(area.updateArea);
-
-    router.route("/transaction")
-        // Create an Transaction
-        .post(transaction.createTransaction)
-        // Get all Transactions
-        .get(transaction.getTransactions);
-
-    router.route("/transaction/:transactionID")
-        // Get the Transaction with this ID
-        .get(transaction.getTransaction)
-        // Update the Transaction with this ID
-        .put(transaction.updateTransaction);
-
-    router.route("/employee")
-        // Create an Employee
-        .post(employee.createEmployee)
-        // Get all Employess
-        .get(employee.getEmployees);
-
-    router.route("/employee/:employeeID")
-        // Get the Employee with this ID
-        .get(employee.getEmployee)
-        // Update the Employee with this ID
-        .put(employee.updateEmployee);
-
-    router.route("/user/reauthenticate")
-        // Get new a new token
-        .post(employee.reauthenticateEmployee);
-
-    router.route("/user/logout")
-        // Logout Employee
-        .get(employee.logout);
-
-    // Unprotected routes
     // View documentation
     app.get("/", function (req, res) {
-        res.sendFile(path.join(__dirname + "/views/index.html"));
-    });
-
-    // Authenticate Employee
-    app.post("/user/authenticate", employee.authenticateEmployee);
+        res.sendFile(path.join(__dirname + "/views/index.html"))
+    })
 
     // View log
     app.get("/log", function (req, res) {
-        res.sendFile(path.join(__dirname + "/../.log/access.log"));
-    });
+        res.sendFile(path.join(__dirname + "/../.log/access.log"))
+    })
+}
 
-    // Register routes
-    // Prefix all protected routes with /api
-    app.use("/api", router);
-};
-
-module.exports = routes;
+module.exports = routes

@@ -5,11 +5,6 @@ module.exports = (req, res, next) => {
     const app = require("../app").app
     const jwt = require("jsonwebtoken")
     const tokenCache = require("../app").tokenCache
-    //console.log(req.method)
-    //console.log(req.baseUrl)
-    //console.log(req.originalUrl)
-    //console.log(req.path)
-    //console.log(req.route)
 
     // Check header or url parameters or post parameters for token
     const token = req.headers["x-access-token"]
