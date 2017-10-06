@@ -2,5 +2,175 @@
 	"dbPath": "mongodb://mfin-dev:mfin-dev@ds147421.mlab.com:47421/mfin-dev",
 	"port": 8080,
 	"secret": "mfinapi",
-	"tokenExpireTime": 1800
+	"tokenExpireTime": 1800,
+	"accessPermissions": [
+		{
+			"route": "POST /api/area",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		},
+		{
+			"route": "POST /api/customer",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": false
+		},
+		{
+			"route": "POST /api/employee",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		},
+		{
+			"route": "POST /api/user/reauthenticate",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "POST /api/user/logout",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "POST /api/loan",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": false
+		},
+		{
+			"route": "POST /api/transaction",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/area",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/area/:areaID",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/customer",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/customer/:customerID",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/employee",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/employee/:employeeID",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/loan",
+			"admin": false,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/loan/:loanID",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/transaction",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/transaction/:transactionID",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": true
+		},
+		{
+			"route": "PUT /api/area/:areaID",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		},
+		{
+			"route": "PUT /api/customer/:customerID",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		},
+		{
+			"route": "PUT /api/employee/:employeeID",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		},
+		{
+			"route": "PUT /api/loan/:loanID",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		},
+		{
+			"route": "PUT /api/transaction/:transactionID",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": true
+		},
+		{
+			"route": "PATCH /api/loan/:loanID/approve",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		},
+		{
+			"route": "PATCH /api/loan/:loanID/reject",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		}
+	]
 }
