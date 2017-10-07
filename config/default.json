@@ -97,7 +97,7 @@
 		},
 		{
 			"route": "GET /api/loan",
-			"admin": false,
+			"admin": true,
 			"manager": true,
 			"receptionist": true,
 			"cashCollector": true
