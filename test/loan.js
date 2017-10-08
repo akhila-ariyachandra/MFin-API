@@ -1200,6 +1200,80 @@ describe("Loans", () => {
                     done()
                 })
         })
+
+        it("it should update the loan with loan status closed", (done) => {
+            const loan = {
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1,
+                "status": "closed",
+                "manager": "john"
+            }
+
+            chai.request(app)
+                .put("/api/loan/3")
+                .set("x-access-token", adminToken)
+                .send(loan)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("status").eql("successfully updated")
+                    res.body.should.have.property("result")
+                    // Check for all fields
+                    res.body.result.should.have.property("__v")
+                    res.body.result.should.have.property("loanID").eql(3)
+                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("date")
+                    res.body.result.should.have.property("loanAmount")
+                    res.body.result.should.have.property("duration")
+                    res.body.result.should.have.property("interest")
+                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("manager").eql("john")
+                    res.body.result.should.have.property("status").eql("closed")
+                    res.body.result.should.have.property("_id")
+                    done()
+                })
+        })
+
+        it("it should update the loan with loan status reopened", (done) => {
+            const loan = {
+                "loanType": "Fix Deposit",
+                "date": "04-03-1998",
+                "loanAmount": 250000,
+                "duration": 12,
+                "interest": 5,
+                "customerID": 1,
+                "status": "reopened",
+                "manager": "john"
+            }
+
+            chai.request(app)
+                .put("/api/loan/3")
+                .set("x-access-token", adminToken)
+                .send(loan)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("status").eql("successfully updated")
+                    res.body.should.have.property("result")
+                    // Check for all fields
+                    res.body.result.should.have.property("__v")
+                    res.body.result.should.have.property("loanID").eql(3)
+                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("date")
+                    res.body.result.should.have.property("loanAmount")
+                    res.body.result.should.have.property("duration")
+                    res.body.result.should.have.property("interest")
+                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("manager").eql("john")
+                    res.body.result.should.have.property("status").eql("reopened")
+                    res.body.result.should.have.property("_id")
+                    done()
+                })
+        })
     })
 
     // Test the PATCH /api/loan/:loanID/approve route
