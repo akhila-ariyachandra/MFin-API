@@ -113,6 +113,7 @@ module.exports = {
                 employee.name = req.body.name
                 employee.surname = req.body.surname
                 employee.nic = req.body.nic
+                employee.address = req.body.address
                 employee.dob = req.body.dob
                 employee.phone.work = req.body.phone.work
 
