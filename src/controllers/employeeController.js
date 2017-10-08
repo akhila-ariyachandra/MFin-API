@@ -96,7 +96,7 @@ module.exports = {
 
     // Update the Employee
     updateEmployee: (req, res) => {
-        const employeeID = req.body.employeeID
+        const employeeID = req.params.employeeID
 
         let employee = null
 
@@ -126,7 +126,7 @@ module.exports = {
                 employee.accountType = req.body.accountType
 
                 // Meta data
-                if (req.body.meta.areaID) {
+                if (req.body.meta && employee.meta.areaID) {
                     employee.meta.areaID = req.body.meta.areaID
                 }
             })
