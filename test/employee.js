@@ -1048,7 +1048,7 @@ describe("Employees", () => {
             }
 
             chai.request(app)
-                .put("/api/employee")
+                .put("/api/employee/6")
                 .set("x-access-token", adminToken)
                 .send(employee)
                 .end((err, res) => {
@@ -1104,7 +1104,6 @@ describe("Employees", () => {
                 "surname": "Doe",
                 "nic": "123456789V",
                 "address": "nowhere",
-                "dob": "1980-01-01",
                 "email": "jacob.doe@gmail.com",
                 "username": "jacob",
                 "password": "sliitcpp",
@@ -1272,7 +1271,6 @@ describe("Employees", () => {
                 "username": "jacob",
                 "password": "sliitcpp",
                 "pin": "1234",
-                "accountType": "admin",
                 "phone": {
                     "work": "1234567890",
                     "personal": "0987654321"
@@ -1354,7 +1352,6 @@ describe("Employees", () => {
                     // Go through the properties one by one
                     res.should.have.status(200)
                     res.body.should.be.a("object")
-                    res.body.should.have.property("status").eql("successfully saved")
                     res.body.should.have.property("result")
                     res.body.result.should.have.property("employeeID").eql(6)
                     done()
@@ -1387,7 +1384,6 @@ describe("Employees", () => {
                     // Go through the properties one by one
                     res.should.have.status(200)
                     res.body.should.be.a("object")
-                    res.body.should.have.property("status").eql("successfully saved")
                     res.body.should.have.property("result")
                     res.body.result.should.have.property("employeeID").eql(6)
                     done()
@@ -1585,7 +1581,7 @@ describe("Employees", () => {
 
         it("it should get a new token for the receptionist account type", (done) => {
             const user = {
-                "username": "john",
+                "username": "james",
                 "pin": "1234"
             }
 
@@ -1607,7 +1603,7 @@ describe("Employees", () => {
 
         it("it should get a new token for the cash collector account type", (done) => {
             const user = {
-                "username": "john",
+                "username": "jake",
                 "pin": "1234"
             }
 
@@ -1630,7 +1626,7 @@ describe("Employees", () => {
         it("it should invalidate the previous token", (done) => {
             chai.request(app)
                 .get("/api/employee")
-                .set("x-access-token", newAdminToken)
+                .set("x-access-token", adminToken)
                 .end((err, res) => {
                     res.should.have.status(401)
                     should.exist(res.body)
