@@ -17,7 +17,8 @@ const schema = {
             "approved",
             "rejected",
             "closed",
-            "reopened"
+            "opened",
+            "completed"
         ],
         default: "pending", 
         required: true 
