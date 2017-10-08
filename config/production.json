@@ -33,13 +33,6 @@
 			"cashCollector": true
 		},
 		{
-			"route": "POST /api/user/logout",
-			"admin": true,
-			"manager": true,
-			"receptionist": true,
-			"cashCollector": true
-		},
-		{
 			"route": "POST /api/loan",
 			"admin": true,
 			"manager": true,
@@ -90,6 +83,13 @@
 		},
 		{
 			"route": "GET /api/employee/:employeeID",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/user/logout",
 			"admin": true,
 			"manager": true,
 			"receptionist": true,
