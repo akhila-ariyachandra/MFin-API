@@ -591,6 +591,95 @@
             </td>
         </tr>
 
+        <!--Create a new Product-->
+        <tr>
+            <td>Product</td>
+            <td>/api/product</td>
+            <td>POST</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
+            <td>Create a product</td>
+            <td>
+                <ul>
+                    <li>productName (String) [Required]</li>
+                    <li>description (String) [Required]</li>
+                    <li>minAmount (Number) [Required]</li>
+                    <li>maxAmount (Number) [Required]</li>
+                    <li>gracePeriod (Number) [Required]</li>
+                    <li>interestRate (Number) [Required]</li>
+                    <li>accruedInterest (Number) [Required]</li>
+                    <li>approvedBy (ObjectId) [Required]</li>
+                    <li>validFrom (Date) [Required]</li>
+                    <li>validTo (Date) [Required]</li>
+                </ul>
+            </td>
+        </tr>
+
+        <!--Get details of all Products-->
+        <tr>
+            <td>Product</td>
+            <td>/api/product</td>
+            <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
+            <td>Get details of all products</td>
+            <td></td>
+        </tr>
+
+        <!--Get details of one Product-->
+        <tr>
+            <td>Product</td>
+            <td>/api/product/:productID</td>
+            <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
+            <td>Get details of one product</td>
+            <td></td>
+        </tr>
+
+        <!--Update a Product-->
+        <tr>
+            <td>Product</td>
+            <td>/api/product/:productID</td>
+            <td>PUT</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
+            <td>Update a product</td>
+            <td>
+                <ul>
+                    <li>productName (String) [Required]</li>
+                    <li>description (String) [Required]</li>
+                    <li>minAmount (Number) [Required]</li>
+                    <li>maxAmount (Number) [Required]</li>
+                    <li>gracePeriod (Number) [Required]</li>
+                    <li>interestRate (Number) [Required]</li>
+                    <li>accruedInterest (Number) [Required]</li>
+                    <li>approvedBy (ObjectId) [Required]</li>
+                    <li>validFrom (Date) [Required]</li>
+                    <li>validTo (Date) [Required]</li>
+                </ul>
+            </td>
+        </tr>
 
         <!--Create new Transaction-->
         <tr>

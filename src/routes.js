@@ -10,6 +10,7 @@ const routes = (app) => {
     const area = require("./controllers/areaController")
     const transaction = require("./controllers/transactionController")
     const employee = require("./controllers/employeeController")
+    const product = require("./controllers/productController")
 
     const authenticate = require("./middleware/authenticationMiddleware")
 
@@ -64,6 +65,16 @@ const routes = (app) => {
     app.patch("/api/loan/:loanID/approve", authenticate, loan.approveLoan)
     // Reject the loan
     app.patch("/api/loan/:loanID/reject", authenticate, loan.rejectLoan)
+
+    // Product
+    // Create a Product
+    app.post("/api/product", authenticate, product.createProduct)
+    // Get all Products
+    app.get("/api/product", authenticate, product.getProducts)
+    // Get the Product with this ID
+    app.get("/api/product/:productID", authenticate, product.getProduct)
+    // Update the Product with this ID
+    app.put("/api/product/:productID", authenticate, product.updateProduct)
 
     // Transaction
     // Create an Transaction

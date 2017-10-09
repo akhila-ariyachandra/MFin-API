@@ -40,6 +40,13 @@
 			"cashCollector": false
 		},
 		{
+			"route": "POST /api/product",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		},
+		{
 			"route": "POST /api/transaction",
 			"admin": true,
 			"manager": true,
@@ -110,6 +117,20 @@
 			"cashCollector": true
 		},
 		{
+			"route": "GET /api/product",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "GET /api/product/:productID",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
 			"route": "GET /api/transaction",
 			"admin": true,
 			"manager": true,
@@ -146,6 +167,13 @@
 		},
 		{
 			"route": "PUT /api/loan/:loanID",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
+		},
+		{
+			"route": "PUT /api/product/:productID",
 			"admin": true,
 			"manager": true,
 			"receptionist": false,
