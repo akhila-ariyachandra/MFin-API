@@ -30,12 +30,16 @@
             width: 5%
         }
 
+        .access {
+            width: 15%
+        }
+
         .description {
-            width: 35%
+            width: 25%
         }
 
         .parameters {
-            width: 35%
+            width: 30%
         }
     </style>
     <title>
@@ -50,9 +54,12 @@
 
     <h2>Authorization</h2>
     <p>
-        The API uses JSON web tokens for authorization. Any route with the prefix <b>/api</b> is protected and will require
-        a token to be accessed. New users can use the route <b>POST /user</b> to register and <b>POST /authenticate</b> to
-        get the token. The tokens are set to expire after 30 mins. The token can be passed in the header as <b>x-access-token</b>        or as <b>token</b> in the query or body.
+        The API uses JSON web tokens for authorization. Any route with the prefix
+        <b>/api</b> is protected and will require a token to be accessed. New users can use the route
+        <b>POST /authenticate</b> to get the token. The tokens are set to expire after 30 mins. The token can be passed in the
+        header as
+        <b>x-access-token</b> or as
+        <b>token</b> in the query or body.
     </p>
 
     <br>
@@ -64,6 +71,7 @@
             <th class="entity">Entity</th>
             <th class="route">Route</th>
             <th class="type">Type</th>
+            <th class="access">Users Allowed</th>
             <th class="description">Description</th>
             <th class="parameters">Parameters</th>
         </tr>
@@ -73,6 +81,14 @@
             <td>Employee</td>
             <td>/user/authenticate</td>
             <td>POST</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Authenticate the user and get a token</td>
             <td>
                 <ul>
@@ -87,6 +103,14 @@
             <td>Employee</td>
             <td>/api/user/reauthenticate</td>
             <td>POST</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get new a token</td>
             <td>
                 <ul>
@@ -101,6 +125,14 @@
             <td>Employee</td>
             <td>/api/user/logout</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Logout the user</td>
             <td>
             </td>
@@ -111,6 +143,12 @@
             <td>Area</td>
             <td>/api/area</td>
             <td>POST</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
             <td>Create a new area</td>
             <td>
                 <ul>
@@ -127,6 +165,14 @@
             <td>Area</td>
             <td>/api/area/:areaID</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of one area</td>
             <td>
                 <ul>
@@ -141,6 +187,14 @@
             <td>Area</td>
             <td>/api/area</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of all areas</td>
             <td>
                 <ul>
@@ -154,6 +208,12 @@
             <td>Area</td>
             <td>/api/area/:areaID</td>
             <td>PUT</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
             <td>Update the area details</td>
             <td>
                 <ul>
@@ -170,6 +230,13 @@
             <td>Customer</td>
             <td>/api/customer</td>
             <td>POST</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                </ul>
+            </td>
             <td>Create a new customer</td>
             <td>
                 <ul>
@@ -193,6 +260,14 @@
             <td>Customer</td>
             <td>/api/customer/:customerID</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of one customer</td>
             <td>
                 <ul>
@@ -207,6 +282,14 @@
             <td>Customer</td>
             <td>/api/customer</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of all customers</td>
             <td>
                 <ul>
@@ -220,6 +303,12 @@
             <td>Customer</td>
             <td>/api/customer/:customerID</td>
             <td>PUT</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
             <td>Update the details of the customer</td>
             <td>
                 <ul>
@@ -244,6 +333,12 @@
             <td>Employee</td>
             <td>/api/employee</td>
             <td>POST</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
             <td>Create a new employee</td>
             <td>
                 <ul>
@@ -281,6 +376,14 @@
             <td>Employee</td>
             <td>/api/employee/:employeeID</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of one employee</td>
             <td>
                 <ul>
@@ -294,6 +397,14 @@
             <td>Employee</td>
             <td>/api/employee</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of all employees</td>
             <td>
             </td>
@@ -304,6 +415,12 @@
             <td>Employee</td>
             <td>/api/employee/:employeeID</td>
             <td>PUT</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
             <td>Create a new employee</td>
             <td>
                 <ul>
@@ -341,6 +458,13 @@
             <td>Loan</td>
             <td>/api/loan</td>
             <td>POST</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                </ul>
+            </td>
             <td>Create a new loan</td>
             <td>
                 <ul>
@@ -360,6 +484,14 @@
             <td>Loan</td>
             <td>/api/loan/:loanID</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of one loan</td>
             <td>
                 <ul>
@@ -374,6 +506,14 @@
             <td>Loan</td>
             <td>/api/loan</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of all loans</td>
             <td>
                 <ul>
@@ -390,6 +530,12 @@
             <td>Loan</td>
             <td>/api/loan/:loanID</td>
             <td>PUT</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
             <td>Update the details of a loan</td>
             <td>
                 <ul>
@@ -412,6 +558,12 @@
             <td>Loan</td>
             <td>/api/loan/:loanID/approve</td>
             <td>PATCH</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
             <td>Approve a loan</td>
             <td>
                 <ul>
@@ -425,6 +577,12 @@
             <td>Loan</td>
             <td>/api/loan/:loanID/reject</td>
             <td>PATCH</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
             <td>Reject a loan</td>
             <td>
                 <ul>
@@ -433,12 +591,108 @@
             </td>
         </tr>
 
+        <!--Create a new Product-->
+        <tr>
+            <td>Product</td>
+            <td>/api/product</td>
+            <td>POST</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
+            <td>Create a product</td>
+            <td>
+                <ul>
+                    <li>productName (String) [Required]</li>
+                    <li>description (String) [Required]</li>
+                    <li>minAmount (Number) [Required]</li>
+                    <li>maxAmount (Number) [Required]</li>
+                    <li>gracePeriod (Number) [Required]</li>
+                    <li>interestRate (Number) [Required]</li>
+                    <li>accruedInterest (Number) [Required]</li>
+                    <li>approvedBy (ObjectId) [Required]</li>
+                    <li>validFrom (Date) [Required]</li>
+                    <li>validTo (Date) [Required]</li>
+                </ul>
+            </td>
+        </tr>
+
+        <!--Get details of all Products-->
+        <tr>
+            <td>Product</td>
+            <td>/api/product</td>
+            <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
+            <td>Get details of all products</td>
+            <td></td>
+        </tr>
+
+        <!--Get details of one Product-->
+        <tr>
+            <td>Product</td>
+            <td>/api/product/:productID</td>
+            <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Receptionist</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
+            <td>Get details of one product</td>
+            <td></td>
+        </tr>
+
+        <!--Update a Product-->
+        <tr>
+            <td>Product</td>
+            <td>/api/product/:productID</td>
+            <td>PUT</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
+            <td>Update a product</td>
+            <td>
+                <ul>
+                    <li>productName (String) [Required]</li>
+                    <li>description (String) [Required]</li>
+                    <li>minAmount (Number) [Required]</li>
+                    <li>maxAmount (Number) [Required]</li>
+                    <li>gracePeriod (Number) [Required]</li>
+                    <li>interestRate (Number) [Required]</li>
+                    <li>accruedInterest (Number) [Required]</li>
+                    <li>approvedBy (ObjectId) [Required]</li>
+                    <li>validFrom (Date) [Required]</li>
+                    <li>validTo (Date) [Required]</li>
+                </ul>
+            </td>
+        </tr>
 
         <!--Create new Transaction-->
         <tr>
             <td>Transaction</td>
             <td>/api/transaction</td>
             <td>POST</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Create a new transaction</td>
             <td>
                 <ul>
@@ -455,6 +709,13 @@
             <td>Transaction</td>
             <td>/api/transaction/:transactionID</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of one transaction</td>
             <td>
                 <ul>
@@ -468,6 +729,13 @@
             <td>transaction</td>
             <td>/api/transaction</td>
             <td>GET</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Get the details of all transactions</td>
             <td>
                 <ul>
@@ -480,6 +748,13 @@
             <td>Transaction</td>
             <td>/api/transaction/:transactionID</td>
             <td>PUT</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                    <li>Cash Collector</li>
+                </ul>
+            </td>
             <td>Update the details of the transaction</td>
             <td>
                 <ul>
