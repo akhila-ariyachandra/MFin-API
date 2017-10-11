@@ -7,7 +7,9 @@ const chaiHttp = require("chai-http")
 const Loan = require("../src/models/loanSchema")
 const Employee = require("../src/models/employeeSchema")
 const Counter = require("../src/models/counterSchema")
+const Customer = require("../src/models/customerSchema")
 const should = chai.should()
+
 
 // Used for hashing password and pin
 const bcrypt = require("bcrypt")
@@ -94,13 +96,26 @@ describe("Loans", () => {
             }
         }
 
+        let customer = {
+            "name": "Bob",
+            "surname": "Jay",
+            "nic": "958642350V",
+            "address": "elsewhere",
+            "dob": "1995-12-29",
+            "phone": "0767986623",
+            "email": "bobjay@gmail.com",
+            "areaID": "037",
+            longitude: "87.8",
+            latitude: "130.5"
+        }
+
         const loan1 = {
             "product": "Fix Deposit",
             "date": "01-01-2000",
             "loanAmount": 5000,
             "duration": 6,
             "interest": 2,
-            "customerID": 2
+            "customer": res
         }
 
         const loan2 = {
@@ -109,12 +124,14 @@ describe("Loans", () => {
             "loanAmount": 10000,
             "duration": 24,
             "interest": 15,
-            "customerID": 1,
+            "customer": res,
             "manager": "John",
             "status": "approved"
         }
 
+
         Employee.remove({})
+            .then(() => Customer.remove({}))
             .then(() => Loan.remove({}))
             .then(() => Counter.remove({}))
             .then(() => Promise.all([
@@ -142,9 +159,11 @@ describe("Loans", () => {
                 Employee.create(manager),
                 Employee.create(receptionist),
                 Employee.create(cashCollector),
+                Customer.create(customer),
                 Loan.create(loan1),
                 Loan.create(loan2)
             ]))
+
             .then(() => {
                 done()
             })
@@ -327,9 +346,9 @@ describe("Loans", () => {
                 })
         })
 
-        it("it should get loans based on customerID if specified in the query", (done) => {
+        it("it should get loans based on customer if specified in the query", (done) => {
             chai.request(app)
-                .get("/api/loan?customerID=1")
+                .get("/api/loan?customer=1")
                 .set("x-access-token", adminToken)
                 .end((err, res) => {
                     res.should.have.status(200)
@@ -363,7 +382,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1
+                "customer": 1
             }
 
             chai.request(app)
@@ -386,7 +405,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1
+                "customer": 1
             }
 
             chai.request(app)
@@ -412,7 +431,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1
+                "customer": 1
             }
 
             chai.request(app)
@@ -439,7 +458,7 @@ describe("Loans", () => {
                 "date": "04-03-1998",
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1
+                "customer": 1
             }
 
             chai.request(app)
@@ -465,7 +484,7 @@ describe("Loans", () => {
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "interest": 5,
-                "customerID": 1
+                "customer": 1
             }
 
             chai.request(app)
@@ -491,7 +510,7 @@ describe("Loans", () => {
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
-                "customerID": 1
+                "customer": 1
             }
 
             chai.request(app)
@@ -511,7 +530,7 @@ describe("Loans", () => {
                 })
         })
 
-        it("it should not create a loan without the customerID field", (done) => {
+        it("it should not create a loan without the customer field", (done) => {
             const loan = {
                 "product": "Fix Deposit",
                 "date": "04-03-1998",
@@ -530,9 +549,9 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("customerID")
-                    res.body.error.errors.customerID.should.have.property("properties")
-                    res.body.error.errors.customerID.properties.should.have.property("type").eql("required")
+                    res.body.error.errors.should.have.property("customer")
+                    res.body.error.errors.customer.should.have.property("properties")
+                    res.body.error.errors.customer.properties.should.have.property("type").eql("required")
                     done()
                 })
         })
@@ -544,7 +563,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1
+                "customer": 1
             }
 
             chai.request(app)
@@ -581,7 +600,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1
+                "customer": 1
             }
 
             chai.request(app)
@@ -601,7 +620,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
-                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("customer")
                     res.body.result.should.have.property("manager").eql("Not set")
                     res.body.result.should.have.property("status").eql("pending")
                     res.body.result.should.have.property("_id")
@@ -636,7 +655,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
-                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("customer")
                     res.body.result.should.have.property("manager").eql("Not set")
                     res.body.result.should.have.property("status").eql("pending")
                     res.body.result.should.have.property("_id")
@@ -651,7 +670,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1
+                "customer": 1
             }
 
             chai.request(app)
@@ -698,7 +717,7 @@ describe("Loans", () => {
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
                     res.body.should.have.property("interest").eql(5)
-                    res.body.should.have.property("customerID").eql(1)
+                    res.body.should.have.property("customer").eql(1)
                     res.body.should.have.property("manager").eql("Not set")
                     res.body.should.have.property("status").eql("pending")
                     res.body.should.have.property("_id")
@@ -721,7 +740,7 @@ describe("Loans", () => {
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
                     res.body.should.have.property("interest").eql(5)
-                    res.body.should.have.property("customerID").eql(1)
+                    res.body.should.have.property("customer").eql(1)
                     res.body.should.have.property("manager").eql("Not set")
                     res.body.should.have.property("status").eql("pending")
                     res.body.should.have.property("_id")
@@ -744,7 +763,7 @@ describe("Loans", () => {
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
                     res.body.should.have.property("interest").eql(5)
-                    res.body.should.have.property("customerID").eql(1)
+                    res.body.should.have.property("customer").eql(1)
                     res.body.should.have.property("manager").eql("Not set")
                     res.body.should.have.property("status").eql("pending")
                     res.body.should.have.property("_id")
@@ -767,7 +786,7 @@ describe("Loans", () => {
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
                     res.body.should.have.property("interest").eql(5)
-                    res.body.should.have.property("customerID").eql(1)
+                    res.body.should.have.property("customer").eql(1)
                     res.body.should.have.property("manager").eql("Not set")
                     res.body.should.have.property("status").eql("pending")
                     res.body.should.have.property("_id")
@@ -785,7 +804,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "Approved",
                 "manager": "Dineth"
             }
@@ -810,7 +829,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "Approved",
                 "manager": "Dineth"
             }
@@ -833,7 +852,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "Approved",
                 "manager": "Dineth"
             }
@@ -861,7 +880,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "Approved",
                 "manager": "Dineth"
             }
@@ -889,7 +908,7 @@ describe("Loans", () => {
                 "date": "1998-04-02T18:30:00.000Z",
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "Approved",
                 "manager": "Dineth"
             }
@@ -917,7 +936,7 @@ describe("Loans", () => {
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "Approved",
                 "manager": "Dineth"
             }
@@ -945,7 +964,7 @@ describe("Loans", () => {
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
-                "customerID": 1,
+                "customer": 1,
                 "status": "Approved",
                 "manager": "Dineth"
             }
@@ -967,7 +986,7 @@ describe("Loans", () => {
                 })
         })
 
-        it("it should not update the loan without the customerID", (done) => {
+        it("it should not update the loan without the customer", (done) => {
             const loan = {
                 "product": "Fix Deposit",
                 "date": "1998-04-02T18:30:00.000Z",
@@ -988,9 +1007,9 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("customerID")
-                    res.body.error.errors.customerID.should.have.property("properties")
-                    res.body.error.errors.customerID.properties.should.have.property("type").eql("required")
+                    res.body.error.errors.should.have.property("customer")
+                    res.body.error.errors.customer.should.have.property("properties")
+                    res.body.error.errors.customer.properties.should.have.property("type").eql("required")
                     done()
                 })
         })
@@ -1002,7 +1021,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "manager": "Dineth"
             }
 
@@ -1030,7 +1049,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "Approved"
             }
 
@@ -1058,7 +1077,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "ongoing",
                 "manager": "john"
             }
@@ -1087,7 +1106,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "approved",
                 "manager": "john"
             }
@@ -1109,7 +1128,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
-                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("customer")
                     res.body.result.should.have.property("manager").eql("john")
                     res.body.result.should.have.property("status").eql("approved")
                     res.body.result.should.have.property("_id")
@@ -1124,7 +1143,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "approved",
                 "manager": "john"
             }
@@ -1146,7 +1165,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
-                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("customer")
                     res.body.result.should.have.property("manager").eql("john")
                     res.body.result.should.have.property("status").eql("approved")
                     res.body.result.should.have.property("_id")
@@ -1161,7 +1180,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "approved",
                 "manager": "john"
             }
@@ -1186,7 +1205,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "approved",
                 "manager": "john"
             }
@@ -1211,7 +1230,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "closed",
                 "manager": "john"
             }
@@ -1233,7 +1252,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
-                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("customer")
                     res.body.result.should.have.property("manager").eql("john")
                     res.body.result.should.have.property("status").eql("closed")
                     res.body.result.should.have.property("_id")
@@ -1248,7 +1267,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "opened",
                 "manager": "john"
             }
@@ -1270,7 +1289,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
-                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("customer")
                     res.body.result.should.have.property("manager").eql("john")
                     res.body.result.should.have.property("status").eql("opened")
                     res.body.result.should.have.property("_id")
@@ -1285,7 +1304,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1,
+                "customer": 1,
                 "status": "completed",
                 "manager": "john"
             }
@@ -1307,7 +1326,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
-                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("customer")
                     res.body.result.should.have.property("manager").eql("john")
                     res.body.result.should.have.property("status").eql("completed")
                     res.body.result.should.have.property("_id")
