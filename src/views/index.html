@@ -56,8 +56,8 @@
     <p>
         The API uses JSON web tokens for authorization. Any route with the prefix
         <b>/api</b> is protected and will require a token to be accessed. New users can use the route
-        <b>POST /authenticate</b> to get the token. The tokens are set to expire after 30 mins. The token can be passed in the
-        header as
+        <b>POST /authenticate</b> to get the token. The tokens are set to expire after 30 mins. The token can be passed in
+        the header as
         <b>x-access-token</b> or as
         <b>token</b> in the query or body.
     </p>
@@ -468,13 +468,13 @@
             <td>Create a new loan</td>
             <td>
                 <ul>
-                    <li>token (string)</li>
-                    <li>loanType (String)</li>
+
+                    <li>product (ObjectID)</li>
                     <li>date (Date) [MM-dd-YYYY]</li>
                     <li>loanAmount (Number)</li>
                     <li>duration (Number)</li>
                     <li>interest (Number)</li>
-                    <li>customerID (Number)</li>
+                    <li>customer (ObjectID)</li>
                 </ul>
             </td>
         </tr>
@@ -519,8 +519,8 @@
                 <ul>
                     <li>manager (Query) (Optional)</li>
                     <li>status (Query) (Optional)</li>
-                    <li>customerID (Query) (Optional)</li>
-                    <li>loanType (Query) (Optional)</li>
+                    <li>customer (Query) (Optional)</li>
+                    <li>product (Query) (Optional)</li>
                 </ul>
             </td>
         </tr>
@@ -541,12 +541,12 @@
                 <ul>
                     <li>token (String)</li>
                     <li>loanID (Number)</li>
-                    <li>loanType (String)</li>
+                    <li>product (ObjectID)</li>
                     <li>date (Date) [MM-dd-YYYY]</li>
                     <li>loanAmount (Number)</li>
                     <li>duration (Number)</li>
                     <li>interest (Number)</li>
-                    <li>customerID (Number)</li>
+                    <li>customer (ObjectID)</li>
                     <li>manager (String)</li>
                     <li>status (String)</li>
                 </ul>

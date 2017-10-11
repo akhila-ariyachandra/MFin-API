@@ -95,7 +95,7 @@ describe("Loans", () => {
         }
 
         const loan1 = {
-            "loanType": "Fix Deposit",
+            "product": "Fix Deposit",
             "date": "01-01-2000",
             "loanAmount": 5000,
             "duration": 6,
@@ -104,7 +104,7 @@ describe("Loans", () => {
         }
 
         const loan2 = {
-            "loanType": "Student Loan",
+            "product": "Student Loan",
             "date": "06-04-2010",
             "loanAmount": 10000,
             "duration": 24,
@@ -342,7 +342,7 @@ describe("Loans", () => {
 
         it("it should get loans based on loan type if specified in the query", (done) => {
             chai.request(app)
-                .get("/api/loan?loanType=Student+Loan")
+                .get("/api/loan?product=Student+Loan")
                 .set("x-access-token", adminToken)
                 .end((err, res) => {
                     res.should.have.status(200)
@@ -358,7 +358,7 @@ describe("Loans", () => {
     describe("POST /api/loan", () => {
         it("it should not create a loan without an authorization token", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -380,7 +380,7 @@ describe("Loans", () => {
         })
 
 
-        it("it should not create a loan without the loanType field", (done) => {
+        it("it should not create a loan without the product field", (done) => {
             const loan = {
                 "date": "04-03-1998",
                 "loanAmount": 250000,
@@ -399,16 +399,16 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("loanType")
-                    res.body.error.errors.loanType.should.have.property("properties")
-                    res.body.error.errors.loanType.properties.should.have.property("type").eql("required")
+                    res.body.error.errors.should.have.property("product")
+                    res.body.error.errors.product.should.have.property("properties")
+                    res.body.error.errors.product.properties.should.have.property("type").eql("required")
                     done()
                 })
         })
 
         it("it should not create a loan without the date field", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
@@ -423,6 +423,7 @@ describe("Loans", () => {
                     // Go through the properties one by one
                     res.should.have.status(200)
                     res.body.should.be.a("object")
+                    res.body.loan.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
                     res.body.error.errors.should.have.property("date")
@@ -434,7 +435,7 @@ describe("Loans", () => {
 
         it("it should not create a loan without the loanAmount field", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "duration": 12,
                 "interest": 5,
@@ -460,7 +461,7 @@ describe("Loans", () => {
 
         it("it should not create a loan without the duration field", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "interest": 5,
@@ -486,7 +487,7 @@ describe("Loans", () => {
 
         it("it should not create a loan without the interest field", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -512,7 +513,7 @@ describe("Loans", () => {
 
         it("it should not create a loan without the customerID field", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -538,7 +539,7 @@ describe("Loans", () => {
 
         it("it should create a loan for the admin account type", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -558,12 +559,14 @@ describe("Loans", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v")
                     res.body.result.should.have.property("loanID").eql(3)
-                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("product")
+                    res.body.product.should.be.a("object")
                     res.body.result.should.have.property("date")
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
-                    res.body.result.should.have.property("customerID")
+                    res.body.result.should.have.property("customer")
+                    res.body.customer.should.be.a("object")
                     res.body.result.should.have.property("manager").eql("Not set")
                     res.body.result.should.have.property("status").eql("pending")
                     res.body.result.should.have.property("_id")
@@ -573,7 +576,7 @@ describe("Loans", () => {
 
         it("it should create a loan for the manager account type", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -593,7 +596,7 @@ describe("Loans", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v")
                     res.body.result.should.have.property("loanID").eql(4)
-                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("product")
                     res.body.result.should.have.property("date")
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
@@ -608,12 +611,12 @@ describe("Loans", () => {
 
         it("it should create a loan for the receptionist account type", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customerID": 1
+                " ": 1
             }
 
             chai.request(app)
@@ -628,7 +631,7 @@ describe("Loans", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v")
                     res.body.result.should.have.property("loanID").eql(5)
-                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("product")
                     res.body.result.should.have.property("date")
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
@@ -643,7 +646,7 @@ describe("Loans", () => {
 
         it("it should not create a loan for the cash collector account type", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -690,7 +693,7 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("__v")
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("loanType").eql("Fix Deposit")
+                    res.body.should.have.property("product").eql("Fix Deposit")
                     res.body.should.have.property("date")
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
@@ -713,7 +716,7 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("__v")
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("loanType").eql("Fix Deposit")
+                    res.body.should.have.property("product").eql("Fix Deposit")
                     res.body.should.have.property("date")
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
@@ -736,7 +739,7 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("__v")
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("loanType").eql("Fix Deposit")
+                    res.body.should.have.property("product").eql("Fix Deposit")
                     res.body.should.have.property("date")
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
@@ -759,7 +762,7 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("__v")
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("loanType").eql("Fix Deposit")
+                    res.body.should.have.property("product").eql("Fix Deposit")
                     res.body.should.have.property("date")
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
@@ -777,7 +780,7 @@ describe("Loans", () => {
     describe("PUT /api/loan/:loanID", () => {
         it("it should not update the loan without an authorization token", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -802,7 +805,7 @@ describe("Loans", () => {
 
         it("it should not update the loan if the wrong loanID is given", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -845,16 +848,16 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("loanType")
-                    res.body.error.errors.loanType.should.have.property("properties")
-                    res.body.error.errors.loanType.properties.should.have.property("type").eql("required")
+                    res.body.error.errors.should.have.property("product")
+                    res.body.error.errors.product.should.have.property("properties")
+                    res.body.error.errors.product.properties.should.have.property("type").eql("required")
                     done()
                 })
         })
 
         it("it should not update the loan without the date", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
@@ -882,7 +885,7 @@ describe("Loans", () => {
 
         it("it should not update the loan without the loan amount", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "1998-04-02T18:30:00.000Z",
                 "duration": 12,
                 "interest": 5,
@@ -910,7 +913,7 @@ describe("Loans", () => {
 
         it("it should not update the loan without the duration", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "interest": 5,
@@ -938,7 +941,7 @@ describe("Loans", () => {
 
         it("it should not update the loan without the interest", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -966,7 +969,7 @@ describe("Loans", () => {
 
         it("it should not update the loan without the customerID", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -994,7 +997,7 @@ describe("Loans", () => {
 
         it("it should not update the loan without the status", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1022,7 +1025,7 @@ describe("Loans", () => {
 
         it("it should not update the loan without the manager", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1050,7 +1053,7 @@ describe("Loans", () => {
 
         it("it should not update the loan with an invalid status", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1079,7 +1082,7 @@ describe("Loans", () => {
 
         it("it should update the loan for admin account type", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1101,7 +1104,7 @@ describe("Loans", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v")
                     res.body.result.should.have.property("loanID").eql(3)
-                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("product")
                     res.body.result.should.have.property("date")
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
@@ -1116,7 +1119,7 @@ describe("Loans", () => {
 
         it("it should update the loan for manager account type", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1138,7 +1141,7 @@ describe("Loans", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v")
                     res.body.result.should.have.property("loanID").eql(3)
-                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("product")
                     res.body.result.should.have.property("date")
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
@@ -1153,7 +1156,7 @@ describe("Loans", () => {
 
         it("it should not update the loan for receptionist account type", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1178,7 +1181,7 @@ describe("Loans", () => {
 
         it("it should not update the loan for cash collector account type", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1203,7 +1206,7 @@ describe("Loans", () => {
 
         it("it should update the loan with loan status closed", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1225,7 +1228,7 @@ describe("Loans", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v")
                     res.body.result.should.have.property("loanID").eql(3)
-                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("product")
                     res.body.result.should.have.property("date")
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
@@ -1240,7 +1243,7 @@ describe("Loans", () => {
 
         it("it should update the loan with loan status opened", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1262,7 +1265,7 @@ describe("Loans", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v")
                     res.body.result.should.have.property("loanID").eql(3)
-                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("product")
                     res.body.result.should.have.property("date")
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
@@ -1277,7 +1280,7 @@ describe("Loans", () => {
 
         it("it should update the loan with loan status opened", (done) => {
             const loan = {
-                "loanType": "Fix Deposit",
+                "product": "Fix Deposit",
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -1299,7 +1302,7 @@ describe("Loans", () => {
                     // Check for all fields
                     res.body.result.should.have.property("__v")
                     res.body.result.should.have.property("loanID").eql(3)
-                    res.body.result.should.have.property("loanType")
+                    res.body.result.should.have.property("product")
                     res.body.result.should.have.property("date")
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
