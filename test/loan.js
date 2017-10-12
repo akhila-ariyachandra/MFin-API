@@ -115,7 +115,7 @@ describe("Loans", () => {
             "loanAmount": 5000,
             "duration": 6,
             "interest": 2,
-            "customer": res
+            "customer": customer
         }
 
         const loan2 = {
@@ -124,7 +124,7 @@ describe("Loans", () => {
             "loanAmount": 10000,
             "duration": 24,
             "interest": 15,
-            "customer": res,
+            "customer": customer,
             "manager": "John",
             "status": "approved"
         }
