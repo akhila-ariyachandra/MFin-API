@@ -1275,7 +1275,7 @@ describe("Loans", () => {
                 })
         })
 
-        it("it should update the loan with loan status opened", (done) => {
+        it("it should update the loan with loan status completed", (done) => {
             const loan = {
                 "loanType": "Fix Deposit",
                 "date": "04-03-1998",
