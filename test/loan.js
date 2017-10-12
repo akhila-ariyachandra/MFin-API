@@ -24,6 +24,9 @@ describe("Loans", () => {
     let receptionistToken = null
     let cashCollectorToken = null
 
+    // Store the customer
+    let customerObject = null
+
     /* Remove all employees, loans and counters 
     , and create a new employee and new loans
     before running tests*/
@@ -115,7 +118,7 @@ describe("Loans", () => {
             "loanAmount": 5000,
             "duration": 6,
             "interest": 2,
-            "customer": customer
+            "customer": customerObject._id
         }
 
         const loan2 = {
@@ -124,7 +127,7 @@ describe("Loans", () => {
             "loanAmount": 10000,
             "duration": 24,
             "interest": 15,
-            "customer": customer,
+            "customer": customerObject._id,
             "manager": "John",
             "status": "approved"
         }
@@ -164,7 +167,8 @@ describe("Loans", () => {
                 Loan.create(loan2)
             ]))
 
-            .then(() => {
+            .then((result) => {
+                customerObject = result[7]
                 done()
             })
     })
