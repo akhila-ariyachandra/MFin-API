@@ -1,17 +1,26 @@
 // Model for the Loan
 const mongoose = require("../db")
 const autoIncrement = require("mongoose-sequence")(mongoose)
+const Schema = mongoose.Schema
 
 const schema = {
-    loanType: { type: String, required: true },
+    product: {
+        type: Schema.Types.ObjectId,
+        ref: "product",
+        required: true
+    },
     date: { type: Date, required: true },
     loanAmount: { type: Number, required: true },
     duration: { type: Number, required: true },
     interest: { type: Number, required: true },
-    customerID: { type: Number, required: true },
+    customer: {
+        type: Schema.Types.ObjectId,
+        ref: "customer",
+        required: true
+    },
     manager: { type: String, default: "Not set", required: true },
-    status: { 
-        type: String, 
+    status: {
+        type: String,
         enum: [
             "pending",
             "approved",
@@ -20,9 +29,11 @@ const schema = {
             "opened",
             "completed"
         ],
-        default: "pending", 
-        required: true 
+        default: "pending",
+        required: true
     }
+
+
 }
 
 const collectionName = "loan"
