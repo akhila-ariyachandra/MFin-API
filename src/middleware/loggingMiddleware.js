@@ -3,7 +3,7 @@
 // Dependencies
 const config = require("config")
 const path = require("path")
-const logPath = path.join(__dirname + "/../.log/")
+const logPath = path.join(__dirname + "/../../.log/")
 const morgan = require("morgan")
 const rfs = require("rotating-file-stream")
 
