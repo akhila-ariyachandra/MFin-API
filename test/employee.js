@@ -2,6 +2,7 @@
 
 const app = require("../src/app").app
 
+const Area = require("../src/models/areaSchema")
 const chai = require("chai")
 const chaiHttp = require("chai-http")
 const Employee = require("../src/models/employeeSchema")
@@ -26,6 +27,9 @@ describe("Employees", () => {
     let newManagerToken = null
     let newReceptionistToken = null
     let newCashCollectorToken = null
+
+    // Store the area object
+    let areaObject = null
 
     /* Remove all employees and counters 
     , and create a new employee
@@ -99,6 +103,12 @@ describe("Employees", () => {
             }
         }
 
+        let area = {
+            "name": "Kaduwela",
+            "postalCode": 10640,
+            "district": "Colombo"
+        }
+
         Employee.remove({})
             .then(() => Counter.remove({}))
             .then(() => Promise.all([
@@ -121,11 +131,25 @@ describe("Employees", () => {
                 cashCollector.password = hashResult[6]
                 cashCollector.pin = hashResult[7]
             })
+            // Save area to database
+            .then(() => Area.create(area))
+            .then((result) => {
+                // Store result of saving area in database
+                areaObject = result
+
+                const meta = {
+                    "area" : areaObject._id
+                }
+
+                // Update cash collector with area details
+                cashCollector.meta = meta
+            })
             .then(() => Promise.all([
+                // Create employees and area
                 Employee.create(admin),
                 Employee.create(manager),
                 Employee.create(receptionist),
-                Employee.create(cashCollector),
+                Employee.create(cashCollector)
             ]))
             .then(() => {
                 done()
@@ -924,6 +948,21 @@ describe("Employees", () => {
                     res.should.have.status(200)
                     should.exist(res.body)
                     res.body.should.be.a("object")
+                    done()
+                })
+        })
+
+        it("it should return the area as a nested object for the cash collector employee record", (done) => {
+            chai.request(app)
+                .get("/api/employee/4")
+                .set("x-access-token", adminToken)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("meta")
+                    res.body.meta.should.have.property("area")
+                    res.body.meta.area.should.be.a("object")
                     done()
                 })
         })

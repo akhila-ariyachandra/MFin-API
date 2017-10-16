@@ -40,9 +40,9 @@ module.exports = {
 
         // Check for optional meta data
         let meta = {}
-        // Check for areaID if the account type is Cash Collector
-        if ((req.body.accountType === "cashCollector") && (req.body.meta.areaID)) {
-            meta.areaID = req.body.meta.areaID
+        // Check for area if the account type is Cash Collector
+        if ((req.body.accountType === "cashCollector") && (req.body.meta.area)) {
+            meta.area = req.body.meta.area
         }
         // Add meta data to employee object
         if (meta) {
@@ -71,6 +71,8 @@ module.exports = {
     // Fetching Details of all Employees
     getEmployees: (req, res) => {
         Employee.find({})
+            .populate("meta.area")
+            .exec()
             .then((result) => {
                 return res.json(result)
             })
@@ -85,6 +87,8 @@ module.exports = {
         const employeeID = req.params.employeeID
 
         Employee.findOne({ "employeeID": employeeID })
+            .populate("meta.area")
+            .exec()
             .then((result) => {
                 return res.json(result)
             })
@@ -127,8 +131,8 @@ module.exports = {
                 employee.accountType = req.body.accountType
 
                 // Meta data
-                if (req.body.meta && employee.meta.areaID) {
-                    employee.meta.areaID = req.body.meta.areaID
+                if (req.body.meta && employee.meta.area) {
+                    employee.meta.area = req.body.meta.area
                 }
             })
             .then(() => Promise.all([
