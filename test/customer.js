@@ -2,6 +2,7 @@
 
 const app = require("../src/app").app
 
+const Area = require("../src/models/areaSchema")
 const chai = require("chai")
 const chaiHttp = require("chai-http")
 const Customer = require("../src/models/customerSchema")
@@ -21,6 +22,9 @@ describe("Customers", () => {
     let managerToken = null
     let receptionistToken = null
     let cashCollectorToken = null
+
+    // Store the area object
+    let areaObject = null
 
     /* Remove all employees, loans and counters 
     , and create a new employee
@@ -94,6 +98,12 @@ describe("Customers", () => {
             }
         }
 
+        let area = {
+            "name" : "Kaduwela",
+            "postalCode" : 10640,
+            "district" : "Colombo"
+        }
+
         Employee.remove({})
             .then(() => Customer.remove({}))
             .then(() => Counter.remove({}))
@@ -118,12 +128,16 @@ describe("Customers", () => {
                 cashCollector.pin = hashResult[7]
             })
             .then(() => Promise.all([
+                // Create employees and area
                 Employee.create(admin),
                 Employee.create(manager),
                 Employee.create(receptionist),
                 Employee.create(cashCollector),
+                Area.create(area)
             ]))
             .then((result) => {
+                // Store result of saving area in database
+                areaObject = result[4]
                 done()
             })
     })
@@ -291,7 +305,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -317,7 +331,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -347,7 +361,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -377,7 +391,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -407,7 +421,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -437,7 +451,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -467,7 +481,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -497,7 +511,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -519,7 +533,7 @@ describe("Customers", () => {
                 })
         })
 
-        it("it should not create a customer without the areaID field", (done) => {
+        it("it should not create a customer without the area field", (done) => {
             const customer = {
                 "name": "John",
                 "surname": "Doe",
@@ -542,9 +556,9 @@ describe("Customers", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("areaID")
-                    res.body.error.errors.areaID.should.have.property("properties")
-                    res.body.error.errors.areaID.properties.should.have.property("type").eql("required")
+                    res.body.error.errors.should.have.property("area")
+                    res.body.error.errors.area.should.have.property("properties")
+                    res.body.error.errors.area.properties.should.have.property("type").eql("required")
                     done()
                 })
         })
@@ -558,7 +572,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "latitude": "79°58'24.1 E"
             }
 
@@ -588,7 +602,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N"
             }
 
@@ -618,7 +632,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -645,7 +659,7 @@ describe("Customers", () => {
                             res.body.result.should.have.property("address")
                             res.body.result.should.have.property("dob")
                             res.body.result.should.have.property("phone")
-                            res.body.result.should.have.property("areaID")
+                            res.body.result.should.have.property("area")
                             res.body.result.should.have.property("longitude")
                             res.body.result.should.have.property("latitude")
                             res.body.result.should.have.property("_id")
@@ -664,7 +678,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -691,7 +705,7 @@ describe("Customers", () => {
                             res.body.result.should.have.property("address")
                             res.body.result.should.have.property("dob")
                             res.body.result.should.have.property("phone")
-                            res.body.result.should.have.property("areaID")
+                            res.body.result.should.have.property("area")
                             res.body.result.should.have.property("longitude")
                             res.body.result.should.have.property("latitude")
                             res.body.result.should.have.property("_id")
@@ -710,7 +724,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -737,7 +751,7 @@ describe("Customers", () => {
                             res.body.result.should.have.property("address")
                             res.body.result.should.have.property("dob")
                             res.body.result.should.have.property("phone")
-                            res.body.result.should.have.property("areaID")
+                            res.body.result.should.have.property("area")
                             res.body.result.should.have.property("longitude")
                             res.body.result.should.have.property("latitude")
                             res.body.result.should.have.property("_id")
@@ -756,7 +770,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -783,7 +797,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -806,7 +820,7 @@ describe("Customers", () => {
                     res.body.result.should.have.property("address")
                     res.body.result.should.have.property("dob")
                     res.body.result.should.have.property("phone")
-                    res.body.result.should.have.property("areaID")
+                    res.body.result.should.have.property("area")
                     res.body.result.should.have.property("longitude")
                     res.body.result.should.have.property("latitude")
                     res.body.result.should.have.property("_id")
@@ -838,6 +852,9 @@ describe("Customers", () => {
                     res.should.have.status(200)
                     should.exist(res.body)
                     res.body.should.be.a("object")
+                    // Check if the area is returned as a nested object
+                    res.body.should.have.property("area")
+                    res.body.area.should.be.a("object")
                     done()
                 })
         })
@@ -850,6 +867,9 @@ describe("Customers", () => {
                     res.should.have.status(200)
                     should.exist(res.body)
                     res.body.should.be.a("object")
+                    // Check if the area is returned as a nested object
+                    res.body.should.have.property("area")
+                    res.body.area.should.be.a("object")
                     done()
                 })
         })
@@ -862,6 +882,9 @@ describe("Customers", () => {
                     res.should.have.status(200)
                     should.exist(res.body)
                     res.body.should.be.a("object")
+                    // Check if the area is returned as a nested object
+                    res.body.should.have.property("area")
+                    res.body.area.should.be.a("object")
                     done()
                 })
         })
@@ -874,6 +897,9 @@ describe("Customers", () => {
                     res.should.have.status(200)
                     should.exist(res.body)
                     res.body.should.be.a("object")
+                    // Check if the area is returned as a nested object
+                    res.body.should.have.property("area")
+                    res.body.area.should.be.a("object")
                     done()
                 })
         })
@@ -903,7 +929,7 @@ describe("Customers", () => {
                 "dob": "01-02-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             })
@@ -928,7 +954,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -958,7 +984,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -988,7 +1014,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -1018,7 +1044,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -1048,7 +1074,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -1078,7 +1104,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -1108,7 +1134,7 @@ describe("Customers", () => {
                 "address": "123/X Baker St., Narnia",
                 "dob": "01-01-1980",
                 "phone": "123456789",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N",
                 "latitude": "79°58'24.1 E"
             }
@@ -1130,7 +1156,7 @@ describe("Customers", () => {
                 })
         })
 
-        it("it should not update the customer without the areaID field", (done) => {
+        it("it should not update the customer without the area field", (done) => {
             const customer = {
                 "name": "John",
                 "surname": "Doe",
@@ -1153,9 +1179,9 @@ describe("Customers", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("areaID")
-                    res.body.error.errors.areaID.should.have.property("properties")
-                    res.body.error.errors.areaID.properties.should.have.property("type").eql("required")
+                    res.body.error.errors.should.have.property("area")
+                    res.body.error.errors.area.should.have.property("properties")
+                    res.body.error.errors.area.properties.should.have.property("type").eql("required")
                     done()
                 })
         })
@@ -1169,7 +1195,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "latitude": "79°58'24.1 E"
             }
 
@@ -1199,7 +1225,7 @@ describe("Customers", () => {
                 "dob": "01-01-1980",
                 "phone": "123456789",
                 "email": "jane@doe.com",
-                "areaID": "1",
+                "area": areaObject._id,
                 "longitude": "6°54'52.8 N"
             }
 
@@ -1230,7 +1256,7 @@ describe("Customers", () => {
                 dob: "01-02-1980",
                 phone: "123456789",
                 "email": "jane@doe.com",
-                areaID: 1,
+                "area": areaObject._id,
                 longitude: "6°54'52.8 N",
                 latitude: "79°58'24.1 E"
             })
@@ -1252,7 +1278,7 @@ describe("Customers", () => {
                     res.body.result.should.have.property("address")
                     res.body.result.should.have.property("dob")
                     res.body.result.should.have.property("phone")
-                    res.body.result.should.have.property("areaID")
+                    res.body.result.should.have.property("area")
                     res.body.result.should.have.property("longitude")
                     res.body.result.should.have.property("latitude")
                     res.body.result.should.have.property("__v")
@@ -1270,7 +1296,7 @@ describe("Customers", () => {
                 dob: "01-02-1980",
                 phone: "123456789",
                 "email": "jane@doe.com",
-                areaID: 1,
+                "area": areaObject._id,
                 longitude: "6°54'52.8 N",
                 latitude: "79°58'24.1 E"
             })
@@ -1292,7 +1318,7 @@ describe("Customers", () => {
                     res.body.result.should.have.property("address")
                     res.body.result.should.have.property("dob")
                     res.body.result.should.have.property("phone")
-                    res.body.result.should.have.property("areaID")
+                    res.body.result.should.have.property("area")
                     res.body.result.should.have.property("longitude")
                     res.body.result.should.have.property("latitude")
                     res.body.result.should.have.property("__v")
@@ -1310,7 +1336,7 @@ describe("Customers", () => {
                 dob: "01-02-1980",
                 phone: "123456789",
                 "email": "jane@doe.com",
-                areaID: 1,
+                "area": areaObject._id,
                 longitude: "6°54'52.8 N",
                 latitude: "79°58'24.1 E"
             })
@@ -1338,7 +1364,7 @@ describe("Customers", () => {
                 dob: "01-02-1980",
                 phone: "123456789",
                 "email": "jane@doe.com",
-                areaID: 1,
+                "area": areaObject._id,
                 longitude: "6°54'52.8 N",
                 latitude: "79°58'24.1 E"
             })
