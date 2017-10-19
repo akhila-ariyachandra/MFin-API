@@ -18,7 +18,10 @@ const schema = {
         ref: "customer",
         required: true
     },
-    manager: { type: String, default: "Not set", required: true },
+    manager: { 
+        type: Schema.Types.ObjectId, 
+        ref: "employee"
+    },
     status: {
         type: String,
         enum: [
