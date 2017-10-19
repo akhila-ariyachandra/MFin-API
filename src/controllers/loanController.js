@@ -41,33 +41,11 @@ module.exports = {
 
     // Fetching Details of all loans
     getLoans: (req, res) => {
-        // Setting search options for data retrieval from the database
-        let searchOptions = {}
-
-        // Add manager to search limiter if specified in route query
-        if (req.query.manager) {
-            searchOptions.manager = req.query.manager
-        }
-
-        // Add status to search limiter if specified in route query
-        if (req.query.status) {
-            searchOptions.status = req.query.status
-        }
-
-        // Add customer objectID to search limiter if specified in route query
-        if (req.query.customer) {
-            searchOptions.customer = req.query.customer
-        }
-
-        // Add product objectID to search limiter if specified in route query
-        if (req.query.product) {
-            searchOptions.product = req.query.product
-        }
-
         // Get data from database
-        Loan.find(searchOptions)
+        Loan.find()
             .populate("product")
             .populate("customer")
+            .populate("manager")
             .exec()
             .then((result) => {
                 return res.json(result)
@@ -85,6 +63,7 @@ module.exports = {
         Loan.findOne({ "loanID": loanID })
             .populate("product")
             .populate("customer")
+            .populate("manager")
             .exec()
             .then((result) => {
                 return res.json(result)
@@ -145,6 +124,10 @@ module.exports = {
                     return res.json({ "error": "Record does not exist" })
                 }
 
+                if (!req.body.manager) {
+                    return res.json({ "error": "Manager is required" })
+                }
+
                 // Change details
                 loan.manager = req.body.manager
                 loan.status = "approved"
@@ -174,6 +157,10 @@ module.exports = {
                 if (!loan) {
                     // If loan doesn't exist i.e. the wrong loanID was given
                     return res.json({ "error": "Record does not exist" })
+                }
+
+                if (!req.body.manager) {
+                    return res.json({ "error": "Manager is required" })
                 }
 
                 // Change details

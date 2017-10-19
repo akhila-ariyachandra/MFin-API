@@ -1,35 +1,53 @@
 "use strict"
 
+/* 
+    Get an instance of the server
+*/
 const app = require("../src/app").app
 
+/*
+    Get all dependencies
+*/
+const Area = require("../src/models/areaSchema")
 const chai = require("chai")
 const chaiHttp = require("chai-http")
-const Loan = require("../src/models/loanSchema")
-const Employee = require("../src/models/employeeSchema")
 const Counter = require("../src/models/counterSchema")
 const Customer = require("../src/models/customerSchema")
+const Employee = require("../src/models/employeeSchema")
+const Loan = require("../src/models/loanSchema")
+const Product = require("../src/models/productSchema")
 const should = chai.should()
 
 
-// Used for hashing password and pin
+/* 
+    Used for hashing password and pin
+*/
 const bcrypt = require("bcrypt")
 const saltRounds = 10
 
 chai.use(chaiHttp)
 
 describe("Loans", () => {
-    // Store authentication adminTokens
+    /* 
+        Store authentication adminTokens
+    */
     let adminToken = null
     let managerToken = null
     let receptionistToken = null
     let cashCollectorToken = null
 
-    // Store the customer
+    /*
+        Store the objects
+    */
+    let adminObject = null
+    let areaObject = null
     let customerObject = null
+    let managerObject = null
+    let productObject = null
 
-    /* Remove all employees, loans and counters 
-    , and create a new employee and new loans
-    before running tests*/
+    /*
+        Set database before running test cases
+    */
     before((done) => {
         let admin = {
             "name": "John",
@@ -99,6 +117,12 @@ describe("Loans", () => {
             }
         }
 
+        const area = {
+            "name": "Kaduwela",
+            "postalCode": 10640,
+            "district": "Colombo"
+        }
+
         let customer = {
             "name": "Bob",
             "surname": "Jay",
@@ -118,7 +142,6 @@ describe("Loans", () => {
             "loanAmount": 5000,
             "duration": 6,
             "interest": 2,
-            "customer": customerObject._id
         }
 
         const loan2 = {
@@ -127,17 +150,32 @@ describe("Loans", () => {
             "loanAmount": 10000,
             "duration": 24,
             "interest": 15,
-            "customer": customerObject._id,
             "manager": "John",
             "status": "approved"
         }
 
+        const product = {
+            "productName": "One month loan",
+            "description": "Loan for a duration of one month",
+            "minAmount": 10000,
+            "maxAmount": 30000,
+            "gracePeriod": 2,
+            "interestRate": 2,
+            "accruedInterest": 4,
+            "validFrom": "01/01/2017",
+            "validTo": "01/01/2018"
+        }
 
-        Employee.remove({})
-            .then(() => Customer.remove({}))
-            .then(() => Loan.remove({}))
+        Area.remove({})
             .then(() => Counter.remove({}))
+            .then(() => Customer.remove({}))
+            .then(() => Employee.remove({}))
+            .then(() => Loan.remove({}))
+            .then(() => Product.remove({}))
             .then(() => Promise.all([
+                /*
+                    Hash all the passwords and pins
+                */
                 bcrypt.hash(admin.password, saltRounds),
                 bcrypt.hash(admin.pin, saltRounds),
                 bcrypt.hash(manager.password, saltRounds),
@@ -148,6 +186,10 @@ describe("Loans", () => {
                 bcrypt.hash(cashCollector.pin, saltRounds)
             ]))
             .then((hashResult) => {
+                /*
+                    Save the hashed passwords and pins to
+                    their respective objects
+                */
                 admin.password = hashResult[0]
                 admin.pin = hashResult[1]
                 manager.password = hashResult[2]
@@ -157,18 +199,67 @@ describe("Loans", () => {
                 cashCollector.password = hashResult[6]
                 cashCollector.pin = hashResult[7]
             })
+            /*
+                Save area to database
+            */
+            .then(() => Area.create(area))
+            .then((result) => {
+                /*
+                    Save the result and assign its _id
+                    to the neccessary objects
+                */
+                areaObject = result
+                customer.area = areaObject._id
+                const meta = {
+                    "area": areaObject._id
+                }
+                cashCollector.meta = meta
+            })
             .then(() => Promise.all([
+                /*
+                    Save all four employees andcustomer to the
+                    database
+                */
                 Employee.create(admin),
                 Employee.create(manager),
                 Employee.create(receptionist),
                 Employee.create(cashCollector),
-                Customer.create(customer),
+                Customer.create(customer)
+            ]))
+            .then((result) => {
+                /*
+                    Save customer return object 
+                    and assign the _id to loan1 and loan2
+                */
+                adminObject = result[0]
+                managerObject = result[1]
+                customerObject = result[4]
+                loan1.customer = customerObject._id
+                loan1.manager = managerObject._id
+                loan2.customer = customerObject._id
+                loan2.manager = managerObject._id
+                product.approvedBy = adminObject._id
+            })
+            /*
+                Save the product to the database
+            */
+            .then(() => Product.create(product))
+            .then((result) => {
+                /*
+                    Assign the _id of result to the product fields of loan
+                */
+                productObject = result
+                loan1.product = productObject._id
+                loan2.product = productObject._id
+            })
+            .then(() => Promise.all([
+                /*
+                    Save loan1 and loan2 to the database
+                */
                 Loan.create(loan1),
                 Loan.create(loan2)
             ]))
-
-            .then((result) => {
-                customerObject = result[7]
+            .then(() => {
                 done()
             })
     })
@@ -323,70 +414,18 @@ describe("Loans", () => {
                     done()
                 })
         })
-
-        it("it should get loans based on status if specified in the query", (done) => {
-            chai.request(app)
-                .get("/api/loan?status=approved")
-                .set("x-access-token", adminToken)
-                .end((err, res) => {
-                    res.should.have.status(200)
-                    should.exist(res.body)
-                    res.body.should.be.a("array")
-                    res.body.length.should.be.eql(1)
-                    done()
-                })
-        })
-
-        it("it should get loans based on manager if specified in the query", (done) => {
-            chai.request(app)
-                .get("/api/loan?manager=Not+set")
-                .set("x-access-token", adminToken)
-                .end((err, res) => {
-                    res.should.have.status(200)
-                    should.exist(res.body)
-                    res.body.should.be.a("array")
-                    res.body.length.should.be.eql(1)
-                    done()
-                })
-        })
-
-        it("it should get loans based on customer if specified in the query", (done) => {
-            chai.request(app)
-                .get("/api/loan?customer=1")
-                .set("x-access-token", adminToken)
-                .end((err, res) => {
-                    res.should.have.status(200)
-                    should.exist(res.body)
-                    res.body.should.be.a("array")
-                    res.body.length.should.be.eql(1)
-                    done()
-                })
-        })
-
-        it("it should get loans based on loan type if specified in the query", (done) => {
-            chai.request(app)
-                .get("/api/loan?product=Student+Loan")
-                .set("x-access-token", adminToken)
-                .end((err, res) => {
-                    res.should.have.status(200)
-                    should.exist(res.body)
-                    res.body.should.be.a("array")
-                    res.body.length.should.be.eql(1)
-                    done()
-                })
-        })
     })
 
     // Test the POST /api/loan route
     describe("POST /api/loan", () => {
         it("it should not create a loan without an authorization token", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
@@ -409,7 +448,7 @@ describe("Loans", () => {
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
@@ -431,11 +470,11 @@ describe("Loans", () => {
 
         it("it should not create a loan without the date field", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
@@ -446,7 +485,6 @@ describe("Loans", () => {
                     // Go through the properties one by one
                     res.should.have.status(200)
                     res.body.should.be.a("object")
-                    res.body.loan.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
                     res.body.error.errors.should.have.property("date")
@@ -458,11 +496,11 @@ describe("Loans", () => {
 
         it("it should not create a loan without the loanAmount field", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "duration": 12,
                 "interest": 5,
-                "customer": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
@@ -484,11 +522,11 @@ describe("Loans", () => {
 
         it("it should not create a loan without the duration field", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "interest": 5,
-                "customer": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
@@ -510,11 +548,11 @@ describe("Loans", () => {
 
         it("it should not create a loan without the interest field", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
-                "customer": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
@@ -536,7 +574,7 @@ describe("Loans", () => {
 
         it("it should not create a loan without the customer field", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
@@ -562,12 +600,12 @@ describe("Loans", () => {
 
         it("it should create a loan for the admin account type", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
@@ -583,14 +621,11 @@ describe("Loans", () => {
                     res.body.result.should.have.property("__v")
                     res.body.result.should.have.property("loanID").eql(3)
                     res.body.result.should.have.property("product")
-                    res.body.product.should.be.a("object")
                     res.body.result.should.have.property("date")
                     res.body.result.should.have.property("loanAmount")
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
                     res.body.result.should.have.property("customer")
-                    res.body.customer.should.be.a("object")
-                    res.body.result.should.have.property("manager").eql("Not set")
                     res.body.result.should.have.property("status").eql("pending")
                     res.body.result.should.have.property("_id")
                     done()
@@ -599,12 +634,12 @@ describe("Loans", () => {
 
         it("it should create a loan for the manager account type", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
@@ -625,7 +660,6 @@ describe("Loans", () => {
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
                     res.body.result.should.have.property("customer")
-                    res.body.result.should.have.property("manager").eql("Not set")
                     res.body.result.should.have.property("status").eql("pending")
                     res.body.result.should.have.property("_id")
                     done()
@@ -634,12 +668,12 @@ describe("Loans", () => {
 
         it("it should create a loan for the receptionist account type", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                " ": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
@@ -660,7 +694,6 @@ describe("Loans", () => {
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
                     res.body.result.should.have.property("customer")
-                    res.body.result.should.have.property("manager").eql("Not set")
                     res.body.result.should.have.property("status").eql("pending")
                     res.body.result.should.have.property("_id")
                     done()
@@ -669,23 +702,24 @@ describe("Loans", () => {
 
         it("it should not create a loan for the cash collector account type", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1
+                "customer": customerObject._id
             }
 
             chai.request(app)
                 .post("/api/loan")
-                .set("x-access-token", receptionistToken)
+                .set("x-access-token", cashCollectorToken)
                 .send(loan)
                 .end((err, res) => {
-                    res.should.have.status(200)
+                    res.should.have.status(401)
+                    should.exist(res.body)
                     res.body.should.be.a("object")
-                    res.body.should.have.property("status").eql("successfully saved")
-                    res.body.should.have.property("result")
+                    res.body.should.have.property("success").eql(false)
+                    res.body.should.have.property("message").eql("Unauthorised")
                     done()
                 })
         })
@@ -716,13 +750,12 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("__v")
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("product").eql("Fix Deposit")
+                    res.body.should.have.property("product")
                     res.body.should.have.property("date")
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
                     res.body.should.have.property("interest").eql(5)
-                    res.body.should.have.property("customer").eql(1)
-                    res.body.should.have.property("manager").eql("Not set")
+                    res.body.should.have.property("customer")
                     res.body.should.have.property("status").eql("pending")
                     res.body.should.have.property("_id")
                     done()
@@ -739,13 +772,12 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("__v")
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("product").eql("Fix Deposit")
+                    res.body.should.have.property("product")
                     res.body.should.have.property("date")
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
                     res.body.should.have.property("interest").eql(5)
-                    res.body.should.have.property("customer").eql(1)
-                    res.body.should.have.property("manager").eql("Not set")
+                    res.body.should.have.property("customer")
                     res.body.should.have.property("status").eql("pending")
                     res.body.should.have.property("_id")
                     done()
@@ -762,13 +794,12 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("__v")
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("product").eql("Fix Deposit")
+                    res.body.should.have.property("product")
                     res.body.should.have.property("date")
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
                     res.body.should.have.property("interest").eql(5)
-                    res.body.should.have.property("customer").eql(1)
-                    res.body.should.have.property("manager").eql("Not set")
+                    res.body.should.have.property("customer")
                     res.body.should.have.property("status").eql("pending")
                     res.body.should.have.property("_id")
                     done()
@@ -785,13 +816,12 @@ describe("Loans", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("__v")
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("product").eql("Fix Deposit")
+                    res.body.should.have.property("product")
                     res.body.should.have.property("date")
                     res.body.should.have.property("loanAmount").eql(250000)
                     res.body.should.have.property("duration").eql(12)
                     res.body.should.have.property("interest").eql(5)
-                    res.body.should.have.property("customer").eql(1)
-                    res.body.should.have.property("manager").eql("Not set")
+                    res.body.should.have.property("customer")
                     res.body.should.have.property("status").eql("pending")
                     res.body.should.have.property("_id")
                     done()
@@ -803,14 +833,14 @@ describe("Loans", () => {
     describe("PUT /api/loan/:loanID", () => {
         it("it should not update the loan without an authorization token", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "Approved",
-                "manager": "Dineth"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -828,14 +858,14 @@ describe("Loans", () => {
 
         it("it should not update the loan if the wrong loanID is given", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "Approved",
-                "manager": "Dineth"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -850,15 +880,15 @@ describe("Loans", () => {
                 })
         })
 
-        it("it should not update the loan without the loan type", (done) => {
+        it("it should not update the loan without the product", (done) => {
             const loan = {
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "Approved",
-                "manager": "Dineth"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -880,13 +910,13 @@ describe("Loans", () => {
 
         it("it should not update the loan without the date", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "Approved",
-                "manager": "Dineth"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -908,13 +938,13 @@ describe("Loans", () => {
 
         it("it should not update the loan without the loan amount", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "1998-04-02T18:30:00.000Z",
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "Approved",
-                "manager": "Dineth"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -936,13 +966,13 @@ describe("Loans", () => {
 
         it("it should not update the loan without the duration", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "Approved",
-                "manager": "Dineth"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -964,13 +994,13 @@ describe("Loans", () => {
 
         it("it should not update the loan without the interest", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "Approved",
-                "manager": "Dineth"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -992,13 +1022,13 @@ describe("Loans", () => {
 
         it("it should not update the loan without the customer", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
                 "status": "Approved",
-                "manager": "Dineth"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1020,13 +1050,13 @@ describe("Loans", () => {
 
         it("it should not update the loan without the status", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "1998-04-02T18:30:00.000Z",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
-                "manager": "Dineth"
+                "customer": customerObject._id,
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1046,44 +1076,16 @@ describe("Loans", () => {
                 })
         })
 
-        it("it should not update the loan without the manager", (done) => {
-            const loan = {
-                "product": "Fix Deposit",
-                "date": "1998-04-02T18:30:00.000Z",
-                "loanAmount": 250000,
-                "duration": 12,
-                "interest": 5,
-                "customer": 1,
-                "status": "Approved"
-            }
-
-            chai.request(app)
-                .put("/api/loan/3")
-                .set("x-access-token", adminToken)
-                .send(loan)
-                .end((err, res) => {
-                    // Go through the properties one by one
-                    res.should.have.status(200)
-                    res.body.should.be.a("object")
-                    res.body.should.have.property("error")
-                    res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("manager")
-                    res.body.error.errors.manager.should.have.property("properties")
-                    res.body.error.errors.manager.properties.should.have.property("type").eql("required")
-                    done()
-                })
-        })
-
         it("it should not update the loan with an invalid status", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "ongoing",
-                "manager": "john"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1105,14 +1107,14 @@ describe("Loans", () => {
 
         it("it should update the loan for admin account type", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "approved",
-                "manager": "john"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1133,7 +1135,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
                     res.body.result.should.have.property("customer")
-                    res.body.result.should.have.property("manager").eql("john")
+                    res.body.result.should.have.property("manager")
                     res.body.result.should.have.property("status").eql("approved")
                     res.body.result.should.have.property("_id")
                     done()
@@ -1142,14 +1144,14 @@ describe("Loans", () => {
 
         it("it should update the loan for manager account type", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "approved",
-                "manager": "john"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1170,7 +1172,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
                     res.body.result.should.have.property("customer")
-                    res.body.result.should.have.property("manager").eql("john")
+                    res.body.result.should.have.property("manager")
                     res.body.result.should.have.property("status").eql("approved")
                     res.body.result.should.have.property("_id")
                     done()
@@ -1179,14 +1181,14 @@ describe("Loans", () => {
 
         it("it should not update the loan for receptionist account type", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "approved",
-                "manager": "john"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1204,14 +1206,14 @@ describe("Loans", () => {
 
         it("it should not update the loan for cash collector account type", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "approved",
-                "manager": "john"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1229,14 +1231,14 @@ describe("Loans", () => {
 
         it("it should update the loan with loan status closed", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "closed",
-                "manager": "john"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1257,7 +1259,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
                     res.body.result.should.have.property("customer")
-                    res.body.result.should.have.property("manager").eql("john")
+                    res.body.result.should.have.property("manager")
                     res.body.result.should.have.property("status").eql("closed")
                     res.body.result.should.have.property("_id")
                     done()
@@ -1266,14 +1268,14 @@ describe("Loans", () => {
 
         it("it should update the loan with loan status opened", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "opened",
-                "manager": "john"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1294,7 +1296,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
                     res.body.result.should.have.property("customer")
-                    res.body.result.should.have.property("manager").eql("john")
+                    res.body.result.should.have.property("manager")
                     res.body.result.should.have.property("status").eql("opened")
                     res.body.result.should.have.property("_id")
                     done()
@@ -1303,14 +1305,14 @@ describe("Loans", () => {
 
         it("it should update the loan with loan status completed", (done) => {
             const loan = {
-                "product": "Fix Deposit",
+                "product": productObject._id,
                 "date": "04-03-1998",
                 "loanAmount": 250000,
                 "duration": 12,
                 "interest": 5,
-                "customer": 1,
+                "customer": customerObject._id,
                 "status": "completed",
-                "manager": "john"
+                "manager": managerObject._id
             }
 
             chai.request(app)
@@ -1331,7 +1333,7 @@ describe("Loans", () => {
                     res.body.result.should.have.property("duration")
                     res.body.result.should.have.property("interest")
                     res.body.result.should.have.property("customer")
-                    res.body.result.should.have.property("manager").eql("john")
+                    res.body.result.should.have.property("manager")
                     res.body.result.should.have.property("status").eql("completed")
                     res.body.result.should.have.property("_id")
                     done()
@@ -1344,7 +1346,7 @@ describe("Loans", () => {
         it("it should not approve the loan without an authorization token", (done) => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     should.exist(res.body)
@@ -1359,7 +1361,7 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/10/approve")
                 .set("x-access-token", adminToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     should.exist(res.body)
@@ -1376,11 +1378,7 @@ describe("Loans", () => {
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
-                    res.body.should.have.property("error")
-                    res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("manager")
-                    res.body.error.errors.manager.should.have.property("properties")
-                    res.body.error.errors.manager.properties.should.have.property("type").eql("required")
+                    res.body.should.have.property("error").eql("Manager is required")
                     done()
                 })
         })
@@ -1389,13 +1387,13 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
                 .set("x-access-token", adminToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
                     // Check for all fields
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("manager").eql("john")
+                    res.body.should.have.property("manager")
                     res.body.should.have.property("status").eql("approved")
                     done()
                 })
@@ -1405,13 +1403,13 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
                 .set("x-access-token", managerToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
                     // Check for all fields
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("manager").eql("john")
+                    res.body.should.have.property("manager")
                     res.body.should.have.property("status").eql("approved")
                     done()
                 })
@@ -1421,7 +1419,7 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
                 .set("x-access-token", receptionistToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     res.body.should.be.a("object")
@@ -1436,7 +1434,7 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
                 .set("x-access-token", cashCollectorToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     res.body.should.be.a("object")
@@ -1453,7 +1451,7 @@ describe("Loans", () => {
         it("it should not reject the loan without an authorization token", (done) => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     should.exist(res.body)
@@ -1468,7 +1466,7 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/10/reject")
                 .set("x-access-token", adminToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     should.exist(res.body)
@@ -1485,11 +1483,7 @@ describe("Loans", () => {
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
-                    res.body.should.have.property("error")
-                    res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("manager")
-                    res.body.error.errors.manager.should.have.property("properties")
-                    res.body.error.errors.manager.properties.should.have.property("type").eql("required")
+                    res.body.should.have.property("error").eql("Manager is required")
                     done()
                 })
         })
@@ -1498,13 +1492,13 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
                 .set("x-access-token", adminToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
                     // Check for all fields
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("manager").eql("john")
+                    res.body.should.have.property("manager")
                     res.body.should.have.property("status").eql("rejected")
                     done()
                 })
@@ -1514,13 +1508,13 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
                 .set("x-access-token", managerToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
                     // Check for all fields
                     res.body.should.have.property("loanID").eql(3)
-                    res.body.should.have.property("manager").eql("john")
+                    res.body.should.have.property("manager")
                     res.body.should.have.property("status").eql("rejected")
                     done()
                 })
@@ -1530,7 +1524,7 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
                 .set("x-access-token", receptionistToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     res.body.should.be.a("object")
@@ -1545,12 +1539,12 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
                 .set("x-access-token", cashCollectorToken)
-                .send({ "manager": "john" })
+                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     res.body.should.be.a("object")
                     // Check for all fields
-                    res.body.should.have.property("success").eql(false)
+                    res.body.should.have.property("success")
                     res.body.should.have.property("message").eql("Unauthorised")
                     done()
                 })
