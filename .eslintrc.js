@@ -25,6 +25,7 @@ module.exports = {
             "error",
             "windows"
         ],
+        "max-len": "warn", // Set max line length of 80
         "no-console": "warn", // Check for console.log
         "no-multi-spaces": "warn", // No multiple spaces
         "no-sync": "error", // Don't use synchronous methods
