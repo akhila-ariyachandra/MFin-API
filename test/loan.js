@@ -207,11 +207,7 @@ describe("Loans", () => {
                 /*
                     Save the result and assign its _id
                     to the neccessary objects
-<<<<<<< HEAD
                 */
-=======
-                */ 
->>>>>>> b87d165c88c4941c97f22e1c009808c3793bef6c
                 areaObject = result
                 customer.area = areaObject._id
                 const meta = {
