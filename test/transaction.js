@@ -7,6 +7,9 @@ const chaiHttp = require("chai-http")
 const Transaction = require("../src/models/transactionSchema")
 const Employee = require("../src/models/employeeSchema")
 const Loan = require("../src/models/loanSchema")
+const Customer = require("../src/models/customerSchema")
+const Product = require("../src/models/productSchema")
+const Area = require("../src/models/areaSchema")
 const Counter = require("../src/models/counterSchema")
 const should = chai.should()
 
@@ -23,11 +26,12 @@ describe("Transactions", () => {
     let receptionistToken = null
     let cashCollectorToken = null
 
-    // Store the loan
-    let loan = null
-
-    // Store the cash collector
+    // Store the objects
+    let productObject = null
+    let customerObject = null
+    let loanObject = null
     let cashCollectorObject = null
+    let areaObject = null
 
     /* Remove all employees, loans and counters 
     , and create a new employee
@@ -101,7 +105,20 @@ describe("Transactions", () => {
             }
         }
 
-        const loanInput = {
+        let customer = {
+            "name": "Bob",
+            "surname": "Jay",
+            "nic": "958642350V",
+            "address": "elsewhere",
+            "dob": "1995-12-29",
+            "phone": "0767986623",
+            "email": "bobjay@gmail.com",
+            "areaID": "037",
+            longitude: "87.8",
+            latitude: "130.5"
+        }
+
+        const loan = {
             "loanType": "Test Loan",
             "date": new Date(),
             "loanAmount": 10000,
@@ -110,9 +127,31 @@ describe("Transactions", () => {
             "customerID": 1
         }
 
+        const product = {
+            "productName": "One month loan",
+            "description": "Loan for a duration of one month",
+            "minAmount": 10000,
+            "maxAmount": 30000,
+            "gracePeriod": 2,
+            "interestRate": 2,
+            "accruedInterest": 4,
+            "validFrom": "01/01/2017",
+            "validTo": "01/01/2018"
+        }
+
+        const area = {
+            "name": "Kaduwela",
+            "postalCode": 10640,
+            "district": "Colombo"
+        }
+
         Employee.remove({})
             .then(() => Transaction.remove({}))
             .then(() => Counter.remove({}))
+            .then(() => Customer.remove({}))
+            .then(() => Product.remove({}))
+            .then(() => Loan.remove({}))
+            .then(() => Area.remove({}))
             .then(() => Promise.all([
                 bcrypt.hash(admin.password, saltRounds),
                 bcrypt.hash(admin.pin, saltRounds),
@@ -133,16 +172,33 @@ describe("Transactions", () => {
                 cashCollector.password = hashResult[6]
                 cashCollector.pin = hashResult[7]
             })
+            .then(() => Area.create(area))
+            .then((result) => {
+                areaObject = result
+                customer.area = areaObject._id
+            })
             .then(() => Promise.all([
                 Employee.create(admin),
                 Employee.create(manager),
                 Employee.create(receptionist),
                 Employee.create(cashCollector),
-                Loan.create(loanInput)
+                Customer.create(customer)
             ]))
             .then((result) => {
                 cashCollectorObject = result[3]
-                loan = result[4]
+                customerObject = result[4]
+                loan.customer = customerObject._id
+                loan.manager = result[1]._id
+                product.approvedBy = result[1]._id
+            })
+            .then(() => Product(product))
+            .then((result) => {
+                productObject = result
+                loan.product = productObject._id
+            })
+            .then(() => Loan.create(loan))
+            .then((result) => {
+                loanObject = result
                 done()
             })
     })
@@ -304,7 +360,7 @@ describe("Transactions", () => {
     describe("POST /api/transaction", () => {
         it("it should not create a transaction without an authorization token", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
                 "status": "unpaid"
@@ -349,7 +405,7 @@ describe("Transactions", () => {
 
         it("it should not create a transaction without the amount field", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "cashCollector": cashCollectorObject._id,
                 "status": "unpaid"
             }
@@ -373,7 +429,7 @@ describe("Transactions", () => {
 
         it("it should not create a transaction without the cashCollector field", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "amount": 10000,
                 "status": "unpaid"
             }
@@ -397,7 +453,7 @@ describe("Transactions", () => {
 
         it("it should create a transaction for the admin account type", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
                 "status": "unpaid"
@@ -433,7 +489,7 @@ describe("Transactions", () => {
 
         it("it should create a transaction for the manager account type", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
                 "status": "unpaid"
@@ -469,7 +525,7 @@ describe("Transactions", () => {
 
         it("it should not create a transaction for the receptionist account type", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
                 "status": "unpaid"
@@ -491,7 +547,7 @@ describe("Transactions", () => {
 
         it("it should create a transaction for the cash collector account type", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
                 "status": "unpaid"
@@ -527,7 +583,7 @@ describe("Transactions", () => {
 
         it("it should create the 2nd transaction with transactionID 2", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
                 "status": "unpaid"
@@ -626,7 +682,7 @@ describe("Transactions", () => {
     describe("PUT /api/transaction/:transactionID", () => {
         it("it should not update the transaction without an authorization token", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "date": new Date(),
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
@@ -647,7 +703,7 @@ describe("Transactions", () => {
 
         it("it should not update the transaction if the wrong transactionID is given", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "date": new Date(),
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
@@ -693,7 +749,7 @@ describe("Transactions", () => {
 
         it("it should not update the transaction without the date field", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
                 "status": "unpaid"
@@ -718,7 +774,7 @@ describe("Transactions", () => {
 
         it("it should not update the transaction without the amount field", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "date": new Date(),
                 "cashCollector": cashCollectorObject._id,
                 "status": "unpaid"
@@ -743,7 +799,7 @@ describe("Transactions", () => {
 
         it("it should not update the transaction without the cashCollector field", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "date": new Date(),
                 "amount": 10000,
                 "status": "unpaid"
@@ -768,7 +824,7 @@ describe("Transactions", () => {
 
         it("it should not update the transaction without the status field", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "date": new Date(),
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
@@ -793,7 +849,7 @@ describe("Transactions", () => {
 
         it("it should update the transaction given the transactionID for the admin account type", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "date": new Date(),
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
@@ -823,7 +879,7 @@ describe("Transactions", () => {
 
         it("it should update the transaction given the transactionID for the manager account type", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "date": new Date(),
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
@@ -853,7 +909,7 @@ describe("Transactions", () => {
 
         it("it should not update the transaction given the transactionID for the receptionist account type", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "date": new Date(),
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
@@ -875,7 +931,7 @@ describe("Transactions", () => {
 
         it("it should update the transaction given the transactionID for the cash collector account type", (done) => {
             const transaction = {
-                "loan": loan._id,
+                "loan": loanObject._id,
                 "date": new Date(),
                 "amount": 10000,
                 "cashCollector": cashCollectorObject._id,
