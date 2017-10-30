@@ -31,7 +31,12 @@ const schema = {
         area: {
             type: Schema.Types.ObjectId,
             ref: "area"
-        } // Used if the employee is a Cash Collector
+        }, // Used if the employee is a Cash Collector
+        newUser: {
+            type: Boolean,
+            required: true,
+            default: true
+        }
     }
 }
 

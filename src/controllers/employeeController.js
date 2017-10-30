@@ -191,6 +191,7 @@ module.exports = {
                                 success: true,
                                 message: "Authentication success.",
                                 accountType: employee.accountType,
+                                newUser: employee.newUser,
                                 token: token
                             })
                         }
@@ -328,6 +329,7 @@ module.exports = {
                 bcrypt.hash(newPassword, saltRounds)
                     .then((result) => {
                         employee.password = result
+                        employee.newUser = false
 
                         employee.save()
                             .then((result) => {
