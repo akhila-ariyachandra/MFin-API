@@ -51,6 +51,10 @@ const routes = (app) => {
     app.post("/api/user/reauthenticate", authenticate, employee.reauthenticateEmployee)
     // Logout Employee
     app.get("/api/user/logout", authenticate, employee.logout)
+    // Change the password
+    app.patch("/api/user/password", authenticate, employee.changePassword)
+    // Change the pin
+    app.patch("/api/user/pin", authenticate, employee.changePin)
 
     // Loan
     // Create a loan

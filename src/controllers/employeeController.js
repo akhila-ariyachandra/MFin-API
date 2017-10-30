@@ -297,5 +297,101 @@ module.exports = {
                 return res.json({ "status": "Successfully logged out" })
             }
         })
+    },
+
+    changePassword: (req, res) => {
+        // Get the employee ObjectID
+        const id = req.decoded._doc._id
+
+        // Get current password for verification
+        const currentPassword = req.body.currentPassword
+        const newPassword = req.body.newPassword
+
+        // Store the employee object
+        let employee = null
+
+        Employee.findById(id)
+            .then((result) => {
+                employee = result
+            })
+            // Run password checking asynchronously to avoid blocking the server
+            .then(() => bcrypt.compare(currentPassword, employee.password))
+            .then((result) => {
+                // Check if password matches
+                if (!result) {
+                    return res.status(401).json({
+                        success: false,
+                        message: "Authentication failed. Wrong password."
+                    })
+                }
+
+                bcrypt.hash(newPassword, saltRounds)
+                    .then((result) => {
+                        employee.password = result
+
+                        employee.save()
+                            .then((result) => {
+                                return res.json(result)
+                            })
+                            .catch((err) => {
+                                return res.status(500).json({
+                                    "message": err
+                                })
+                            })
+                    })
+            })
+            .catch((err) => {
+                return res.status(500).json({
+                    "message": err
+                })
+            })
+    },
+
+    changePin: (req, res) => {
+        // Get the employee ObjectID
+        const id = req.decoded._doc._id
+
+        // Get current password for verification
+        const currentPin = req.body.currentPin
+        const newPin = req.body.newPin
+
+        // Store the employee object
+        let employee = null
+
+        Employee.findById(id)
+            .then((result) => {
+                employee = result
+            })
+            // Run pin checking asynchronously to avoid blocking the server
+            .then(() => bcrypt.compare(currentPin, employee.pin))
+            .then((result) => {
+                // Check if password matches
+                if (!result) {
+                    return res.status(401).json({
+                        success: false,
+                        message: "Authentication failed. Wrong pin."
+                    })
+                }
+
+                bcrypt.hash(newPin, saltRounds)
+                    .then((result) => {
+                        employee.pin = result
+
+                        employee.save()
+                            .then((result) => {
+                                return res.json(result)
+                            })
+                            .catch((err) => {
+                                return res.status(500).json({
+                                    "message": err
+                                })
+                            })
+                    })
+            })
+            .catch((err) => {
+                return res.status(500).json({
+                    "message": err
+                })
+            })
     }
 }

@@ -187,6 +187,20 @@
 			"cashCollector": true
 		},
 		{
+			"route": "PATCH /api/user/password",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
+			"route": "PATCH /api/user/pin",
+			"admin": true,
+			"manager": true,
+			"receptionist": true,
+			"cashCollector": true
+		},
+		{
 			"route": "PATCH /api/loan/:loanID/approve",
 			"admin": true,
 			"manager": true,
