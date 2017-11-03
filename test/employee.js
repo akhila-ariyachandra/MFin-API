@@ -138,7 +138,7 @@ describe("Employees", () => {
                 areaObject = result
 
                 const meta = {
-                    "area" : areaObject._id
+                    "area": areaObject._id
                 }
 
                 // Update cash collector with area details
@@ -1672,6 +1672,230 @@ describe("Employees", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("success").eql(false)
                     res.body.should.have.property("message").eql("Unauthorised")
+                    done()
+                })
+        })
+    })
+
+    // Test the PATCH /api/user/password route
+    describe("PATCH /api/user/password", () => {
+        it("it should not change the password without an authorization token", (done) => {
+            chai.request(app)
+                .patch("/api/user/password")
+                .end((err, res) => {
+                    res.should.have.status(401)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("success").eql(false)
+                    res.body.should.have.property("message").eql("Unauthorised")
+                    done()
+                })
+        })
+
+        it("it should not change the password with the wrong current password", (done) => {
+            const passwords = {
+                "currentPassword": "sliitccp1",
+                "newPassword": "sliitccp"
+            }
+
+            chai.request(app)
+                .patch("/api/user/password")
+                .set("x-access-token", newAdminToken)
+                .send(passwords)
+                .end((err, res) => {
+                    res.should.have.status(401)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("success").eql(false)
+                    res.body.should.have.property("message").eql("Authentication failed. Wrong password.")
+                    done()
+                })
+        })
+
+        it("it should change the password for the admin account type", (done) => {
+            const passwords = {
+                "currentPassword": "sliitcpp",
+                "newPassword": "sliitcpp1"
+            }
+
+            chai.request(app)
+                .patch("/api/user/password")
+                .set("x-access-token", newAdminToken)
+                .send(passwords)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("password")
+                    done()
+                })
+        })
+
+        it("it should change the password for the manager account type", (done) => {
+            const passwords = {
+                "currentPassword": "sliitcpp",
+                "newPassword": "sliitcpp1"
+            }
+
+            chai.request(app)
+                .patch("/api/user/password")
+                .set("x-access-token", newManagerToken)
+                .send(passwords)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("password")
+                    done()
+                })
+        })
+
+        it("it should change the password for the receptionist account type", (done) => {
+            const passwords = {
+                "currentPassword": "sliitcpp",
+                "newPassword": "sliitcpp1"
+            }
+
+            chai.request(app)
+                .patch("/api/user/password")
+                .set("x-access-token", newReceptionistToken)
+                .send(passwords)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("password")
+                    done()
+                })
+        })
+
+        it("it should change the password for the cash collector account type", (done) => {
+            const passwords = {
+                "currentPassword": "sliitcpp",
+                "newPassword": "sliitcpp1"
+            }
+
+            chai.request(app)
+                .patch("/api/user/password")
+                .set("x-access-token", newCashCollectorToken)
+                .send(passwords)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("password")
+                    done()
+                })
+        })
+    })
+    
+    // Test the PATCH /api/user/pin route
+    describe("PATCH /api/user/pin", () => {
+        it("it should not change the pin without an authorization token", (done) => {
+            chai.request(app)
+                .patch("/api/user/pin")
+                .end((err, res) => {
+                    res.should.have.status(401)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("success").eql(false)
+                    res.body.should.have.property("message").eql("Unauthorised")
+                    done()
+                })
+        })
+
+        it("it should not change the pin with the wrong current pin", (done) => {
+            const pins = {
+                "currentPin": "12345",
+                "newPin": "12345"
+            }
+
+            chai.request(app)
+                .patch("/api/user/pin")
+                .set("x-access-token", newAdminToken)
+                .send(pins)
+                .end((err, res) => {
+                    res.should.have.status(401)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("success").eql(false)
+                    res.body.should.have.property("message").eql("Authentication failed. Wrong pin.")
+                    done()
+                })
+        })
+
+        it("it should change the pin for the admin account type", (done) => {
+            const pins = {
+                "currentPin": "1234",
+                "newPin": "12345"
+            }
+
+            chai.request(app)
+                .patch("/api/user/pin")
+                .set("x-access-token", newAdminToken)
+                .send(pins)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("pin")
+                    done()
+                })
+        })
+
+        it("it should change the pin for the manager account type", (done) => {
+            const pins = {
+                "currentPin": "1234",
+                "newPin": "12345"
+            }
+
+            chai.request(app)
+                .patch("/api/user/pin")
+                .set("x-access-token", newManagerToken)
+                .send(pins)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("pin")
+                    done()
+                })
+        })
+
+        it("it should change the pin for the receptionist account type", (done) => {
+            const pins = {
+                "currentPin": "1234",
+                "newPin": "12345"
+            }
+
+            chai.request(app)
+                .patch("/api/user/pin")
+                .set("x-access-token", newReceptionistToken)
+                .send(pins)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("pin")
+                    done()
+                })
+        })
+
+        it("it should change the pin for the cash collector account type", (done) => {
+            const pins = {
+                "currentPin": "1234",
+                "newPin": "12345"
+            }
+
+            chai.request(app)
+                .patch("/api/user/pin")
+                .set("x-access-token", newCashCollectorToken)
+                .send(pins)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("pin")
                     done()
                 })
         })
