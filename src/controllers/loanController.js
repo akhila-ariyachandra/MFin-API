@@ -124,12 +124,8 @@ module.exports = {
                     return res.json({ "error": "Record does not exist" })
                 }
 
-                if (!req.body.manager) {
-                    return res.json({ "error": "Manager is required" })
-                }
-
                 // Change details
-                loan.manager = req.body.manager
+                loan.manager = req.decoded._doc._id
                 loan.status = "approved"
 
                 loan.save()
@@ -159,12 +155,8 @@ module.exports = {
                     return res.json({ "error": "Record does not exist" })
                 }
 
-                if (!req.body.manager) {
-                    return res.json({ "error": "Manager is required" })
-                }
-
                 // Change details
-                loan.manager = req.body.manager
+                loan.manager = req.decoded._doc._id
                 loan.status = "rejected"
 
                 loan.save()

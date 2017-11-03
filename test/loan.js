@@ -1332,7 +1332,6 @@ describe("Loans", () => {
         it("it should not approve the loan without an authorization token", (done) => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     should.exist(res.body)
@@ -1347,7 +1346,6 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/10/approve")
                 .set("x-access-token", adminToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     should.exist(res.body)
@@ -1357,23 +1355,10 @@ describe("Loans", () => {
                 })
         })
 
-        it("it should not approve the loan without the manager", (done) => {
-            chai.request(app)
-                .patch("/api/loan/3/approve")
-                .set("x-access-token", adminToken)
-                .end((err, res) => {
-                    res.should.have.status(200)
-                    res.body.should.be.a("object")
-                    res.body.should.have.property("error").eql("Manager is required")
-                    done()
-                })
-        })
-
         it("it should approve the loan for the admin account type", (done) => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
                 .set("x-access-token", adminToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
@@ -1389,7 +1374,6 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
                 .set("x-access-token", managerToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
@@ -1405,7 +1389,6 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
                 .set("x-access-token", receptionistToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     res.body.should.be.a("object")
@@ -1420,7 +1403,6 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/approve")
                 .set("x-access-token", cashCollectorToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     res.body.should.be.a("object")
@@ -1437,7 +1419,6 @@ describe("Loans", () => {
         it("it should not reject the loan without an authorization token", (done) => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     should.exist(res.body)
@@ -1452,7 +1433,6 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/10/reject")
                 .set("x-access-token", adminToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     should.exist(res.body)
@@ -1462,23 +1442,10 @@ describe("Loans", () => {
                 })
         })
 
-        it("it should not reject the loan without the manager", (done) => {
-            chai.request(app)
-                .patch("/api/loan/3/reject")
-                .set("x-access-token", adminToken)
-                .end((err, res) => {
-                    res.should.have.status(200)
-                    res.body.should.be.a("object")
-                    res.body.should.have.property("error").eql("Manager is required")
-                    done()
-                })
-        })
-
         it("it should reject the loan for the admin account type", (done) => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
                 .set("x-access-token", adminToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
@@ -1494,7 +1461,6 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
                 .set("x-access-token", managerToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.body.should.be.a("object")
@@ -1510,7 +1476,6 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
                 .set("x-access-token", receptionistToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     res.body.should.be.a("object")
@@ -1525,7 +1490,6 @@ describe("Loans", () => {
             chai.request(app)
                 .patch("/api/loan/3/reject")
                 .set("x-access-token", cashCollectorToken)
-                .send({ "manager": managerObject._id })
                 .end((err, res) => {
                     res.should.have.status(401)
                     res.body.should.be.a("object")
