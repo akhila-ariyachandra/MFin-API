@@ -9,10 +9,7 @@ const schema = {
     nic: { type: String, required: true },
     address: { type: String, required: true },
     dob: { type: Date, required: true },
-    phone: {
-        work: { type: String, required: true },
-        personal: { type: String }
-    },
+    phone: { type: String, required: true },
     email: { type: String, required: true },
     username: { type: String, required: true },
     password: { type: String, required: true },

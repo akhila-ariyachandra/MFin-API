@@ -25,17 +25,10 @@ module.exports = {
             "nic": req.body.nic,
             "address": req.body.address,
             "dob": req.body.dob,
-            "phone": {
-                "work": req.body.phone.work
-            },
+            "phone": req.body.phone,
             "email": req.body.email,
             "username": req.body.username,
             "accountType": req.body.accountType
-        }
-
-        // Check for personal phone
-        if (req.body.phone.personal) {
-            employee.phone.personal = req.body.phone.personal
         }
 
         // Check for optional meta data
@@ -119,13 +112,7 @@ module.exports = {
                 employee.nic = req.body.nic
                 employee.address = req.body.address
                 employee.dob = req.body.dob
-                employee.phone.work = req.body.phone.work
-
-                // Check for presence of personal phone number
-                if (req.body.phone.personal) {
-                    employee.phone.personal = req.body.phone.personal
-                }
-
+                employee.phone = req.body.phone
                 employee.email = req.body.email
                 employee.username = req.body.username
                 employee.accountType = req.body.accountType

@@ -60,10 +60,7 @@ describe("Loans", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "admin",
-            "phone": {
-                "work": "1234567890",
-                "personal": "0987654321"
-            }
+            "phone":"1234567890"
         }
 
         let manager = {
@@ -77,10 +74,7 @@ describe("Loans", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "manager",
-            "phone": {
-                "work": "1234567890",
-                "personal": "0987654321"
-            }
+            "phone":"1234567890"
         }
 
         let receptionist = {
@@ -94,10 +88,7 @@ describe("Loans", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "receptionist",
-            "phone": {
-                "work": "1234567890",
-                "personal": "0987654321"
-            }
+            "phone":"1234567890"
         }
 
         let cashCollector = {
@@ -111,10 +102,7 @@ describe("Loans", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "cashCollector",
-            "phone": {
-                "work": "1234567890",
-                "personal": "0987654321"
-            }
+            "phone":"1234567890"
         }
 
         const area = {

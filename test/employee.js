@@ -46,10 +46,7 @@ describe("Employees", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "admin",
-            "phone": {
-                "work": "1234567890",
-                "personal": "0987654321"
-            }
+            "phone": "1234567890"
         }
 
         let manager = {
@@ -63,10 +60,7 @@ describe("Employees", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "manager",
-            "phone": {
-                "work": "1234567890",
-                "personal": "0987654321"
-            }
+            "phone": "1234567890"
         }
 
         let receptionist = {
@@ -80,10 +74,7 @@ describe("Employees", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "receptionist",
-            "phone": {
-                "work": "1234567890",
-                "personal": "0987654321"
-            }
+            "phone": "1234567890"
         }
 
         let cashCollector = {
@@ -97,10 +88,7 @@ describe("Employees", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "cashCollector",
-            "phone": {
-                "work": "1234567890",
-                "personal": "0987654321"
-            }
+            "phone": "1234567890"
         }
 
         let area = {
@@ -377,10 +365,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -407,10 +392,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -441,10 +423,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -475,10 +454,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -509,10 +485,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -543,10 +516,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -577,10 +547,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -611,10 +578,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -645,10 +609,7 @@ describe("Employees", () => {
                 "username": "jacob",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -676,10 +637,7 @@ describe("Employees", () => {
                 "username": "jacob",
                 "password": "sliitcpp",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -707,10 +665,7 @@ describe("Employees", () => {
                 "username": "jacob",
                 "password": "sliitcpp",
                 "pin": "1234",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -730,7 +685,7 @@ describe("Employees", () => {
                 })
         })
 
-        it("it should not create an employee without the phone.work field", (done) => {
+        it("it should not create an employee without the phone field", (done) => {
             const employee = {
                 "name": "Jacob",
                 "surname": "Doe",
@@ -741,10 +696,7 @@ describe("Employees", () => {
                 "username": "jacob",
                 "password": "sliitcpp",
                 "pin": "1234",
-                "accountType": "admin",
-                "phone": {
-                    "personal": "0987654321"
-                }
+                "accountType": "admin"
             }
 
             chai.request(app)
@@ -757,7 +709,7 @@ describe("Employees", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("phone.work")
+                    res.body.error.errors.should.have.property("phone")
                     done()
                 })
         })
@@ -774,10 +726,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -806,10 +755,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -838,10 +784,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -869,10 +812,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -982,10 +922,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1012,10 +949,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1046,10 +980,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1080,10 +1011,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1114,10 +1042,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1148,10 +1073,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1182,10 +1104,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1216,10 +1135,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1250,10 +1166,7 @@ describe("Employees", () => {
                 "username": "jacob",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1280,10 +1193,7 @@ describe("Employees", () => {
                 "username": "jacob",
                 "password": "sliitcpp",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1310,10 +1220,7 @@ describe("Employees", () => {
                 "username": "jacob",
                 "password": "sliitcpp",
                 "pin": "1234",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1333,7 +1240,7 @@ describe("Employees", () => {
                 })
         })
 
-        it("it should not update the employee without the phone.work field", (done) => {
+        it("it should not update the employee without the phone field", (done) => {
             const employee = {
                 "name": "Jacob",
                 "surname": "Doe",
@@ -1344,10 +1251,7 @@ describe("Employees", () => {
                 "username": "jacob",
                 "password": "sliitcpp",
                 "pin": "1234",
-                "accountType": "admin",
-                "phone": {
-                    "personal": "0987654321"
-                }
+                "accountType": "admin"
             }
 
             chai.request(app)
@@ -1360,7 +1264,7 @@ describe("Employees", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("phone.work")
+                    res.body.error.errors.should.have.property("phone")
                     done()
                 })
         })
@@ -1377,10 +1281,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1409,10 +1310,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1441,10 +1339,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1473,10 +1368,7 @@ describe("Employees", () => {
                 "password": "sliitcpp",
                 "pin": "1234",
                 "accountType": "admin",
-                "phone": {
-                    "work": "1234567890",
-                    "personal": "0987654321"
-                }
+                "phone": "1234567890"
             }
 
             chai.request(app)
@@ -1788,7 +1680,7 @@ describe("Employees", () => {
                 })
         })
     })
-    
+
     // Test the PATCH /api/user/pin route
     describe("PATCH /api/user/pin", () => {
         it("it should not change the pin without an authorization token", (done) => {
