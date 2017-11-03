@@ -23,8 +23,6 @@ module.exports = {
         const phone = req.body.phone
         const email = req.body.email
         const area = req.body.area
-        const longitude = req.body.longitude
-        const latitude = req.body.latitude
 
         Customer.create({
             name: name,
@@ -34,9 +32,7 @@ module.exports = {
             dob: dob,
             phone: phone,
             email: email,
-            area: area,
-            longitude: longitude,
-            latitude: latitude
+            area: area
         })
             .then((result) => {
                 return res.json({ "result": result, "status": "successfully saved" })
@@ -98,8 +94,6 @@ module.exports = {
                 customer.phone = req.body.phone
                 customer.email = req.body.email
                 customer.area = req.body.area
-                customer.longitude = req.body.longitude
-                customer.latitude = req.body.latitude
 
                 // Send data to database
                 customer.save()

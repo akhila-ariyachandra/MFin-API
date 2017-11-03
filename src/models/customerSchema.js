@@ -15,9 +15,7 @@ const schema = {
         type: Schema.Types.ObjectId,
         ref: "area",
         required: true
-    },
-    longitude: { type: String, required: true },
-    latitude: { type: String, required: true }
+    }
 }
 
 const collectionName = "customer"

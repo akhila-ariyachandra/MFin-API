@@ -119,9 +119,7 @@ describe("Loans", () => {
             "dob": "1995-12-29",
             "phone": "0767986623",
             "email": "bobjay@gmail.com",
-            "areaID": "037",
-            longitude: "87.8",
-            latitude: "130.5"
+            "areaID": "037"
         }
 
         const loan1 = {
