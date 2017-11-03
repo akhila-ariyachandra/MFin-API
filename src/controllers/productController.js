@@ -25,8 +25,7 @@ module.exports = {
         const interestRate = req.body.interestRate
         const accruedInterest = req.body.accruedInterest
         const approvedBy = req.body.approvedBy
-        const validFrom = req.body.validFrom
-        const validTo = req.body.validTo
+        const duration = req.body.duration
 
         // Create the Product
         Product.create({
@@ -38,8 +37,7 @@ module.exports = {
             "interestRate": interestRate,
             "accruedInterest": accruedInterest,
             "approvedBy": approvedBy,
-            "validFrom": validFrom,
-            "validTo": validTo
+            "duration": duration
         })
             .then((result) => {
                 return res.json(result)
@@ -104,8 +102,7 @@ module.exports = {
                 product.interestRate = req.body.interestRate
                 product.accruedInterest = req.body.accruedInterest
                 product.approvedBy = req.body.approvedBy
-                product.validFrom = req.body.validFrom
-                product.validTo = req.body.validTo
+                product.duration = req.body.duration
 
                 // Update object in the database
                 product.save()

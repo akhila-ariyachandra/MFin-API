@@ -20,8 +20,7 @@ const schema = {
         ref: "employee",
         required: true
     },
-    validFrom: { type: Schema.Types.Date, required: true },
-    validTo: { type: Schema.Types.Date, required: true }
+    duration: { type: Schema.Types.Number, required: true }
 }
 
 const collectionName = "product"

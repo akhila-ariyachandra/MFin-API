@@ -293,8 +293,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -319,8 +318,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -349,8 +347,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -379,8 +376,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -409,8 +405,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -439,8 +434,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -469,8 +463,7 @@ describe("Product", () => {
                 "gracePeriod": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -499,8 +492,7 @@ describe("Product", () => {
                 "gracePeriod": 2,
                 "interestRate": 2,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -529,8 +521,7 @@ describe("Product", () => {
                 "gracePeriod": 2,
                 "interestRate": 2,
                 "accruedInterest": 4,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -550,7 +541,7 @@ describe("Product", () => {
                 })
         })
 
-        it("it should not create a product without the validFrom field", (done) => {
+        it("it should not create a product without the duration field", (done) => {
             const product = {
                 "productName": "One month loan",
                 "description": "Loan for a duration of one month",
@@ -558,9 +549,7 @@ describe("Product", () => {
                 "maxAmount": 30000,
                 "gracePeriod": 2,
                 "interestRate": 2,
-                "accruedInterest": 4,
-                "approvedBy": adminObject._id,
-                "validTo": "01/01/2018"
+                "accruedInterest": 4
             }
 
             chai.request(app)
@@ -573,39 +562,9 @@ describe("Product", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("validFrom")
-                    res.body.error.errors.validFrom.should.have.property("properties")
-                    res.body.error.errors.validFrom.properties.should.have.property("type").eql("required")
-                    done()
-                })
-        })
-
-        it("it should not create a product without the validTo field", (done) => {
-            const product = {
-                "productName": "One month loan",
-                "description": "Loan for a duration of one month",
-                "minAmount": 10000,
-                "maxAmount": 30000,
-                "gracePeriod": 2,
-                "interestRate": 2,
-                "accruedInterest": 4,
-                "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017"
-            }
-
-            chai.request(app)
-                .post("/api/product")
-                .set("x-access-token", adminToken)
-                .send(product)
-                .end((err, res) => {
-                    // Go through the properties one by one
-                    res.should.have.status(200)
-                    res.body.should.be.a("object")
-                    res.body.should.have.property("error")
-                    res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("validTo")
-                    res.body.error.errors.validTo.should.have.property("properties")
-                    res.body.error.errors.validTo.properties.should.have.property("type").eql("required")
+                    res.body.error.errors.should.have.property("duration")
+                    res.body.error.errors.duration.should.have.property("properties")
+                    res.body.error.errors.duration.properties.should.have.property("type").eql("required")
                     done()
                 })
         })
@@ -620,8 +579,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             // Remove all products before running the test
@@ -647,8 +605,7 @@ describe("Product", () => {
                             res.body.should.have.property("interestRate").eql(2)
                             res.body.should.have.property("accruedInterest").eql(4)
                             res.body.should.have.property("approvedBy")
-                            res.body.should.have.property("validFrom")
-                            res.body.should.have.property("validTo")
+                            res.body.should.have.property("duration").eql(30)
                             done()
                         })
                 })
@@ -665,8 +622,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": managerObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             // Remove all products before running the test
@@ -692,8 +648,7 @@ describe("Product", () => {
                             res.body.should.have.property("interestRate").eql(2)
                             res.body.should.have.property("accruedInterest").eql(4)
                             res.body.should.have.property("approvedBy")
-                            res.body.should.have.property("validFrom")
-                            res.body.should.have.property("validTo")
+                            res.body.should.have.property("duration").eql(30)
                             done()
                         })
                 })
@@ -789,8 +744,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -816,8 +770,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -842,8 +795,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -872,8 +824,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -902,8 +853,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -932,8 +882,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -962,8 +911,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -992,8 +940,7 @@ describe("Product", () => {
                 "gracePeriod": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -1022,8 +969,7 @@ describe("Product", () => {
                 "gracePeriod": 2,
                 "interestRate": 2,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -1052,8 +998,7 @@ describe("Product", () => {
                 "gracePeriod": 2,
                 "interestRate": 2,
                 "accruedInterest": 4,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -1073,7 +1018,7 @@ describe("Product", () => {
                 })
         })
 
-        it("it should not update the product without the validFrom field", (done) => {
+        it("it should not update the product without the duration field", (done) => {
             const product = {
                 "productName": "One month loan",
                 "description": "Loan for a duration of one month",
@@ -1081,9 +1026,7 @@ describe("Product", () => {
                 "maxAmount": 30000,
                 "gracePeriod": 2,
                 "interestRate": 2,
-                "accruedInterest": 4,
-                "approvedBy": adminObject._id,
-                "validTo": "01/01/2018"
+                "accruedInterest": 4
             }
 
             chai.request(app)
@@ -1096,39 +1039,9 @@ describe("Product", () => {
                     res.body.should.be.a("object")
                     res.body.should.have.property("error")
                     res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("validFrom")
-                    res.body.error.errors.validFrom.should.have.property("properties")
-                    res.body.error.errors.validFrom.properties.should.have.property("type").eql("required")
-                    done()
-                })
-        })
-
-        it("it should not update the product without the validTo field", (done) => {
-            const product = {
-                "productName": "One month loan",
-                "description": "Loan for a duration of one month",
-                "minAmount": 10000,
-                "maxAmount": 30000,
-                "gracePeriod": 2,
-                "interestRate": 2,
-                "accruedInterest": 4,
-                "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017"
-            }
-
-            chai.request(app)
-                .put("/api/product/1")
-                .set("x-access-token", adminToken)
-                .send(product)
-                .end((err, res) => {
-                    // Go through the properties one by one
-                    res.should.have.status(200)
-                    res.body.should.be.a("object")
-                    res.body.should.have.property("error")
-                    res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("validTo")
-                    res.body.error.errors.validTo.should.have.property("properties")
-                    res.body.error.errors.validTo.properties.should.have.property("type").eql("required")
+                    res.body.error.errors.should.have.property("duration")
+                    res.body.error.errors.duration.should.have.property("properties")
+                    res.body.error.errors.duration.properties.should.have.property("type").eql("required")
                     done()
                 })
         })
@@ -1143,8 +1056,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": adminObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -1166,8 +1078,7 @@ describe("Product", () => {
                     res.body.should.have.property("interestRate").eql(2)
                     res.body.should.have.property("accruedInterest").eql(4)
                     res.body.should.have.property("approvedBy")
-                    res.body.should.have.property("validFrom")
-                    res.body.should.have.property("validTo")
+                    res.body.should.have.property("duration").eql(30)
                     done()
                 })
         })
@@ -1182,8 +1093,7 @@ describe("Product", () => {
                 "interestRate": 2,
                 "accruedInterest": 4,
                 "approvedBy": managerObject._id,
-                "validFrom": "01/01/2017",
-                "validTo": "01/01/2018"
+                "duration": 30
             }
 
             chai.request(app)
@@ -1205,8 +1115,7 @@ describe("Product", () => {
                     res.body.should.have.property("interestRate").eql(2)
                     res.body.should.have.property("accruedInterest").eql(4)
                     res.body.should.have.property("approvedBy")
-                    res.body.should.have.property("validFrom")
-                    res.body.should.have.property("validTo")
+                    res.body.should.have.property("duration").eql(30)
                     done()
                 })
         })

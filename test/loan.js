@@ -148,8 +148,7 @@ describe("Loans", () => {
             "gracePeriod": 2,
             "interestRate": 2,
             "accruedInterest": 4,
-            "validFrom": "01/01/2017",
-            "validTo": "01/01/2018"
+            "duration": 30
         }
 
         Area.remove({})
