@@ -79,6 +79,11 @@ const routes = (app) => {
     app.get("/api/product/:productID", authenticate, product.getProduct)
     // Update the Product with this ID
     app.put("/api/product/:productID", authenticate, product.updateProduct)
+    // Approve the product with this ID
+    app.patch("/api/product/:productID/approve",
+        authenticate, 
+        product.approveProduct
+    )
 
     // Transaction
     // Create an Transaction

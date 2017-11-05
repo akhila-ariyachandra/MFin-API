@@ -20,7 +20,8 @@ const schema = {
         ref: "employee",
         required: true
     },
-    duration: { type: Schema.Types.Number, required: true }
+    duration: { type: Schema.Types.Number, required: true },
+    additionalApproval: { type: Schema.Types.ObjectId, ref: "employee" }
 }
 
 const collectionName = "product"

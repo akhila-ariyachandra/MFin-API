@@ -42,7 +42,7 @@ describe("Product", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "admin",
-            "phone":"1234567890"
+            "phone": "1234567890"
         }
 
         let manager = {
@@ -56,7 +56,7 @@ describe("Product", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "manager",
-            "phone":"1234567890"
+            "phone": "1234567890"
         }
 
         let receptionist = {
@@ -70,7 +70,7 @@ describe("Product", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "receptionist",
-            "phone":"1234567890"
+            "phone": "1234567890"
         }
 
         let cashCollector = {
@@ -84,7 +84,7 @@ describe("Product", () => {
             "password": "sliitcpp",
             "pin": "1234",
             "accountType": "cashCollector",
-            "phone":"1234567890"
+            "phone": "1234567890"
         }
 
         // Remove all existing employees
@@ -508,35 +508,6 @@ describe("Product", () => {
                     res.body.error.errors.should.have.property("accruedInterest")
                     res.body.error.errors.accruedInterest.should.have.property("properties")
                     res.body.error.errors.accruedInterest.properties.should.have.property("type").eql("required")
-                    done()
-                })
-        })
-
-        it("it should not create a product without the approvedBy field", (done) => {
-            const product = {
-                "productName": "One month loan",
-                "description": "Loan for a duration of one month",
-                "minAmount": 10000,
-                "maxAmount": 30000,
-                "gracePeriod": 2,
-                "interestRate": 2,
-                "accruedInterest": 4,
-                "duration": 30
-            }
-
-            chai.request(app)
-                .post("/api/product")
-                .set("x-access-token", adminToken)
-                .send(product)
-                .end((err, res) => {
-                    // Go through the properties one by one
-                    res.should.have.status(200)
-                    res.body.should.be.a("object")
-                    res.body.should.have.property("error")
-                    res.body.error.should.have.property("errors")
-                    res.body.error.errors.should.have.property("approvedBy")
-                    res.body.error.errors.approvedBy.should.have.property("properties")
-                    res.body.error.errors.approvedBy.properties.should.have.property("type").eql("required")
                     done()
                 })
         })
@@ -1116,6 +1087,89 @@ describe("Product", () => {
                     res.body.should.have.property("accruedInterest").eql(4)
                     res.body.should.have.property("approvedBy")
                     res.body.should.have.property("duration").eql(30)
+                    done()
+                })
+        })
+    })
+
+    // Test the PATCH /api/product/:productID route
+    describe("PATCH /api/product/:productID", () => {
+        it("it should not approve the product without an authorization token", (done) => {
+            chai.request(app)
+                .patch("/api/product/1/approve")
+                .end((err, res) => {
+                    res.should.have.status(401)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("success").eql(false)
+                    res.body.should.have.property("message").eql("Unauthorised")
+                    done()
+                })
+        })
+
+        it("it should not approve the product with the wrong productID", (done) => {
+            chai.request(app)
+                .patch("/api/product/2/approve")
+                .set("x-access-token", adminToken)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("error").eql("Record does not exist")
+                    done()
+                })
+        })
+
+        it("it should approve the product for the admin account type", (done) => {
+            chai.request(app)
+                .patch("/api/product/1/approve")
+                .set("x-access-token", adminToken)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("additionalApproval")
+                    done()
+                })
+        })
+
+        it("it should approve the product for the manager account type", (done) => {
+            chai.request(app)
+                .patch("/api/product/1/approve")
+                .set("x-access-token", managerToken)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("additionalApproval")
+                    done()
+                })
+        })
+
+        it("it should approve the product for the receptionist account type", (done) => {
+            chai.request(app)
+                .patch("/api/product/1/approve")
+                .set("x-access-token", receptionistToken)
+                .end((err, res) => {
+                    res.should.have.status(401)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("success").eql(false)
+                    res.body.should.have.property("message").eql("Unauthorised")
+                    done()
+                })
+        })
+
+        it("it should approve the product for the cash collector account type", (done) => {
+            chai.request(app)
+                .patch("/api/product/1/approve")
+                .set("x-access-token", cashCollectorToken)
+                .end((err, res) => {
+                    res.should.have.status(401)
+                    should.exist(res.body)
+                    res.body.should.be.a("object")
+                    res.body.should.have.property("success").eql(false)
+                    res.body.should.have.property("message").eql("Unauthorised")
                     done()
                 })
         })

@@ -631,7 +631,6 @@
                     <li>gracePeriod (Number) [Required]</li>
                     <li>interestRate (Number) [Required]</li>
                     <li>accruedInterest (Number) [Required]</li>
-                    <li>approvedBy (ObjectId) [Required]</li>
                     <li>duration (Number) [Required]</li>
                 </ul>
             </td>
@@ -696,6 +695,21 @@
                     <li>duration (Number) [Required]</li>
                 </ul>
             </td>
+        </tr>
+
+        <!--Approve a product-->
+        <tr>
+            <td>Product</td>
+            <td>/api/product/:productID/approve</td>
+            <td>PATCH</td>
+            <td>
+                <ul>
+                    <li>Admin</li>
+                    <li>Manager</li>
+                </ul>
+            </td>
+            <td>Approve a product</td>
+            <td></td>
         </tr>
 
         <!--Create new Transaction-->

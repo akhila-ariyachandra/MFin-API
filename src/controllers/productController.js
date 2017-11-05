@@ -24,7 +24,7 @@ module.exports = {
         const gracePeriod = req.body.gracePeriod
         const interestRate = req.body.interestRate
         const accruedInterest = req.body.accruedInterest
-        const approvedBy = req.body.approvedBy
+        const approvedBy = req.decoded._doc._id
         const duration = req.body.duration
 
         // Create the Product
@@ -113,6 +113,41 @@ module.exports = {
                         errorLogger(req.route.path, err)
                         return res.json({ "error": err })
                     })
+            })
+    },
+
+    approveProduct: (req, res) => {
+        // Get product ID
+        const productID = req.params.productID
+
+        // Retrieve the Product from the database
+        Product.findOne({ "productID": productID })
+            .then((product) => {
+                // Check of the product exists or not
+                if (!product) {
+                    /* 
+                        If product doesn't exist i.e. the wrong productID
+                        was given
+                    */
+                    return res.json({ "error": "Record does not exist" })
+                }
+
+                /* 
+                    Update the additionalApproval field with the data in the 
+                    authentication token
+                */
+                product.additionalApproval = req.decoded._doc._id
+
+                product.save()
+                    .then((result) => {
+                        return res.json(result)
+                    })
+                    .catch((err) => {
+                        return res.json({ "error": err })
+                    })
+            })
+            .catch((err) => {
+                return res.json({ "error": err })
             })
     }
 }

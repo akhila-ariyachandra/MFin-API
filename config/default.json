@@ -213,6 +213,13 @@
 			"manager": true,
 			"receptionist": false,
 			"cashCollector": false
+		},
+		{
+			"route": "PATCH /api/product/:productID/approve",
+			"admin": true,
+			"manager": true,
+			"receptionist": false,
+			"cashCollector": false
 		}
 	]
 }
