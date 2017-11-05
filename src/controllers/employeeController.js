@@ -178,6 +178,7 @@ module.exports = {
                                 success: true,
                                 message: "Authentication success.",
                                 accountType: employee.accountType,
+                                employeeID: employee.employeeID,
                                 newUser: employee.meta.newUser,
                                 token: token
                             })
